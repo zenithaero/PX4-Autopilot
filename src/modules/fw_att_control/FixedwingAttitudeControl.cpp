@@ -139,14 +139,14 @@ FixedwingAttitudeControl::vehicle_manual_poll(const float yaw_body)
 
 			if (!_vcontrol_mode.flag_control_climb_rate_enabled) {
 
-				const float throttle = (_manual_control_setpoint.z + 1.f) * .5f;
+				const float throttle = (_manual_control_setpoint.throttle + 1.f) * .5f;
 
 				if (_vcontrol_mode.flag_control_attitude_enabled) {
 					// STABILIZED mode generate the attitude setpoint from manual user inputs
 
-					_att_sp.roll_body = _manual_control_setpoint.y * radians(_param_fw_man_r_max.get());
+					_att_sp.roll_body = _manual_control_setpoint.roll * radians(_param_fw_man_r_max.get());
 
-					_att_sp.pitch_body = -_manual_control_setpoint.x * radians(_param_fw_man_p_max.get())
+					_att_sp.pitch_body = -_manual_control_setpoint.pitch * radians(_param_fw_man_p_max.get())
 							     + radians(_param_fw_psp_off.get());
 					_att_sp.pitch_body = constrain(_att_sp.pitch_body,
 								       -radians(_param_fw_man_p_max.get()), radians(_param_fw_man_p_max.get()));
@@ -166,9 +166,9 @@ FixedwingAttitudeControl::vehicle_manual_poll(const float yaw_body)
 
 					// RATE mode we need to generate the rate setpoint from manual user inputs
 					_rates_sp.timestamp = hrt_absolute_time();
-					_rates_sp.roll = _manual_control_setpoint.y * radians(_param_fw_acro_x_max.get());
-					_rates_sp.pitch = -_manual_control_setpoint.x * radians(_param_fw_acro_y_max.get());
-					_rates_sp.yaw = _manual_control_setpoint.r * radians(_param_fw_acro_z_max.get());
+					_rates_sp.roll = _manual_control_setpoint.roll * radians(_param_fw_acro_x_max.get());
+					_rates_sp.pitch = -_manual_control_setpoint.pitch * radians(_param_fw_acro_y_max.get());
+					_rates_sp.yaw = _manual_control_setpoint.yaw * radians(_param_fw_acro_z_max.get());
 					_rates_sp.thrust_body[0] = throttle;
 
 					_rate_sp_pub.publish(_rates_sp);
@@ -176,11 +176,11 @@ FixedwingAttitudeControl::vehicle_manual_poll(const float yaw_body)
 				} else {
 					/* manual/direct control */
 					_actuator_controls.control[actuator_controls_s::INDEX_ROLL] =
-						_manual_control_setpoint.y * _param_fw_man_r_sc.get() + _param_trim_roll.get();
+						_manual_control_setpoint.roll * _param_fw_man_r_sc.get() + _param_trim_roll.get();
 					_actuator_controls.control[actuator_controls_s::INDEX_PITCH] =
-						-_manual_control_setpoint.x * _param_fw_man_p_sc.get() + _param_trim_pitch.get();
+						-_manual_control_setpoint.pitch * _param_fw_man_p_sc.get() + _param_trim_pitch.get();
 					_actuator_controls.control[actuator_controls_s::INDEX_YAW] =
-						_manual_control_setpoint.r * _param_fw_man_y_sc.get() + _param_trim_yaw.get();
+						_manual_control_setpoint.yaw * _param_fw_man_y_sc.get() + _param_trim_yaw.get();
 					_actuator_controls.control[actuator_controls_s::INDEX_THROTTLE] = throttle;
 				}
 			}
@@ -565,7 +565,7 @@ void FixedwingAttitudeControl::Run()
 
 					/* add in manual rudder control in manual modes */
 					if (_vcontrol_mode.flag_control_manual_enabled) {
-						_actuator_controls.control[actuator_controls_s::INDEX_YAW] += _manual_control_setpoint.r;
+						_actuator_controls.control[actuator_controls_s::INDEX_YAW] += _manual_control_setpoint.yaw;
 					}
 
 					if (!PX4_ISFINITE(yaw_u)) {
