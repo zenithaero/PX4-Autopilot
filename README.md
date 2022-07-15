@@ -20,6 +20,9 @@ PX4 is highly portable, OS-independent and supports Linux, NuttX and MacOS out o
   * many more experimental types (Blimps, Boats, Submarines, High altitude balloons, etc)
 * Releases: [Downloads](https://github.com/PX4/PX4-Autopilot/releases)
 
+## Zenith Aero fork
+
+This is a much better version!
 
 ## Building a PX4 based drone, rover, boat or robot
 
