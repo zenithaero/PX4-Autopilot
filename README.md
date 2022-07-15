@@ -22,7 +22,7 @@ PX4 is highly portable, OS-independent and supports Linux, NuttX and MacOS out o
 
 ## Zenith Aero fork
 
-This is a much better version!
+This is a much better version! No really, we're not kidding.
 
 ## Building a PX4 based drone, rover, boat or robot
 
