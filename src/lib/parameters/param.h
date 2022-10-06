@@ -471,7 +471,7 @@ __END_DECLS
 
 
 #if defined(__cplusplus) && !defined(PARAM_IMPLEMENTATION)
-#if defined(CONFIG_ARCH_BOARD_PX4_SITL) || 0 // set to 1 to debug param type mismatches
+#if defined(CONFIG_ARCH_BOARD_PX4_SITL) || 1 // set to 1 to debug param type mismatches
 #include <cstdio>
 #include <px4_platform_common/log.h>
 

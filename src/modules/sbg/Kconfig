@@ -1,0 +1,5 @@
+menuconfig MODULES_SBG
+	bool "sbg"
+	default n
+	---help---
+		Enable support for sbg
