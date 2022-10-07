@@ -35,6 +35,12 @@
 
 #define DIM(x) ((sizeof(x)/sizeof(0[x])) / ((size_t)(!(sizeof(x) % sizeof(0[x])))))
 
+template<typename _Tp>
+constexpr _Tp max(_Tp a, _Tp b)
+{
+	return (a > b) ? a : b;
+}
+
 class SBG : public ModuleBase<SBG>, public ModuleParams, public px4::ScheduledWorkItem
 {
 public:
@@ -56,9 +62,9 @@ public:
 
 private:
 	// Sbg interface
-	SbgEComHandle _comHandle;
+	SbgEComHandle _com_handle;
 	SbgInterface _interface;
-	SbgEComDeviceInfo _deviceInfo;
+	SbgEComDeviceInfo _device_info;
 
 	// Previous messages
 	estimator_selector_status_s selector_status{};
@@ -93,9 +99,10 @@ private:
 	// Data
 	MapProjection _pos_ref{}; // WGS-84 position latitude and longitude of the origin
 	float _alt_ref{0.0f}; // WGS-84 height (m)
-	SbgLogEkfQuatData _sbgQuatData;
-	SbgLogEkfNavData _sbgNavData;
-	SbgLogImuData _sbgImuData;
+	SbgLogEkfQuatData _sbg_quat_data;
+	SbgLogEkfNavData _sbg_nav_data;
+	SbgLogImuData _sbg_imu_data;
+	SbgLogGpsPos _sbg_gps_pos_data;
 
 	// Serial logs callback
 	static SbgErrorCode onLogReceived(SbgEComHandle *pHandle, SbgEComClass msgClass, SbgEComMsgId msg, const SbgBinaryLogData *pLogData, void *pUserArg);
