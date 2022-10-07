@@ -791,17 +791,17 @@ void EKF2Selector::Run()
 		    || (last_instance_change_prev != _last_instance_change)
 		    || _accel_fault_detected || _gyro_fault_detected) {
 
-			PublishEstimatorSelectorStatus();
+			// PublishEstimatorSelectorStatus();
 			_selector_status_publish = false;
 		}
 	}
 
 	// republish selected estimator data for system
-	PublishVehicleAttitude();
-	PublishVehicleLocalPosition();
-	PublishVehicleGlobalPosition();
-	PublishVehicleOdometry();
-	PublishWindEstimate();
+	// PublishVehicleAttitude();
+	// PublishVehicleLocalPosition();
+	// PublishVehicleGlobalPosition();
+	// PublishVehicleOdometry();
+	// PublishWindEstimate();
 
 	// re-schedule as backup timeout
 	ScheduleDelayed(FILTER_UPDATE_PERIOD);

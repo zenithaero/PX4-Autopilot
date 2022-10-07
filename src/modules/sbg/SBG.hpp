@@ -12,7 +12,11 @@
 #include <uORB/SubscriptionCallback.hpp>
 
 #include <px4_platform_common/px4_work_queue/ScheduledWorkItem.hpp>
+#include <lib/geo/geo.h>
 #include <sbgEComLib.h>
+// Subscriptions
+#include <uORB/topics/vehicle_command.h>
+#include <uORB/topics/estimator_status.h>
 // Raw publications
 #include <uORB/topics/sbg_ekf_nav.h>
 #include <uORB/topics/sbg_ekf_quat.h>
@@ -27,6 +31,7 @@
 #include <uORB/topics/vehicle_global_position.h>
 #include <uORB/topics/vehicle_odometry.h>
 #include <uORB/topics/wind.h>
+
 
 #define DIM(x) ((sizeof(x)/sizeof(0[x])) / ((size_t)(!(sizeof(x) % sizeof(0[x])))))
 
@@ -50,14 +55,27 @@ public:
 	bool init();
 
 private:
+	// Sbg interface
 	SbgEComHandle _comHandle;
 	SbgInterface _interface;
 	SbgEComDeviceInfo _deviceInfo;
 
+	// Previous messages
+	estimator_selector_status_s selector_status{};
+	sensor_selection_s sensor_selection{};
+	vehicle_attitude_s attitude{};
+	vehicle_global_position_s global_position{};
+	vehicle_local_position_s local_position{};
+	vehicle_odometry_s odometry{};
+	wind_s wind{};
+
+
 	void Run() override;
 
-	// Serial logs callback
-	static SbgErrorCode onLogReceived(SbgEComHandle *pHandle, SbgEComClass msgClass, SbgEComMsgId msg, const SbgBinaryLogData *pLogData, void *pUserArg);
+
+	// Subscriptions
+	uORB::Subscription _vehicle_command_sub{ORB_ID(vehicle_command)};
+	uORB::Subscription _estimator_status_sub{ORB_ID(estimator_status), 0};
 
 	// Raw publications
 	uORB::Publication<sbg_ekf_nav_s>	_sbg_ekf_nav_pub{ORB_ID(sbg_ekf_nav)};
@@ -72,9 +90,27 @@ private:
 	uORB::Publication<vehicle_odometry_s>          _vehicle_odometry_pub{ORB_ID(vehicle_odometry)};
 	uORB::Publication<wind_s>             _wind_pub{ORB_ID(wind)};
 
+	// Data
+	MapProjection _pos_ref{}; // WGS-84 position latitude and longitude of the origin
+	float _alt_ref{0.0f}; // WGS-84 height (m)
+	SbgLogEkfQuatData _sbgQuatData;
+	SbgLogEkfNavData _sbgNavData;
+	SbgLogImuData _sbgImuData;
+
+	// Serial logs callback
+	static SbgErrorCode onLogReceived(SbgEComHandle *pHandle, SbgEComClass msgClass, SbgEComMsgId msg, const SbgBinaryLogData *pLogData, void *pUserArg);
+
+
 	int connect();
 	void onLog(const SbgEComMsgId &msg, const SbgBinaryLogData *pLogData);
+
+	void emulate();
+	void updateGlobalOrigin();
+	void setGlobalOrigin(const double latitude, const double longitude, const float altitude);
+	void getGlobalOrigin(double &latitude, double &longitude, float &origin_alt) const;
+
 	void publishEstimatorSelectorStatus();
+	void publishSensorSelection();
 	void publishVehicleAttitude();
 	void publishVehicleLocalPosition();
 	void publishVehicleGlobalPosition();
