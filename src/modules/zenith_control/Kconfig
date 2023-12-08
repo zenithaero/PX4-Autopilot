@@ -1,0 +1,12 @@
+menuconfig MODULES_ZENITH_CONTROL
+	bool "zenith_control"
+	default n
+	---help---
+		Enable support for zenith_control
+
+menuconfig USER_ZENITH_CONTROL
+	bool "zenith_control running as userspace module"
+	default n
+	depends on BOARD_PROTECTED && MODULES_ZENITH_CONTROL
+	---help---
+		Put zenith_control in userspace memory
