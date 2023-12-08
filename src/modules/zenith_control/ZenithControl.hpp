@@ -34,6 +34,9 @@
 #include <uORB/topics/vehicle_thrust_setpoint.h>
 #include <uORB/topics/vehicle_torque_setpoint.h>
 
+#include <uORB/topics/actuator_motors.h>
+#include <uORB/topics/actuator_servos.h>
+
 
 using uORB::SubscriptionData;
 
@@ -65,7 +68,7 @@ private:
 	// uORB::SubscriptionInterval _parameter_update_sub{ORB_ID(parameter_update), 1_s};
 //
 	// uORB::Subscription _battery_status_sub{ORB_ID(battery_status)};
-	// uORB::Subscription _manual_control_setpoint_sub{ORB_ID(manual_control_setpoint)};
+	uORB::Subscription _manual_control_setpoint_sub{ORB_ID(manual_control_setpoint)};
 	// uORB::Subscription _rates_sp_sub{ORB_ID(vehicle_rates_setpoint)};
 	// uORB::Subscription _vehicle_control_mode_sub{ORB_ID(vehicle_control_mode)};
 	// uORB::Subscription _vehicle_land_detected_sub{ORB_ID(vehicle_land_detected)};
@@ -77,6 +80,13 @@ private:
 	uORB::Publication<vehicle_torque_setpoint_s>	_vehicle_torque_setpoint_pub;
 	uORB::Publication<vehicle_thrust_setpoint_s>	_vehicle_thrust_setpoint_pub;
 //
+
+	//
+	manual_control_setpoint_s		_manual_control_setpoint{};
+	uORB::Publication<actuator_motors_s>	_actuator_motors_pub{ORB_ID(actuator_motors)};
+	uORB::Publication<actuator_servos_s>	_actuator_servos_pub{ORB_ID(actuator_servos)};
+
+
 	// uORB::SubscriptionData<airspeed_validated_s> _airspeed_validated_sub{ORB_ID(airspeed_validated)};
 //
 	// uORB::Publication<vehicle_rates_setpoint_s>	_rate_sp_pub{ORB_ID(vehicle_rates_setpoint)};
@@ -84,7 +94,6 @@ private:
 	// uORB::Publication<normalized_unsigned_setpoint_s> _flaps_setpoint_pub{ORB_ID(flaps_setpoint)};
 	// uORB::Publication<normalized_unsigned_setpoint_s> _spoilers_setpoint_pub{ORB_ID(spoilers_setpoint)};
 //
-	// // manual_control_setpoint_s		_manual_control_setpoint{};
 	// vehicle_control_mode_s			_vcontrol_mode{};
 	// vehicle_thrust_setpoint_s		_vehicle_thrust_setpoint{};
 	// vehicle_torque_setpoint_s		_vehicle_torque_setpoint{};

@@ -112,7 +112,6 @@ include(px4_parse_function_args)
 set(CMAKE_OSX_SYSROOT "/Library/Developer/CommandLineTools/SDKs/MacOSX12.sdk")
 
 
-
 #=============================================================================
 # git
 #
