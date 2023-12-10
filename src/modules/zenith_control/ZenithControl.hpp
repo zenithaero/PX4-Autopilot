@@ -26,6 +26,8 @@
 #include <uORB/topics/normalized_unsigned_setpoint.h>
 #include <uORB/topics/parameter_update.h>
 #include <uORB/topics/rate_ctrl_status.h>
+
+#include <uORB/topics/vehicle_attitude.h>
 #include <uORB/topics/vehicle_angular_velocity.h>
 #include <uORB/topics/vehicle_control_mode.h>
 #include <uORB/topics/vehicle_land_detected.h>
@@ -64,13 +66,16 @@ private:
 	void Run() override;
 
 	// uORB::SubscriptionCallbackWorkItem _vehicle_angular_velocity_sub{this, ORB_ID(vehicle_angular_velocity)};
-//
+	// uORB::SubscriptionCallbackWorkItem _att_sub{this, ORB_ID(vehicle_attitude)};
+	uORB::Subscription _vehicle_angular_velocity_sub{ORB_ID(vehicle_angular_velocity)};
+	uORB::Subscription _att_sub{ORB_ID(vehicle_attitude)};
+
 	// uORB::SubscriptionInterval _parameter_update_sub{ORB_ID(parameter_update), 1_s};
 //
 	// uORB::Subscription _battery_status_sub{ORB_ID(battery_status)};
 	uORB::Subscription _manual_control_setpoint_sub{ORB_ID(manual_control_setpoint)};
 	// uORB::Subscription _rates_sp_sub{ORB_ID(vehicle_rates_setpoint)};
-	// uORB::Subscription _vehicle_control_mode_sub{ORB_ID(vehicle_control_mode)};
+	uORB::Subscription _vehicle_control_mode_sub{ORB_ID(vehicle_control_mode)};
 	// uORB::Subscription _vehicle_land_detected_sub{ORB_ID(vehicle_land_detected)};
 	// uORB::Subscription _vehicle_status_sub{ORB_ID(vehicle_status)};
 	// uORB::Subscription _vehicle_rates_sub{ORB_ID(vehicle_angular_velocity)};
@@ -94,12 +99,14 @@ private:
 	// uORB::Publication<normalized_unsigned_setpoint_s> _flaps_setpoint_pub{ORB_ID(flaps_setpoint)};
 	// uORB::Publication<normalized_unsigned_setpoint_s> _spoilers_setpoint_pub{ORB_ID(spoilers_setpoint)};
 //
-	// vehicle_control_mode_s			_vcontrol_mode{};
+	vehicle_control_mode_s			_vcontrol_mode{};
 	// vehicle_thrust_setpoint_s		_vehicle_thrust_setpoint{};
 	// vehicle_torque_setpoint_s		_vehicle_torque_setpoint{};
 	// vehicle_rates_setpoint_s		_rates_sp{};
 	// vehicle_status_s			_vehicle_status{};
 
 	perf_counter_t _loop_perf;
+	matrix::Dcmf _R{matrix::eye<float, 3>()};
+
 	// hrt_abstime _last_run{0};
 };

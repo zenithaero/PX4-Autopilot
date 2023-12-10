@@ -3,9 +3,9 @@
  *
  * Code generation for model "PX4Controller".
  *
- * Model version              : 1.277
+ * Model version              : 1.278
  * Simulink Coder version : 9.7 (R2022a) 13-Nov-2021
- * C++ source code generated on : Fri Dec  8 03:03:21 2023
+ * C++ source code generated on : Sun Dec 10 03:06:45 2023
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -154,23 +154,19 @@ extern "C" {
 
 /* Block signals (default storage) */
 struct B_PX4Controller_T {
-  real_T Gain7;                        /* '<S76>/Gain7' */
-  real_T steErr;                       /* '<S78>/Sum' */
-  real_T Selector5[14];                /* '<S14>/Selector5' */
-  real_T Selector4[14];                /* '<S14>/Selector4' */
-  real_T Selector5_l[14];              /* '<S15>/Selector5' */
-  real_T Selector4_b[14];              /* '<S15>/Selector4' */
-  real_T Selector5_k[14];              /* '<S16>/Selector5' */
-  real_T Selector4_g[14];              /* '<S16>/Selector4' */
+  real_T Gain7;                        /* '<S75>/Gain7' */
+  real_T steErr;                       /* '<S77>/Sum' */
+  real_T VectorConcatenate[6];         /* '<S13>/Vector Concatenate' */
+  real_T Gain[6];                      /* '<S15>/Gain' */
   real_T Switch1[4];                   /* '<S11>/Switch1' */
   real_T Switch2[6];                   /* '<S11>/Switch2' */
   real_T Switch3[2];                   /* '<S11>/Switch3' */
   real_T Switch4[2];                   /* '<S11>/Switch4' */
-  real_T Product[2];                   /* '<S35>/Product' */
-  real_T Product_g;                    /* '<S80>/Product' */
-  real_T steDotErr;                    /* '<S78>/Sum1' */
-  boolean_T OR;                        /* '<S74>/OR' */
-  boolean_T OR_k;                      /* '<S27>/OR' */
+  real_T Product[2];                   /* '<S34>/Product' */
+  real_T Product_g;                    /* '<S79>/Product' */
+  real_T steDotErr;                    /* '<S77>/Sum1' */
+  boolean_T OR;                        /* '<S73>/OR' */
+  boolean_T OR_k;                      /* '<S26>/OR' */
 };
 
 /* Block states (default storage) for system '<Root>' */
@@ -188,33 +184,33 @@ struct DW_PX4Controller_T {
 
 /* Continuous states (default storage) */
 struct X_PX4Controller_T {
-  real_T Integrator1_CSTATE;           /* '<S77>/Integrator1' */
+  real_T Integrator1_CSTATE;           /* '<S76>/Integrator1' */
   real_T Integrator_CSTATE[2];         /* '<S3>/Integrator' */
-  real_T Lowpass_CSTATE;               /* '<S78>/Low pass' */
-  real_T Integrator_CSTATE_f;          /* '<S78>/Integrator' */
+  real_T Lowpass_CSTATE;               /* '<S77>/Low pass' */
+  real_T Integrator_CSTATE_f;          /* '<S77>/Integrator' */
 };
 
 /* State derivatives (default storage) */
 struct XDot_PX4Controller_T {
-  real_T Integrator1_CSTATE;           /* '<S77>/Integrator1' */
+  real_T Integrator1_CSTATE;           /* '<S76>/Integrator1' */
   real_T Integrator_CSTATE[2];         /* '<S3>/Integrator' */
-  real_T Lowpass_CSTATE;               /* '<S78>/Low pass' */
-  real_T Integrator_CSTATE_f;          /* '<S78>/Integrator' */
+  real_T Lowpass_CSTATE;               /* '<S77>/Low pass' */
+  real_T Integrator_CSTATE_f;          /* '<S77>/Integrator' */
 };
 
 /* State disabled  */
 struct XDis_PX4Controller_T {
-  boolean_T Integrator1_CSTATE;        /* '<S77>/Integrator1' */
+  boolean_T Integrator1_CSTATE;        /* '<S76>/Integrator1' */
   boolean_T Integrator_CSTATE[2];      /* '<S3>/Integrator' */
-  boolean_T Lowpass_CSTATE;            /* '<S78>/Low pass' */
-  boolean_T Integrator_CSTATE_f;       /* '<S78>/Integrator' */
+  boolean_T Lowpass_CSTATE;            /* '<S77>/Low pass' */
+  boolean_T Integrator_CSTATE_f;       /* '<S77>/Integrator' */
 };
 
 /* Zero-crossing (trigger) state */
 struct PrevZCX_PX4Controller_T {
-  ZCSigState Integrator1_Reset_ZCE;    /* '<S77>/Integrator1' */
+  ZCSigState Integrator1_Reset_ZCE;    /* '<S76>/Integrator1' */
   ZCSigState Integrator_Reset_ZCE;     /* '<S3>/Integrator' */
-  ZCSigState Integrator_Reset_ZCE_l;   /* '<S78>/Integrator' */
+  ZCSigState Integrator_Reset_ZCE_l;   /* '<S77>/Integrator' */
 };
 
 #ifndef ODE4_INTG
@@ -242,89 +238,146 @@ struct ExtY_PX4Controller_T {
 
 /* Parameters (default storage) */
 struct P_PX4Controller_T_ {
+  real_T SubsystemReference_fmMask[6];
+                                    /* Mask Parameter: SubsystemReference_fmMask
+                                     * Referenced by:
+                                     *   '<S15>/Gain'
+                                     *   '<S15>/Gain1'
+                                     */
+  real_T SubsystemReference1_fmMask[6];
+                                   /* Mask Parameter: SubsystemReference1_fmMask
+                                    * Referenced by:
+                                    *   '<S16>/Gain'
+                                    *   '<S16>/Gain1'
+                                    */
+  real_T SubsystemReference2_fmMask[6];
+                                   /* Mask Parameter: SubsystemReference2_fmMask
+                                    * Referenced by:
+                                    *   '<S17>/Gain'
+                                    *   '<S17>/Gain1'
+                                    */
   real_T SubsystemReference3_table[36];
                                     /* Mask Parameter: SubsystemReference3_table
-                                     * Referenced by: '<S32>/Interpolation Using Prelookup'
+                                     * Referenced by: '<S31>/Interpolation Using Prelookup'
                                      */
   real_T SubsystemReference3_table_m[36];
                                   /* Mask Parameter: SubsystemReference3_table_m
-                                   * Referenced by: '<S72>/Interpolation Using Prelookup'
+                                   * Referenced by: '<S71>/Interpolation Using Prelookup'
                                    */
   real_T SubsystemReference3_table_p[48];
                                   /* Mask Parameter: SubsystemReference3_table_p
-                                   * Referenced by: '<S17>/Interpolation Using Prelookup'
+                                   * Referenced by: '<S19>/Interpolation Using Prelookup'
                                    */
   real_T SubsystemReference4_table[72];
                                     /* Mask Parameter: SubsystemReference4_table
-                                     * Referenced by: '<S18>/Interpolation Using Prelookup'
+                                     * Referenced by: '<S20>/Interpolation Using Prelookup'
                                      */
   real_T SubsystemReference5_table[24];
                                     /* Mask Parameter: SubsystemReference5_table
-                                     * Referenced by: '<S19>/Interpolation Using Prelookup'
+                                     * Referenced by: '<S21>/Interpolation Using Prelookup'
                                      */
   real_T SubsystemReference6_table[24];
                                     /* Mask Parameter: SubsystemReference6_table
-                                     * Referenced by: '<S20>/Interpolation Using Prelookup'
+                                     * Referenced by: '<S22>/Interpolation Using Prelookup'
                                      */
-  real_T Gain_Gain;                    /* Expression: 100
+  real_T Gain_Gain;                    /* Expression: 10
                                         * Referenced by: '<S12>/Gain'
+                                        */
+  real_T Gain_Gain_d;               /* Expression: config.gains.allocation.maxFx
+                                     * Referenced by: '<S70>/Gain'
+                                     */
+  real_T Gain_Gain_g;               /* Expression: config.gains.allocation.maxFx
+                                     * Referenced by: '<S27>/Gain'
+                                     */
+  real_T Saturation_UpperSat;          /* Expression: inf
+                                        * Referenced by: '<S77>/Saturation'
+                                        */
+  real_T Saturation_LowerSat;          /* Expression: 0.1
+                                        * Referenced by: '<S77>/Saturation'
+                                        */
+  real_T InterpolationUsingPrelookup_Tab[4];/* Expression: squeeze(table)
+                                             * Referenced by: '<S81>/Interpolation Using Prelookup'
+                                             */
+  real_T InterpolationUsingPrelookup_T_n[4];/* Expression: squeeze(table)
+                                             * Referenced by: '<S83>/Interpolation Using Prelookup'
+                                             */
+  real_T InterpolationUsingPrelookup_T_c[4];/* Expression: squeeze(table)
+                                             * Referenced by: '<S82>/Interpolation Using Prelookup'
+                                             */
+  real_T M_Gain;                       /* Expression: config.aircraft.M
+                                        * Referenced by: '<S77>/M'
+                                        */
+  real_T Switch1_Threshold;            /* Expression: 0
+                                        * Referenced by: '<S27>/Switch1'
+                                        */
+  real_T Switch1_Threshold_g;          /* Expression: 0
+                                        * Referenced by: '<S70>/Switch1'
                                         */
   real_T Gain1_Gain;                   /* Expression: 10
                                         * Referenced by: '<S12>/Gain1'
                                         */
-  real_T Gain2_Gain;                   /* Expression: 10
+  real_T Gain2_Gain;                   /* Expression: -10
                                         * Referenced by: '<S12>/Gain2'
                                         */
-  real_T Gain3_Gain;                   /* Expression: 10
+  real_T Gain3_Gain;                   /* Expression: 5
                                         * Referenced by: '<S12>/Gain3'
                                         */
-  real_T Gain1_Gain_p;                 /* Expression: pi/3
-                                        * Referenced by: '<S28>/Gain1'
+  real_T Gain1_Gain_f;                 /* Computed Parameter: Gain1_Gain_f
+                                        * Referenced by: '<S7>/Gain1'
                                         */
-  real_T Gain2_Gain_p;                 /* Expression: pi/3
-                                        * Referenced by: '<S28>/Gain2'
+  real_T Gain2_Gain_k;                 /* Expression: -1
+                                        * Referenced by: '<S7>/Gain2'
                                         */
-  real_T Gain3_Gain_b;                 /* Expression: pi/3
-                                        * Referenced by: '<S28>/Gain3'
+  real_T Gain3_Gain_c;                 /* Expression: 0
+                                        * Referenced by: '<S7>/Gain3'
                                         */
-  real_T Gain_Gain_d;                  /* Expression: 100
-                                        * Referenced by: '<S71>/Gain'
+  real_T InterpolationUsingPrelookup__cs[12];/* Expression: squeeze(table)
+                                              * Referenced by: '<S72>/Interpolation Using Prelookup'
+                                              */
+  real_T Gain_Gain_a;                  /* Computed Parameter: Gain_Gain_a
+                                        * Referenced by: '<S7>/Gain'
                                         */
-  real_T Gain_Gain_g;                  /* Expression: 100
-                                        * Referenced by: '<S28>/Gain'
+  real_T Saturation_UpperSat_c[3];     /* Expression: config.gains.rate.max
+                                        * Referenced by: '<S7>/Saturation'
                                         */
-  real_T Saturation_UpperSat;          /* Expression: inf
-                                        * Referenced by: '<S78>/Saturation'
+  real_T Saturation_LowerSat_d[3];     /* Expression: -config.gains.rate.max
+                                        * Referenced by: '<S7>/Saturation'
                                         */
-  real_T Saturation_LowerSat;          /* Expression: 0.1
-                                        * Referenced by: '<S78>/Saturation'
+  real_T _Gain;                        /* Computed Parameter: _Gain
+                                        * Referenced by: '<S7>/ '
                                         */
-  real_T InterpolationUsingPrelookup_Tab[4];/* Expression: squeeze(table)
-                                             * Referenced by: '<S82>/Interpolation Using Prelookup'
-                                             */
-  real_T InterpolationUsingPrelookup_T_n[4];/* Expression: squeeze(table)
-                                             * Referenced by: '<S84>/Interpolation Using Prelookup'
-                                             */
-  real_T InterpolationUsingPrelookup_T_c[4];/* Expression: squeeze(table)
-                                             * Referenced by: '<S83>/Interpolation Using Prelookup'
-                                             */
-  real_T M_Gain;                       /* Expression: config.aircraft.M
-                                        * Referenced by: '<S78>/M'
+  real_T _Gain_m;                      /* Computed Parameter: _Gain_m
+                                        * Referenced by: '<S7>/   '
                                         */
-  real_T Switch1_Threshold;            /* Expression: 0
-                                        * Referenced by: '<S28>/Switch1'
+  real_T Saturation1_UpperSat;       /* Expression: config.gains.attitude.max(2)
+                                      * Referenced by: '<S74>/Saturation1'
+                                      */
+  real_T Saturation1_LowerSat;      /* Expression: -config.gains.attitude.max(2)
+                                     * Referenced by: '<S74>/Saturation1'
+                                     */
+  real_T Saturation1_UpperSat_g;     /* Expression: config.gains.attitude.max(1)
+                                      * Referenced by: '<S68>/Saturation1'
+                                      */
+  real_T Saturation1_LowerSat_b;    /* Expression: -config.gains.attitude.max(1)
+                                     * Referenced by: '<S68>/Saturation1'
+                                     */
+  real_T Saturation_UpperSat_p[3];     /* Expression: config.gains.rate.max
+                                        * Referenced by: '<S28>/Saturation'
                                         */
-  real_T Gain1_Gain_l;                 /* Expression: pi/2
-                                        * Referenced by: '<S71>/Gain1'
+  real_T Saturation_LowerSat_c[3];     /* Expression: -config.gains.rate.max
+                                        * Referenced by: '<S28>/Saturation'
                                         */
-  real_T Gain2_Gain_m;                 /* Expression: pi/2
-                                        * Referenced by: '<S71>/Gain2'
-                                        */
-  real_T Gain3_Gain_k;                 /* Expression: pi/2
-                                        * Referenced by: '<S71>/Gain3'
-                                        */
-  real_T Gain_Gain_a;                  /* Expression: sqrt(2)
-                                        * Referenced by: '<S67>/Gain'
+  real_T Gain1_Gain_p;               /* Expression: config.gains.attitude.max(1)
+                                      * Referenced by: '<S27>/Gain1'
+                                      */
+  real_T Gain2_Gain_p;              /* Expression: -config.gains.attitude.max(2)
+                                     * Referenced by: '<S27>/Gain2'
+                                     */
+  real_T Gain3_Gain_b;               /* Expression: config.gains.attitude.max(3)
+                                      * Referenced by: '<S27>/Gain3'
+                                      */
+  real_T Gain_Gain_a0;                 /* Expression: sqrt(2)
+                                        * Referenced by: '<S66>/Gain'
                                         */
   real_T Gain_Gain_k;                  /* Expression: 0.5 * 1.225
                                         * Referenced by: '<S8>/Gain'
@@ -337,112 +390,121 @@ struct P_PX4Controller_T_ {
                                         * Referenced by: '<S8>/Prelookup6'
                                         */
   real_T InterpolationUsingPrelookup_T_h[4];/* Expression: squeeze(table)
-                                             * Referenced by: '<S70>/Interpolation Using Prelookup'
+                                             * Referenced by: '<S69>/Interpolation Using Prelookup'
                                              */
   real_T Saturation_UpperSat_m;        /* Expression: inf
-                                        * Referenced by: '<S67>/Saturation'
+                                        * Referenced by: '<S66>/Saturation'
                                         */
   real_T Saturation_LowerSat_k;        /* Expression: config.gains.L1.minL1
-                                        * Referenced by: '<S67>/Saturation'
+                                        * Referenced by: '<S66>/Saturation'
                                         */
   real_T Gain_Gain_do;                 /* Expression: -1
-                                        * Referenced by: '<S68>/Gain'
+                                        * Referenced by: '<S67>/Gain'
                                         */
   real_T Saturation_UpperSat_a;        /* Expression: inf
-                                        * Referenced by: '<S68>/Saturation'
+                                        * Referenced by: '<S67>/Saturation'
                                         */
   real_T Saturation_LowerSat_e;        /* Expression: 0
-                                        * Referenced by: '<S68>/Saturation'
+                                        * Referenced by: '<S67>/Saturation'
                                         */
   real_T Gain_Gain_dn;                 /* Expression: 2
-                                        * Referenced by: '<S66>/Gain'
+                                        * Referenced by: '<S65>/Gain'
                                         */
   real_T uG_Gain;                      /* Expression: 1/config.gains.tecs.G
-                                        * Referenced by: '<S66>/1//G'
+                                        * Referenced by: '<S65>/1//G'
                                         */
   real_T Gain2_Gain_h;                 /* Computed Parameter: Gain2_Gain_h
                                         * Referenced by: '<S6>/Gain2'
                                         */
   real_T Integrator1_IC;               /* Expression: 0
-                                        * Referenced by: '<S77>/Integrator1'
+                                        * Referenced by: '<S76>/Integrator1'
                                         */
   real_T Constant_Value;               /* Expression: config.gains.tecs.balSpeW
-                                        * Referenced by: '<S77>/Constant'
+                                        * Referenced by: '<S76>/Constant'
                                         */
   real_T Gain_Gain_f;                  /* Computed Parameter: Gain_Gain_f
-                                        * Referenced by: '<S76>/Gain'
+                                        * Referenced by: '<S75>/Gain'
                                         */
   real_T Multiply_Gain;                /* Expression: config.gains.tecs.G
-                                        * Referenced by: '<S76>/Multiply'
+                                        * Referenced by: '<S75>/Multiply'
                                         */
   real_T Constant1_Value;              /* Expression: config.gains.tecs.balSkeW
-                                        * Referenced by: '<S77>/Constant1'
+                                        * Referenced by: '<S76>/Constant1'
                                         */
   real_T Gain2_Gain_o;                 /* Computed Parameter: Gain2_Gain_o
-                                        * Referenced by: '<S76>/Gain2'
+                                        * Referenced by: '<S75>/Gain2'
                                         */
   real_T Multiply5_Gain;               /* Expression: 0.5
-                                        * Referenced by: '<S76>/Multiply5'
+                                        * Referenced by: '<S75>/Multiply5'
                                         */
   real_T Gain2_Gain_c;                 /* Expression: -1
-                                        * Referenced by: '<S38>/Gain2'
+                                        * Referenced by: '<S37>/Gain2'
                                         */
   real_T Gain1_Gain_h;                 /* Computed Parameter: Gain1_Gain_h
-                                        * Referenced by: '<S76>/Gain1'
+                                        * Referenced by: '<S75>/Gain1'
                                         */
   real_T Multiply1_Gain;               /* Expression: config.gains.tecs.G
-                                        * Referenced by: '<S76>/Multiply1'
+                                        * Referenced by: '<S75>/Multiply1'
                                         */
   real_T Gain3_Gain_j;                 /* Computed Parameter: Gain3_Gain_j
-                                        * Referenced by: '<S76>/Gain3'
+                                        * Referenced by: '<S75>/Gain3'
                                         */
   real_T Multiply3_Gain;               /* Expression: 0.5
-                                        * Referenced by: '<S76>/Multiply3'
+                                        * Referenced by: '<S75>/Multiply3'
                                         */
   real_T InterpolationUsingPrelookup_T_j[4];/* Expression: squeeze(table)
-                                             * Referenced by: '<S81>/Interpolation Using Prelookup'
+                                             * Referenced by: '<S80>/Interpolation Using Prelookup'
                                              */
   real_T Gain6_Gain;                   /* Computed Parameter: Gain6_Gain
-                                        * Referenced by: '<S76>/Gain6'
+                                        * Referenced by: '<S75>/Gain6'
                                         */
   real_T Multiply4_Gain;               /* Expression: config.gains.tecs.G
-                                        * Referenced by: '<S76>/Multiply4'
+                                        * Referenced by: '<S75>/Multiply4'
                                         */
   real_T Gain5_Gain;                   /* Computed Parameter: Gain5_Gain
-                                        * Referenced by: '<S76>/Gain5'
+                                        * Referenced by: '<S75>/Gain5'
                                         */
   real_T Gain3_Gain_p;                 /* Expression: -1
-                                        * Referenced by: '<S38>/Gain3'
+                                        * Referenced by: '<S37>/Gain3'
                                         */
   real_T Gain4_Gain;                   /* Computed Parameter: Gain4_Gain
-                                        * Referenced by: '<S76>/Gain4'
+                                        * Referenced by: '<S75>/Gain4'
                                         */
   real_T Multiply2_Gain;               /* Expression: config.gains.tecs.G
-                                        * Referenced by: '<S76>/Multiply2'
+                                        * Referenced by: '<S75>/Multiply2'
                                         */
   real_T Constant_Value_b;             /* Expression: 0
-                                        * Referenced by: '<S38>/Constant'
+                                        * Referenced by: '<S37>/Constant'
                                         */
   real_T Gain7_Gain;                   /* Computed Parameter: Gain7_Gain
-                                        * Referenced by: '<S76>/Gain7'
+                                        * Referenced by: '<S75>/Gain7'
                                         */
   real_T InterpolationUsingPrelookup_T_b[4];/* Expression: squeeze(table)
-                                             * Referenced by: '<S79>/Interpolation Using Prelookup'
+                                             * Referenced by: '<S78>/Interpolation Using Prelookup'
                                              */
   real_T Gain1_Gain_hh;                /* Expression: config.gains.tecs.G
-                                        * Referenced by: '<S77>/Gain1'
+                                        * Referenced by: '<S76>/Gain1'
                                         */
   real_T Saturation_UpperSat_l;        /* Expression: inf
-                                        * Referenced by: '<S77>/Saturation'
+                                        * Referenced by: '<S76>/Saturation'
                                         */
   real_T Saturation_LowerSat_b;        /* Expression: 0.1
-                                        * Referenced by: '<S77>/Saturation'
+                                        * Referenced by: '<S76>/Saturation'
                                         */
   real_T Constant2_Value;              /* Expression: 0
-                                        * Referenced by: '<S77>/Constant2'
+                                        * Referenced by: '<S76>/Constant2'
                                         */
   real_T Switch7_Threshold;            /* Expression: 0
-                                        * Referenced by: '<S28>/Switch7'
+                                        * Referenced by: '<S27>/Switch7'
+                                        */
+  real_T Gain1_Gain_l;                 /* Expression: config.gains.rate.max(1)
+                                        * Referenced by: '<S70>/Gain1'
+                                        */
+  real_T Gain2_Gain_m;                 /* Expression: -config.gains.rate.max(2)
+                                        * Referenced by: '<S70>/Gain2'
+                                        */
+  real_T Gain3_Gain_k;                 /* Expression: config.gains.rate.max(3)
+                                        * Referenced by: '<S70>/Gain3'
                                         */
   real_T Integrator_IC;                /* Expression: 0
                                         * Referenced by: '<S3>/Integrator'
@@ -458,19 +520,21 @@ struct P_PX4Controller_T_ {
                                         * Referenced by: '<S8>/Prelookup3'
                                         */
   real_T Constant_Value_h[3];          /* Expression: 0:size(table, 4) - 1
-                                        * Referenced by: '<S32>/Constant'
+                                        * Referenced by: '<S31>/Constant'
                                         */
-  real_T _Gain;                        /* Computed Parameter: _Gain
+  real_T _Gain_n;                      /* Computed Parameter: _Gain_n
                                         * Referenced by: '<S3>/   '
                                         */
-  real_T Saturation1_UpperSat[2];
-                               /* Expression: config.gains.attitude.limits(2, :)
-                                * Referenced by: '<S3>/Saturation1'
-                                */
-  real_T Saturation1_LowerSat[2];
-                               /* Expression: config.gains.attitude.limits(1, :)
-                                * Referenced by: '<S3>/Saturation1'
-                                */
+  real_T Switch2_Threshold;            /* Expression: 0
+                                        * Referenced by: '<S27>/Switch2'
+                                        */
+  real_T Saturation1_UpperSat_e[2];/* Expression: config.gains.attitude.max(1:2)
+                                    * Referenced by: '<S3>/Saturation1'
+                                    */
+  real_T Saturation1_LowerSat_k[2];
+                                  /* Expression: -config.gains.attitude.max(1:2)
+                                   * Referenced by: '<S3>/Saturation1'
+                                   */
   real_T Gain1_Gain_g;                 /* Computed Parameter: Gain1_Gain_g
                                         * Referenced by: '<S3>/Gain1'
                                         */
@@ -478,10 +542,10 @@ struct P_PX4Controller_T_ {
                                         * Referenced by: '<S3>/Gain2'
                                         */
   real_T Constant_Value_bd[2];         /* Expression: 0:size(table, 4) - 1
-                                        * Referenced by: '<S36>/Constant'
+                                        * Referenced by: '<S35>/Constant'
                                         */
   real_T InterpolationUsingPrelookup_T_i[8];/* Expression: squeeze(table)
-                                             * Referenced by: '<S36>/Interpolation Using Prelookup'
+                                             * Referenced by: '<S35>/Interpolation Using Prelookup'
                                              */
   real_T Gain4_Gain_g;                 /* Computed Parameter: Gain4_Gain_g
                                         * Referenced by: '<S3>/Gain4'
@@ -490,19 +554,19 @@ struct P_PX4Controller_T_ {
                                         * Referenced by: '<S3>/Gain5'
                                         */
   real_T Constant_Value_k[2];          /* Expression: 0:size(table, 4) - 1
-                                        * Referenced by: '<S34>/Constant'
+                                        * Referenced by: '<S33>/Constant'
                                         */
   real_T InterpolationUsingPrelookup_T_l[8];/* Expression: squeeze(table)
-                                             * Referenced by: '<S34>/Interpolation Using Prelookup'
+                                             * Referenced by: '<S33>/Interpolation Using Prelookup'
                                              */
   real_T Gain1_Gain_e;                 /* Expression: config.gains.tecs.G
-                                        * Referenced by: '<S33>/Gain1'
+                                        * Referenced by: '<S32>/Gain1'
                                         */
   real_T Saturation_UpperSat_ag;       /* Expression: inf
-                                        * Referenced by: '<S33>/Saturation'
+                                        * Referenced by: '<S32>/Saturation'
                                         */
   real_T Saturation_LowerSat_kd;       /* Expression: 0.1
-                                        * Referenced by: '<S33>/Saturation'
+                                        * Referenced by: '<S32>/Saturation'
                                         */
   real_T Gain3_Gain_g;                 /* Computed Parameter: Gain3_Gain_g
                                         * Referenced by: '<S3>/Gain3'
@@ -511,224 +575,97 @@ struct P_PX4Controller_T_ {
                                         * Referenced by: '<S3>/Gain6'
                                         */
   real_T Switch7_Threshold_k;          /* Expression: 0
-                                        * Referenced by: '<S71>/Switch7'
+                                        * Referenced by: '<S70>/Switch7'
                                         */
   real_T Constant_Value_i[9];          /* Expression: config.aircraft.I
                                         * Referenced by: '<S7>/Constant'
                                         */
   real_T Constant_Value_a[3];          /* Expression: 0:size(table, 4) - 1
-                                        * Referenced by: '<S72>/Constant'
+                                        * Referenced by: '<S71>/Constant'
                                         */
-  real_T _Gain_m;                      /* Computed Parameter: _Gain_m
-                                        * Referenced by: '<S7>/   '
-                                        */
-  real_T Saturation_UpperSat_c[3];     /* Expression: config.gains.rate.max
-                                        * Referenced by: '<S7>/Saturation'
-                                        */
-  real_T Saturation_LowerSat_d[3];     /* Expression: -config.gains.rate.max
-                                        * Referenced by: '<S7>/Saturation'
-                                        */
-  real_T _Gain_o;                      /* Computed Parameter: _Gain_o
-                                        * Referenced by: '<S7>/ '
-                                        */
-  real_T Gain_Gain_at;                 /* Computed Parameter: Gain_Gain_at
-                                        * Referenced by: '<S7>/Gain'
+  real_T Switch2_Threshold_l;          /* Expression: 0
+                                        * Referenced by: '<S70>/Switch2'
                                         */
   real_T Constant_Value_f[3];          /* Expression: 0:size(table, 4) - 1
-                                        * Referenced by: '<S73>/Constant'
-                                        */
-  real_T InterpolationUsingPrelookup__cs[12];/* Expression: squeeze(table)
-                                              * Referenced by: '<S73>/Interpolation Using Prelookup'
-                                              */
-  real_T Gain1_Gain_f;                 /* Computed Parameter: Gain1_Gain_f
-                                        * Referenced by: '<S7>/Gain1'
-                                        */
-  real_T Gain2_Gain_k;                 /* Expression: -1
-                                        * Referenced by: '<S7>/Gain2'
-                                        */
-  real_T Gain3_Gain_c;                 /* Expression: 0
-                                        * Referenced by: '<S7>/Gain3'
-                                        */
-  real_T Lowpass_A;                    /* Computed Parameter: Lowpass_A
-                                        * Referenced by: '<S78>/Low pass'
-                                        */
-  real_T Lowpass_C;                    /* Computed Parameter: Lowpass_C
-                                        * Referenced by: '<S78>/Low pass'
-                                        */
-  real_T Integrator_IC_a;              /* Expression: 0
-                                        * Referenced by: '<S78>/Integrator'
-                                        */
-  real_T Switch1_Threshold_g;          /* Expression: 0
-                                        * Referenced by: '<S71>/Switch1'
-                                        */
-  real_T Saturation1_UpperSat_g;
-                               /* Expression: config.gains.attitude.limits(2, 1)
-                                * Referenced by: '<S69>/Saturation1'
-                                */
-  real_T Saturation1_LowerSat_b;
-                               /* Expression: config.gains.attitude.limits(1, 1)
-                                * Referenced by: '<S69>/Saturation1'
-                                */
-  real_T Saturation1_UpperSat_k;
-                               /* Expression: config.gains.attitude.limits(2, 2)
-                                * Referenced by: '<S75>/Saturation1'
-                                */
-  real_T Saturation1_LowerSat_n;
-                               /* Expression: config.gains.attitude.limits(1, 2)
-                                * Referenced by: '<S75>/Saturation1'
-                                */
-  real_T Saturation_UpperSat_p[3];     /* Expression: config.gains.rate.max
-                                        * Referenced by: '<S29>/Saturation'
-                                        */
-  real_T Saturation_LowerSat_c[3];     /* Expression: -config.gains.rate.max
-                                        * Referenced by: '<S29>/Saturation'
-                                        */
-  real_T Constant_Value_n[84];         /* Expression: 0:size(table, 4) - 1
-                                        * Referenced by: '<S22>/Constant'
-                                        */
-  real_T InterpolationUsingPrelookup__cj[336];/* Expression: squeeze(table)
-                                               * Referenced by: '<S22>/Interpolation Using Prelookup'
-                                               */
-  real_T allLimits_Value[28];          /* Expression: config.act.allLimits
-                                        * Referenced by: '<S14>/allLimits'
-                                        */
-  real_T Constant_Value_e[4];          /* Expression: 0:size(table, 4) - 1
-                                        * Referenced by: '<S17>/Constant'
-                                        */
-  real_T Constant_Value_m[6];          /* Expression: 0:size(table, 4) - 1
-                                        * Referenced by: '<S18>/Constant'
-                                        */
-  real_T Constant_Value_e4[2];         /* Expression: 0:size(table, 4) - 1
-                                        * Referenced by: '<S19>/Constant'
-                                        */
-  real_T Constant_Value_ns[2];         /* Expression: 0:size(table, 4) - 1
-                                        * Referenced by: '<S20>/Constant'
-                                        */
-  real_T Constant_Value_fu[84];        /* Expression: 0:size(table, 4) - 1
-                                        * Referenced by: '<S21>/Constant'
-                                        */
-  real_T InterpolationUsingPrelookup__nf[336];/* Expression: squeeze(table)
-                                               * Referenced by: '<S21>/Interpolation Using Prelookup'
-                                               */
-  real_T Switch1_Threshold_l;          /* Expression: 0
-                                        * Referenced by: '<S12>/Switch1'
-                                        */
-  real_T Constant5_Value[2];           /* Expression: [0 0]
-                                        * Referenced by: '<S13>/Constant5'
+                                        * Referenced by: '<S72>/Constant'
                                         */
   real_T Switch7_Threshold_e;          /* Expression: 0
                                         * Referenced by: '<S12>/Switch7'
                                         */
-  real_T Constant6_Value[6];           /* Expression: [0 0 0 1 1 0]
-                                        * Referenced by: '<S13>/Constant6'
+  real_T Lowpass_A;                    /* Computed Parameter: Lowpass_A
+                                        * Referenced by: '<S77>/Low pass'
                                         */
-  real_T Saturation5_UpperSat;         /* Expression: inf
-                                        * Referenced by: '<S14>/Saturation5'
+  real_T Lowpass_C;                    /* Computed Parameter: Lowpass_C
+                                        * Referenced by: '<S77>/Low pass'
                                         */
-  real_T Saturation5_LowerSat;         /* Expression: eps
-                                        * Referenced by: '<S14>/Saturation5'
+  real_T Integrator_IC_a;              /* Expression: 0
+                                        * Referenced by: '<S77>/Integrator'
                                         */
-  real_T Saturation4_UpperSat;         /* Expression: 1
-                                        * Referenced by: '<S14>/Saturation4'
+  real_T Switch1_Threshold_l;          /* Expression: 0
+                                        * Referenced by: '<S12>/Switch1'
                                         */
-  real_T Saturation4_LowerSat;         /* Expression: 0
-                                        * Referenced by: '<S14>/Saturation4'
+  real_T Constant_Value_hr[6];         /* Expression: zeros(6, 1)
+                                        * Referenced by: '<S2>/Constant'
                                         */
-  real_T Saturation6_UpperSat;         /* Expression: -eps
-                                        * Referenced by: '<S14>/Saturation6'
+  real_T Constant_Value_n[84];         /* Expression: 0:size(table, 4) - 1
+                                        * Referenced by: '<S18>/Constant'
                                         */
-  real_T Saturation6_LowerSat;         /* Expression: -inf
-                                        * Referenced by: '<S14>/Saturation6'
-                                        */
-  real_T Saturation7_UpperSat;         /* Expression: 1
-                                        * Referenced by: '<S14>/Saturation7'
-                                        */
-  real_T Saturation7_LowerSat;         /* Expression: 0
-                                        * Referenced by: '<S14>/Saturation7'
-                                        */
-  real_T Constant_Value_nh[84];        /* Expression: 0:size(table, 4) - 1
-                                        * Referenced by: '<S24>/Constant'
-                                        */
-  real_T InterpolationUsingPrelookup__bc[336];/* Expression: squeeze(table)
-                                               * Referenced by: '<S24>/Interpolation Using Prelookup'
+  real_T InterpolationUsingPrelookup_T_p[336];/* Expression: squeeze(table)
+                                               * Referenced by: '<S18>/Interpolation Using Prelookup'
                                                */
-  real_T allLimits_Value_e[28];        /* Expression: config.act.allLimits
-                                        * Referenced by: '<S15>/allLimits'
+  real_T Constant_Value_bp[84];        /* Expression: zeros(14, 6)
+                                        * Referenced by: '<S14>/Constant'
                                         */
-  real_T Constant_Value_c[84];         /* Expression: 0:size(table, 4) - 1
-                                        * Referenced by: '<S23>/Constant'
-                                        */
-  real_T InterpolationUsingPrelookup_T_a[336];/* Expression: squeeze(table)
-                                               * Referenced by: '<S23>/Interpolation Using Prelookup'
-                                               */
-  real_T Constant1_Value_k[6];         /* Expression: [1 0 0 0 0 0]
-                                        * Referenced by: '<S13>/Constant1'
-                                        */
-  real_T Saturation5_UpperSat_a;       /* Expression: inf
-                                        * Referenced by: '<S15>/Saturation5'
-                                        */
-  real_T Saturation5_LowerSat_g;       /* Expression: eps
-                                        * Referenced by: '<S15>/Saturation5'
-                                        */
-  real_T Saturation4_UpperSat_k;       /* Expression: 1
-                                        * Referenced by: '<S15>/Saturation4'
-                                        */
-  real_T Saturation4_LowerSat_k;       /* Expression: 0
-                                        * Referenced by: '<S15>/Saturation4'
-                                        */
-  real_T Saturation6_UpperSat_h;       /* Expression: -eps
-                                        * Referenced by: '<S15>/Saturation6'
-                                        */
-  real_T Saturation6_LowerSat_h;       /* Expression: -inf
-                                        * Referenced by: '<S15>/Saturation6'
-                                        */
-  real_T Saturation7_UpperSat_p;       /* Expression: 1
-                                        * Referenced by: '<S15>/Saturation7'
-                                        */
-  real_T Saturation7_LowerSat_d;       /* Expression: 0
-                                        * Referenced by: '<S15>/Saturation7'
-                                        */
-  real_T Constant_Value_p[84];         /* Expression: 0:size(table, 4) - 1
-                                        * Referenced by: '<S26>/Constant'
-                                        */
-  real_T InterpolationUsingPrelookup_T_g[336];/* Expression: squeeze(table)
-                                               * Referenced by: '<S26>/Interpolation Using Prelookup'
-                                               */
-  real_T allLimits_Value_i[28];        /* Expression: config.act.allLimits
-                                        * Referenced by: '<S16>/allLimits'
-                                        */
-  real_T Constant_Value_pv[84];        /* Expression: 0:size(table, 4) - 1
+  real_T Constant_Value_np[4];         /* Expression: 0:size(table, 4) - 1
                                         * Referenced by: '<S25>/Constant'
                                         */
-  real_T InterpolationUsingPrelookup__is[336];/* Expression: squeeze(table)
-                                               * Referenced by: '<S25>/Interpolation Using Prelookup'
-                                               */
-  real_T Constant2_Value_e[6];         /* Expression: [0 0 0 0 0 1]
-                                        * Referenced by: '<S13>/Constant2'
+  real_T InterpolationUsingPrelookup_T_m[16];/* Expression: squeeze(table)
+                                              * Referenced by: '<S25>/Interpolation Using Prelookup'
+                                              */
+  real_T Constant1_Value_e[2];         /* Expression: [0 0]
+                                        * Referenced by: '<S13>/Constant1'
                                         */
-  real_T Saturation5_UpperSat_f;       /* Expression: inf
-                                        * Referenced by: '<S16>/Saturation5'
+  real_T Constant_Value_e[4];          /* Expression: 0:size(table, 4) - 1
+                                        * Referenced by: '<S19>/Constant'
                                         */
-  real_T Saturation5_LowerSat_f;       /* Expression: eps
-                                        * Referenced by: '<S16>/Saturation5'
+  real_T Constant_Value_m[6];          /* Expression: 0:size(table, 4) - 1
+                                        * Referenced by: '<S20>/Constant'
                                         */
-  real_T Saturation4_UpperSat_m;       /* Expression: 1
-                                        * Referenced by: '<S16>/Saturation4'
+  real_T Constant_Value_e4[2];         /* Expression: 0:size(table, 4) - 1
+                                        * Referenced by: '<S21>/Constant'
                                         */
-  real_T Saturation4_LowerSat_o;       /* Expression: 0
-                                        * Referenced by: '<S16>/Saturation4'
+  real_T Constant_Value_ns[2];         /* Expression: 0:size(table, 4) - 1
+                                        * Referenced by: '<S22>/Constant'
                                         */
-  real_T Saturation6_UpperSat_p;       /* Expression: -eps
-                                        * Referenced by: '<S16>/Saturation6'
+  real_T Saturation_UpperSat_pe[14];   /* Expression: config.act.limits(2, :)
+                                        * Referenced by: '<S15>/Saturation'
                                         */
-  real_T Saturation6_LowerSat_g;       /* Expression: -inf
-                                        * Referenced by: '<S16>/Saturation6'
+  real_T Saturation_LowerSat_bc[14];   /* Expression: config.act.limits(1, :)
+                                        * Referenced by: '<S15>/Saturation'
                                         */
-  real_T Saturation7_UpperSat_i;       /* Expression: 1
-                                        * Referenced by: '<S16>/Saturation7'
+  real_T Constant_Value_ke[2];         /* Expression: 0:size(table, 4) - 1
+                                        * Referenced by: '<S23>/Constant'
                                         */
-  real_T Saturation7_LowerSat_g;       /* Expression: 0
-                                        * Referenced by: '<S16>/Saturation7'
+  real_T InterpolationUsingPrelookup__pv[8];/* Expression: squeeze(table)
+                                             * Referenced by: '<S23>/Interpolation Using Prelookup'
+                                             */
+  real_T Saturation_UpperSat_cb[14];   /* Expression: config.act.limits(2, :)
+                                        * Referenced by: '<S16>/Saturation'
+                                        */
+  real_T Saturation_LowerSat_c1[14];   /* Expression: config.act.limits(1, :)
+                                        * Referenced by: '<S16>/Saturation'
+                                        */
+  real_T Constant_Value_l[16];         /* Expression: 0:size(table, 4) - 1
+                                        * Referenced by: '<S24>/Constant'
+                                        */
+  real_T InterpolationUsingPrelookup__m0[64];/* Expression: squeeze(table)
+                                              * Referenced by: '<S24>/Interpolation Using Prelookup'
+                                              */
+  real_T Saturation_UpperSat_l4[14];   /* Expression: config.act.limits(2, :)
+                                        * Referenced by: '<S17>/Saturation'
+                                        */
+  real_T Saturation_LowerSat_ey[14];   /* Expression: config.act.limits(1, :)
+                                        * Referenced by: '<S17>/Saturation'
                                         */
   real_T Memory_1_InitialCondition;    /* Expression: 0
                                         * Referenced by: '<S1>/Memory'
@@ -748,7 +685,7 @@ struct P_PX4Controller_T_ {
   real_T Constant1_Value_h[6];         /* Expression: [1 1 1 -1 -1 -1]
                                         * Referenced by: '<S11>/Constant1'
                                         */
-  real_T Constant2_Value_k[2];         /* Expression: [1 1]
+  real_T Constant2_Value_k[2];         /* Expression: [-1 -1]
                                         * Referenced by: '<S11>/Constant2'
                                         */
   real_T Constant3_Value[2];           /* Expression: [1 1]
@@ -757,7 +694,7 @@ struct P_PX4Controller_T_ {
   real_T Switch1_Threshold_m;          /* Expression: 0
                                         * Referenced by: '<S11>/Switch1'
                                         */
-  real_T Switch2_Threshold;            /* Expression: 0
+  real_T Switch2_Threshold_o;          /* Expression: 0
                                         * Referenced by: '<S11>/Switch2'
                                         */
   real_T Switch3_Threshold;            /* Expression: 0
@@ -766,38 +703,38 @@ struct P_PX4Controller_T_ {
   real_T Switch4_Threshold;            /* Expression: 0
                                         * Referenced by: '<S11>/Switch4'
                                         */
-  real_T Constant_Value_cn[2];         /* Expression: 0:size(table, 4) - 1
-                                        * Referenced by: '<S35>/Constant'
+  real_T Constant_Value_c[2];          /* Expression: 0:size(table, 4) - 1
+                                        * Referenced by: '<S34>/Constant'
                                         */
   real_T InterpolationUsingPrelookup__ho[8];/* Expression: squeeze(table)
-                                             * Referenced by: '<S35>/Interpolation Using Prelookup'
+                                             * Referenced by: '<S34>/Interpolation Using Prelookup'
                                              */
-  real_T InterpolationUsingPrelookup_T_m[4];/* Expression: squeeze(table)
-                                             * Referenced by: '<S80>/Interpolation Using Prelookup'
+  real_T InterpolationUsingPrelookup__mw[4];/* Expression: squeeze(table)
+                                             * Referenced by: '<S79>/Interpolation Using Prelookup'
                                              */
   uint32_T InterpolationUsingPrelookup_dim[3];
                           /* Computed Parameter: InterpolationUsingPrelookup_dim
-                           * Referenced by: '<S32>/Interpolation Using Prelookup'
+                           * Referenced by: '<S31>/Interpolation Using Prelookup'
                            */
   uint32_T InterpolationUsingPrelookup_d_f[3];
                           /* Computed Parameter: InterpolationUsingPrelookup_d_f
-                           * Referenced by: '<S72>/Interpolation Using Prelookup'
+                           * Referenced by: '<S71>/Interpolation Using Prelookup'
                            */
   uint32_T InterpolationUsingPrelookup_d_d[3];
                           /* Computed Parameter: InterpolationUsingPrelookup_d_d
-                           * Referenced by: '<S17>/Interpolation Using Prelookup'
+                           * Referenced by: '<S19>/Interpolation Using Prelookup'
                            */
   uint32_T InterpolationUsingPrelookup_d_o[3];
                           /* Computed Parameter: InterpolationUsingPrelookup_d_o
-                           * Referenced by: '<S18>/Interpolation Using Prelookup'
+                           * Referenced by: '<S20>/Interpolation Using Prelookup'
                            */
   uint32_T InterpolationUsingPrelookup_d_m[3];
                           /* Computed Parameter: InterpolationUsingPrelookup_d_m
-                           * Referenced by: '<S19>/Interpolation Using Prelookup'
+                           * Referenced by: '<S21>/Interpolation Using Prelookup'
                            */
   uint32_T InterpolationUsingPrelookup__mi[3];
                           /* Computed Parameter: InterpolationUsingPrelookup__mi
-                           * Referenced by: '<S20>/Interpolation Using Prelookup'
+                           * Referenced by: '<S22>/Interpolation Using Prelookup'
                            */
 };
 
@@ -958,77 +895,76 @@ extern "C" {
  * '<S10>'  : 'PX4Controller/Controller/Allocation/ Trim'
  * '<S11>'  : 'PX4Controller/Controller/Allocation/Actuation override'
  * '<S12>'  : 'PX4Controller/Controller/Allocation/FM Override'
- * '<S13>'  : 'PX4Controller/Controller/Allocation/Subsystem'
- * '<S14>'  : 'PX4Controller/Controller/Allocation/Subsystem Reference'
- * '<S15>'  : 'PX4Controller/Controller/Allocation/Subsystem Reference1'
- * '<S16>'  : 'PX4Controller/Controller/Allocation/Subsystem Reference2'
- * '<S17>'  : 'PX4Controller/Controller/Allocation/ Trim/Subsystem Reference3'
- * '<S18>'  : 'PX4Controller/Controller/Allocation/ Trim/Subsystem Reference4'
- * '<S19>'  : 'PX4Controller/Controller/Allocation/ Trim/Subsystem Reference5'
- * '<S20>'  : 'PX4Controller/Controller/Allocation/ Trim/Subsystem Reference6'
- * '<S21>'  : 'PX4Controller/Controller/Allocation/Subsystem Reference/Subsystem Reference'
- * '<S22>'  : 'PX4Controller/Controller/Allocation/Subsystem Reference/Subsystem Reference1'
- * '<S23>'  : 'PX4Controller/Controller/Allocation/Subsystem Reference1/Subsystem Reference'
- * '<S24>'  : 'PX4Controller/Controller/Allocation/Subsystem Reference1/Subsystem Reference1'
- * '<S25>'  : 'PX4Controller/Controller/Allocation/Subsystem Reference2/Subsystem Reference'
- * '<S26>'  : 'PX4Controller/Controller/Allocation/Subsystem Reference2/Subsystem Reference1'
- * '<S27>'  : 'PX4Controller/Controller/Attitude/Disable'
- * '<S28>'  : 'PX4Controller/Controller/Attitude/Manual override'
- * '<S29>'  : 'PX4Controller/Controller/Attitude/Saturation'
- * '<S30>'  : 'PX4Controller/Controller/Attitude/Signals'
- * '<S31>'  : 'PX4Controller/Controller/Attitude/Subsystem Reference'
- * '<S32>'  : 'PX4Controller/Controller/Attitude/Subsystem Reference3'
- * '<S33>'  : 'PX4Controller/Controller/Attitude/Turn coordinator'
- * '<S34>'  : 'PX4Controller/Controller/Attitude/attitude.Kd'
- * '<S35>'  : 'PX4Controller/Controller/Attitude/attitude.Ki'
- * '<S36>'  : 'PX4Controller/Controller/Attitude/attitude.Kp'
- * '<S37>'  : 'PX4Controller/Controller/Attitude/Signals/Subsystem Reference1'
- * '<S38>'  : 'PX4Controller/Controller/Estimator/Computed'
- * '<S39>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference'
- * '<S40>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference1'
- * '<S41>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference2'
- * '<S42>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference3'
- * '<S43>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference4'
- * '<S44>'  : 'PX4Controller/Controller/Estimator/Subsystem1'
- * '<S45>'  : 'PX4Controller/Controller/Estimator/Subsystem10'
- * '<S46>'  : 'PX4Controller/Controller/Estimator/Subsystem5'
- * '<S47>'  : 'PX4Controller/Controller/Estimator/Subsystem6'
- * '<S48>'  : 'PX4Controller/Controller/Estimator/Subsystem7'
- * '<S49>'  : 'PX4Controller/Controller/Estimator/Subsystem8'
- * '<S50>'  : 'PX4Controller/Controller/Estimator/Subsystem9'
- * '<S51>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference/Subsystem'
- * '<S52>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference/Subsystem1'
- * '<S53>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference/Subsystem2'
- * '<S54>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference1/Subsystem'
- * '<S55>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference1/Subsystem1'
- * '<S56>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference1/Subsystem2'
- * '<S57>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference2/Subsystem'
- * '<S58>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference2/Subsystem1'
- * '<S59>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference2/Subsystem2'
- * '<S60>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference3/Subsystem'
- * '<S61>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference3/Subsystem1'
- * '<S62>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference3/Subsystem2'
- * '<S63>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference4/Subsystem'
- * '<S64>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference4/Subsystem1'
- * '<S65>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference4/Subsystem2'
- * '<S66>'  : 'PX4Controller/Controller/L1/Controller'
- * '<S67>'  : 'PX4Controller/Controller/L1/L1'
- * '<S68>'  : 'PX4Controller/Controller/L1/Line'
- * '<S69>'  : 'PX4Controller/Controller/L1/Saturation'
- * '<S70>'  : 'PX4Controller/Controller/L1/L1/gains.L1.wnInv'
- * '<S71>'  : 'PX4Controller/Controller/Rate/Manual override'
- * '<S72>'  : 'PX4Controller/Controller/Rate/Subsystem Reference3'
- * '<S73>'  : 'PX4Controller/Controller/Rate/rate.Kp'
- * '<S74>'  : 'PX4Controller/Controller/TECS/Disable'
- * '<S75>'  : 'PX4Controller/Controller/TECS/Saturation'
- * '<S76>'  : 'PX4Controller/Controller/TECS/Specific energy '
- * '<S77>'  : 'PX4Controller/Controller/TECS/Specific energy balance'
- * '<S78>'  : 'PX4Controller/Controller/TECS/Total specific energy'
- * '<S79>'  : 'PX4Controller/Controller/TECS/Specific energy balance/tecs.balKd'
- * '<S80>'  : 'PX4Controller/Controller/TECS/Specific energy balance/tecs.balKi'
- * '<S81>'  : 'PX4Controller/Controller/TECS/Specific energy balance/tecs.balKp'
- * '<S82>'  : 'PX4Controller/Controller/TECS/Total specific energy/gains.tecs.totKi'
- * '<S83>'  : 'PX4Controller/Controller/TECS/Total specific energy/tecs.totKd'
- * '<S84>'  : 'PX4Controller/Controller/TECS/Total specific energy/tecs.totKp'
+ * '<S13>'  : 'PX4Controller/Controller/Allocation/FMCmd'
+ * '<S14>'  : 'PX4Controller/Controller/Allocation/Subsystem'
+ * '<S15>'  : 'PX4Controller/Controller/Allocation/Subsystem Reference'
+ * '<S16>'  : 'PX4Controller/Controller/Allocation/Subsystem Reference1'
+ * '<S17>'  : 'PX4Controller/Controller/Allocation/Subsystem Reference2'
+ * '<S18>'  : 'PX4Controller/Controller/Allocation/Subsystem Reference3'
+ * '<S19>'  : 'PX4Controller/Controller/Allocation/ Trim/Subsystem Reference3'
+ * '<S20>'  : 'PX4Controller/Controller/Allocation/ Trim/Subsystem Reference4'
+ * '<S21>'  : 'PX4Controller/Controller/Allocation/ Trim/Subsystem Reference5'
+ * '<S22>'  : 'PX4Controller/Controller/Allocation/ Trim/Subsystem Reference6'
+ * '<S23>'  : 'PX4Controller/Controller/Allocation/Subsystem/Subsystem Reference1'
+ * '<S24>'  : 'PX4Controller/Controller/Allocation/Subsystem/Subsystem Reference2'
+ * '<S25>'  : 'PX4Controller/Controller/Allocation/Subsystem/Subsystem Reference3'
+ * '<S26>'  : 'PX4Controller/Controller/Attitude/Disable'
+ * '<S27>'  : 'PX4Controller/Controller/Attitude/Manual override'
+ * '<S28>'  : 'PX4Controller/Controller/Attitude/Saturation'
+ * '<S29>'  : 'PX4Controller/Controller/Attitude/Signals'
+ * '<S30>'  : 'PX4Controller/Controller/Attitude/Subsystem Reference'
+ * '<S31>'  : 'PX4Controller/Controller/Attitude/Subsystem Reference3'
+ * '<S32>'  : 'PX4Controller/Controller/Attitude/Turn coordinator'
+ * '<S33>'  : 'PX4Controller/Controller/Attitude/attitude.Kd'
+ * '<S34>'  : 'PX4Controller/Controller/Attitude/attitude.Ki'
+ * '<S35>'  : 'PX4Controller/Controller/Attitude/attitude.Kp'
+ * '<S36>'  : 'PX4Controller/Controller/Attitude/Signals/Subsystem Reference1'
+ * '<S37>'  : 'PX4Controller/Controller/Estimator/Computed'
+ * '<S38>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference'
+ * '<S39>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference1'
+ * '<S40>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference2'
+ * '<S41>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference3'
+ * '<S42>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference4'
+ * '<S43>'  : 'PX4Controller/Controller/Estimator/Subsystem1'
+ * '<S44>'  : 'PX4Controller/Controller/Estimator/Subsystem10'
+ * '<S45>'  : 'PX4Controller/Controller/Estimator/Subsystem5'
+ * '<S46>'  : 'PX4Controller/Controller/Estimator/Subsystem6'
+ * '<S47>'  : 'PX4Controller/Controller/Estimator/Subsystem7'
+ * '<S48>'  : 'PX4Controller/Controller/Estimator/Subsystem8'
+ * '<S49>'  : 'PX4Controller/Controller/Estimator/Subsystem9'
+ * '<S50>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference/Subsystem'
+ * '<S51>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference/Subsystem1'
+ * '<S52>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference/Subsystem2'
+ * '<S53>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference1/Subsystem'
+ * '<S54>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference1/Subsystem1'
+ * '<S55>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference1/Subsystem2'
+ * '<S56>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference2/Subsystem'
+ * '<S57>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference2/Subsystem1'
+ * '<S58>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference2/Subsystem2'
+ * '<S59>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference3/Subsystem'
+ * '<S60>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference3/Subsystem1'
+ * '<S61>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference3/Subsystem2'
+ * '<S62>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference4/Subsystem'
+ * '<S63>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference4/Subsystem1'
+ * '<S64>'  : 'PX4Controller/Controller/Estimator/Subsystem Reference4/Subsystem2'
+ * '<S65>'  : 'PX4Controller/Controller/L1/Controller'
+ * '<S66>'  : 'PX4Controller/Controller/L1/L1'
+ * '<S67>'  : 'PX4Controller/Controller/L1/Line'
+ * '<S68>'  : 'PX4Controller/Controller/L1/Saturation'
+ * '<S69>'  : 'PX4Controller/Controller/L1/L1/gains.L1.wnInv'
+ * '<S70>'  : 'PX4Controller/Controller/Rate/Manual override'
+ * '<S71>'  : 'PX4Controller/Controller/Rate/Subsystem Reference3'
+ * '<S72>'  : 'PX4Controller/Controller/Rate/rate.Kp'
+ * '<S73>'  : 'PX4Controller/Controller/TECS/Disable'
+ * '<S74>'  : 'PX4Controller/Controller/TECS/Saturation'
+ * '<S75>'  : 'PX4Controller/Controller/TECS/Specific energy '
+ * '<S76>'  : 'PX4Controller/Controller/TECS/Specific energy balance'
+ * '<S77>'  : 'PX4Controller/Controller/TECS/Total specific energy'
+ * '<S78>'  : 'PX4Controller/Controller/TECS/Specific energy balance/tecs.balKd'
+ * '<S79>'  : 'PX4Controller/Controller/TECS/Specific energy balance/tecs.balKi'
+ * '<S80>'  : 'PX4Controller/Controller/TECS/Specific energy balance/tecs.balKp'
+ * '<S81>'  : 'PX4Controller/Controller/TECS/Total specific energy/gains.tecs.totKi'
+ * '<S82>'  : 'PX4Controller/Controller/TECS/Total specific energy/tecs.totKd'
+ * '<S83>'  : 'PX4Controller/Controller/TECS/Total specific energy/tecs.totKp'
  */
 #endif                                 /* RTW_HEADER_PX4Controller_h_ */

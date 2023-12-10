@@ -3,9 +3,9 @@
  *
  * Code generation for model "PX4Controller".
  *
- * Model version              : 1.277
+ * Model version              : 1.278
  * Simulink Coder version : 9.7 (R2022a) 13-Nov-2021
- * C++ source code generated on : Fri Dec  8 03:03:21 2023
+ * C++ source code generated on : Sun Dec 10 03:06:45 2023
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -276,20 +276,22 @@ real_T rt_atan2d_snf(real_T u0, real_T u1)
 /* Model step function */
 void PX4Controller_step(void)
 {
-  real_T rtb_InterpolationUsingPrelook_g[84];
-  real_T rtb_InterpolationUsingPrelook_l[84];
-  real_T rtb_Divide2[14];
-  real_T rtb_Sum2_d[14];
-  real_T rtb_Sum2_f[14];
-  real_T rtb_InterpolationUsingPrelook_d[6];
-  real_T rtb_MatrixMultiply1_k[6];
-  real_T rtb_Sum2_a[6];
+  real_T rtb_Assignment2[84];
+  real_T rtb_InterpolationUsingPreloo_dw[84];
+  real_T rtb_InterpolationUsingPrelook_c[16];
+  real_T rtb_Saturation_az[14];
+  real_T rtb_Saturation_j[14];
+  real_T rtb_Subtract1[6];
+  real_T rtb_Subtract1_tmp[6];
+  real_T rtb_Subtract1_tmp_0[6];
+  real_T tmp[6];
   real_T frac_2[3];
   real_T frac_5[3];
-  real_T frac_b[3];
   real_T frac_c[3];
   real_T frac_d[3];
   real_T frac_e[3];
+  real_T frac_f[3];
+  real_T rtb_Switch7_e[3];
   real_T frac[2];
   real_T frac_0[2];
   real_T frac_1[2];
@@ -300,65 +302,59 @@ void PX4Controller_step(void)
   real_T frac_8[2];
   real_T frac_9[2];
   real_T frac_a[2];
-  real_T frac_f[2];
+  real_T frac_b[2];
   real_T frac_g[2];
   real_T frac_h[2];
   real_T frac_i[2];
   real_T frac_j[2];
-  real_T frac_k[2];
-  real_T frac_l[2];
-  real_T rtb_Assignment1_idx_0;
-  real_T rtb_Assignment1_idx_1;
-  real_T rtb_Assignment1_idx_2;
+  real_T rtb_Gain1_a;
+  real_T rtb_Gain1_g;
   real_T rtb_Gain2;
+  real_T rtb_Gain2_m;
+  real_T rtb_Gain6;
+  real_T rtb_InterpolationUsingPrelook_0;
+  real_T rtb_InterpolationUsingPrelook_4;
+  real_T rtb_InterpolationUsingPrelook_5;
+  real_T rtb_InterpolationUsingPrelook_6;
   real_T rtb_InterpolationUsingPrelook_k;
-  real_T rtb_Saturation1;
-  real_T rtb_Saturation7;
-  real_T rtb_Saturation7_g;
-  real_T rtb_Switch1_b;
-  real_T rtb_Switch7_d_idx_0;
-  real_T rtb_Switch7_d_idx_0_0;
-  real_T rtb_Switch7_d_idx_1;
-  real_T rtb_Switch7_d_idx_2;
+  real_T rtb_Switch1_o;
   real_T rtb_Switch7_idx_0;
   real_T rtb_Switch7_idx_1;
+  real_T rtb_Tan1;
   real_T rtb_f1;
   real_T rtb_f1_m;
   real_T rtb_f2;
   real_T rtb_f2_p;
-  real_T rtb_f3;
   real_T rtb_sebErr;
   real_T rtb_skeCmd;
   real_T rtb_skeDot;
   real_T rtb_skeDotCmd;
-  real_T rtb_ske_0;
   real_T rtb_spe;
+  real_T rtb_speCmd;
   real_T rtb_speDot;
   real_T rtb_speDotCmd;
   real_T rtb_tecsthetaCmd;
   uint32_T bpIndex_2[4];
   uint32_T bpIndex_5[4];
-  uint32_T bpIndex_b[4];
   uint32_T bpIndex_c[4];
   uint32_T bpIndex_d[4];
   uint32_T bpIndex_e[4];
+  uint32_T bpIndex_f[4];
   uint32_T bpIndex_3[3];
   uint32_T bpIndex_4[3];
   uint32_T bpIndex_6[3];
+  uint32_T bpIndex_8[3];
   uint32_T bpIndex_9[3];
-  uint32_T bpIndex_f[3];
   uint32_T bpIndex_g[3];
   uint32_T bpIndex_h[3];
   uint32_T bpIndex_i[3];
-  uint32_T bpIndex_j[3];
-  uint32_T bpIndex_k[3];
   uint32_T bpIndex[2];
   uint32_T bpIndex_0[2];
   uint32_T bpIndex_1[2];
   uint32_T bpIndex_7[2];
-  uint32_T bpIndex_8[2];
   uint32_T bpIndex_a[2];
-  uint32_T bpIndex_l[2];
+  uint32_T bpIndex_b[2];
+  uint32_T bpIndex_j[2];
   uint32_T rtb_k1;
   uint32_T rtb_k1_g;
   uint32_T rtb_k2;
@@ -384,10 +380,25 @@ void PX4Controller_step(void)
     PX4Controller_M->Timing.t[0] = rtsiGetT(&PX4Controller_M->solverInfo);
   }
 
-  /* DotProduct: '<S67>/Dot Product' incorporates:
+  /* Gain: '<S27>/Gain1' incorporates:
+   *  Inport: '<Root>/CmdBusIn'
+   */
+  rtb_Gain1_g = PX4Controller_P.Gain1_Gain_p * PX4Controller_U.CmdBusIn.rc[1];
+
+  /* Gain: '<S27>/Gain2' incorporates:
+   *  Inport: '<Root>/CmdBusIn'
+   */
+  rtb_Tan1 = PX4Controller_P.Gain2_Gain_p * PX4Controller_U.CmdBusIn.rc[2];
+
+  /* Gain: '<S27>/Gain3' incorporates:
+   *  Inport: '<Root>/CmdBusIn'
+   */
+  rtb_Gain6 = PX4Controller_P.Gain3_Gain_b * PX4Controller_U.CmdBusIn.rc[3];
+
+  /* DotProduct: '<S66>/Dot Product' incorporates:
    *  Inport: '<Root>/StateBus'
    */
-  rtb_ske_0 = PX4Controller_U.StateBus_m.vNed[0] *
+  rtb_InterpolationUsingPrelook_0 = PX4Controller_U.StateBus_m.vNed[0] *
     PX4Controller_U.StateBus_m.vNed[0] + PX4Controller_U.StateBus_m.vNed[1] *
     PX4Controller_U.StateBus_m.vNed[1];
 
@@ -409,110 +420,111 @@ void PX4Controller_step(void)
                        PX4Controller_P.Prelookup6_BreakpointsData, 1U, &rtb_f2,
                        &PX4Controller_DW.Prelookup6_DWORK1);
 
-  /* Interpolation_n-D: '<S70>/Interpolation Using Prelookup' */
+  /* Interpolation_n-D: '<S69>/Interpolation Using Prelookup' */
   frac[0] = rtb_f1;
   frac[1] = rtb_f2;
   bpIndex[0] = rtb_k1;
   bpIndex[1] = rtb_k2;
 
-  /* Product: '<S70>/Product' incorporates:
-   *  DotProduct: '<S67>/Dot Product'
-   *  Gain: '<S67>/Gain'
-   *  Interpolation_n-D: '<S70>/Interpolation Using Prelookup'
-   *  Sqrt: '<S67>/Square Root'
+  /* Product: '<S69>/Product' incorporates:
+   *  DotProduct: '<S66>/Dot Product'
+   *  Gain: '<S66>/Gain'
+   *  Interpolation_n-D: '<S69>/Interpolation Using Prelookup'
+   *  Sqrt: '<S66>/Square Root'
    */
-  rtb_skeDot = PX4Controller_P.Gain_Gain_a * std::sqrt(rtb_ske_0) * intrp2d_l_pw
-    (bpIndex, frac, PX4Controller_P.InterpolationUsingPrelookup_T_h, 2U);
+  rtb_skeDot = PX4Controller_P.Gain_Gain_a0 * std::sqrt
+    (rtb_InterpolationUsingPrelook_0) * intrp2d_l_pw(bpIndex, frac,
+    PX4Controller_P.InterpolationUsingPrelookup_T_h, 2U);
 
-  /* Saturate: '<S67>/Saturation' */
+  /* Saturate: '<S66>/Saturation' */
   if (rtb_skeDot > PX4Controller_P.Saturation_UpperSat_m) {
     rtb_skeDot = PX4Controller_P.Saturation_UpperSat_m;
   } else if (rtb_skeDot < PX4Controller_P.Saturation_LowerSat_k) {
     rtb_skeDot = PX4Controller_P.Saturation_LowerSat_k;
   }
 
-  /* End of Saturate: '<S67>/Saturation' */
+  /* End of Saturate: '<S66>/Saturation' */
 
-  /* Trigonometry: '<S68>/Cos1' incorporates:
+  /* Trigonometry: '<S67>/Cos1' incorporates:
    *  Inport: '<Root>/CmdBusIn'
    */
   rtb_spe = std::sin(PX4Controller_U.CmdBusIn.trackLine[0]);
 
-  /* Trigonometry: '<S68>/Cos' incorporates:
+  /* Trigonometry: '<S67>/Cos' incorporates:
    *  Inport: '<Root>/CmdBusIn'
    */
   rtb_skeCmd = std::cos(PX4Controller_U.CmdBusIn.trackLine[0]);
 
-  /* SignalConversion generated from: '<S68>/Dot Product1' incorporates:
-   *  Gain: '<S68>/Gain'
+  /* SignalConversion generated from: '<S67>/Dot Product1' incorporates:
+   *  Gain: '<S67>/Gain'
    */
   frac[1] = PX4Controller_P.Gain_Gain_do * rtb_skeCmd;
 
-  /* DotProduct: '<S68>/Dot Product1' incorporates:
+  /* DotProduct: '<S67>/Dot Product1' incorporates:
    *  Inport: '<Root>/CmdBusIn'
    *  Inport: '<Root>/StateBus'
-   *  SignalConversion generated from: '<S68>/Dot Product1'
-   *  Sum: '<S68>/Minus'
+   *  SignalConversion generated from: '<S67>/Dot Product1'
+   *  Sum: '<S67>/Minus'
    */
-  rtb_Switch7_d_idx_0 = (PX4Controller_U.StateBus_m.xNed[0] -
-    PX4Controller_U.CmdBusIn.trackLine[1]) * rtb_spe +
+  rtb_Gain2 = (PX4Controller_U.StateBus_m.xNed[0] -
+               PX4Controller_U.CmdBusIn.trackLine[1]) * rtb_spe +
     (PX4Controller_U.StateBus_m.xNed[1] - PX4Controller_U.CmdBusIn.trackLine[2])
     * frac[1];
 
-  /* Sum: '<S68>/Minus1' incorporates:
-   *  DotProduct: '<S68>/Dot Product1'
-   *  Math: '<S68>/Square'
-   *  Math: '<S68>/Square2'
+  /* Sum: '<S67>/Minus1' incorporates:
+   *  DotProduct: '<S67>/Dot Product1'
+   *  Math: '<S67>/Square'
+   *  Math: '<S67>/Square2'
    */
-  rtb_f3 = rtb_skeDot * rtb_skeDot - rtb_Switch7_d_idx_0 * rtb_Switch7_d_idx_0;
+  rtb_f2_p = rtb_skeDot * rtb_skeDot - rtb_Gain2 * rtb_Gain2;
 
-  /* Saturate: '<S68>/Saturation' */
-  if (rtb_f3 > PX4Controller_P.Saturation_UpperSat_a) {
-    rtb_f3 = PX4Controller_P.Saturation_UpperSat_a;
-  } else if (rtb_f3 < PX4Controller_P.Saturation_LowerSat_e) {
-    rtb_f3 = PX4Controller_P.Saturation_LowerSat_e;
+  /* Saturate: '<S67>/Saturation' */
+  if (rtb_f2_p > PX4Controller_P.Saturation_UpperSat_a) {
+    rtb_f2_p = PX4Controller_P.Saturation_UpperSat_a;
+  } else if (rtb_f2_p < PX4Controller_P.Saturation_LowerSat_e) {
+    rtb_f2_p = PX4Controller_P.Saturation_LowerSat_e;
   }
 
-  /* End of Saturate: '<S68>/Saturation' */
+  /* End of Saturate: '<S67>/Saturation' */
 
-  /* Trigonometry: '<S66>/Cos' incorporates:
+  /* Trigonometry: '<S65>/Cos' incorporates:
    *  Inport: '<Root>/StateBus'
-   *  Trigonometry: '<S31>/sincos'
-   *  Trigonometry: '<S37>/sincos'
+   *  Trigonometry: '<S30>/sincos'
+   *  Trigonometry: '<S36>/sincos'
    */
-  rtb_InterpolationUsingPrelook_k = std::cos
+  rtb_InterpolationUsingPrelook_6 = std::cos
     (PX4Controller_U.StateBus_m.eulerBody[1]);
 
   /* Gain: '<S6>/Gain2' incorporates:
-   *  DotProduct: '<S67>/Dot Product'
-   *  DotProduct: '<S68>/Dot Product1'
-   *  DotProduct: '<S68>/Dot Product2'
-   *  DotProduct: '<S68>/Dot Product3'
-   *  Gain: '<S66>/1//G'
-   *  Gain: '<S66>/Gain'
+   *  DotProduct: '<S66>/Dot Product'
+   *  DotProduct: '<S67>/Dot Product1'
+   *  DotProduct: '<S67>/Dot Product2'
+   *  DotProduct: '<S67>/Dot Product3'
+   *  Gain: '<S65>/1//G'
+   *  Gain: '<S65>/Gain'
    *  Inport: '<Root>/StateBus'
-   *  Product: '<S66>/Divide'
-   *  Product: '<S66>/Product'
-   *  SignalConversion generated from: '<S68>/Dot Product1'
-   *  Sqrt: '<S68>/Square Root'
-   *  Sum: '<S68>/Minus2'
-   *  Trigonometry: '<S66>/Atan'
-   *  Trigonometry: '<S66>/Cos'
-   *  Trigonometry: '<S66>/Sin'
-   *  Trigonometry: '<S68>/Atan1'
-   *  Trigonometry: '<S68>/Atan2'
+   *  Product: '<S65>/Divide'
+   *  Product: '<S65>/Product'
+   *  SignalConversion generated from: '<S67>/Dot Product1'
+   *  Sqrt: '<S67>/Square Root'
+   *  Sum: '<S67>/Minus2'
+   *  Trigonometry: '<S65>/Atan'
+   *  Trigonometry: '<S65>/Cos'
+   *  Trigonometry: '<S65>/Sin'
+   *  Trigonometry: '<S67>/Atan1'
+   *  Trigonometry: '<S67>/Atan2'
    */
   rtb_Gain2 = std::atan(std::sin(rt_atan2d_snf(rtb_spe *
     PX4Controller_U.StateBus_m.vNed[0] + frac[1] *
     PX4Controller_U.StateBus_m.vNed[1], rtb_skeCmd *
     PX4Controller_U.StateBus_m.vNed[0] + rtb_spe *
-    PX4Controller_U.StateBus_m.vNed[1]) + rt_atan2d_snf(rtb_Switch7_d_idx_0, std::
-    sqrt(rtb_f3))) * (1.0 / rtb_skeDot) * rtb_ske_0 *
+    PX4Controller_U.StateBus_m.vNed[1]) + rt_atan2d_snf(rtb_Gain2, std::sqrt
+    (rtb_f2_p))) * (1.0 / rtb_skeDot) * rtb_InterpolationUsingPrelook_0 *
                         PX4Controller_P.Gain_Gain_dn * PX4Controller_P.uG_Gain *
-                        rtb_InterpolationUsingPrelook_k) *
+                        rtb_InterpolationUsingPrelook_6) *
     PX4Controller_P.Gain2_Gain_h;
 
-  /* Logic: '<S74>/OR' incorporates:
+  /* Logic: '<S73>/OR' incorporates:
    *  Inport: '<Root>/CmdBusIn'
    */
   PX4Controller_B.OR = ((PX4Controller_U.CmdBusIn.manualAttitude != 0.0) ||
@@ -520,7 +532,7 @@ void PX4Controller_step(void)
                         (PX4Controller_U.CmdBusIn.manualFM != 0.0) ||
                         (PX4Controller_U.CmdBusIn.manualActuation != 0.0));
 
-  /* Integrator: '<S77>/Integrator1' */
+  /* Integrator: '<S76>/Integrator1' */
   if (rtsiIsModeUpdateTimeStep(&PX4Controller_M->solverInfo)) {
     didZcEventOccur = (((PX4Controller_PrevZCX.Integrator1_Reset_ZCE ==
                          POS_ZCSIG) != PX4Controller_B.OR) &&
@@ -534,134 +546,133 @@ void PX4Controller_step(void)
     }
   }
 
-  rtb_f3 = PX4Controller_X.Integrator1_CSTATE;
-
-  /* Gain: '<S76>/Multiply' incorporates:
-   *  Gain: '<S76>/Gain'
+  /* Gain: '<S75>/Multiply' incorporates:
+   *  Gain: '<S75>/Gain'
    *  Inport: '<Root>/CmdBusIn'
    */
-  rtb_Saturation1 = PX4Controller_P.Gain_Gain_f * PX4Controller_U.CmdBusIn.hCmd *
+  rtb_speCmd = PX4Controller_P.Gain_Gain_f * PX4Controller_U.CmdBusIn.hCmd *
     PX4Controller_P.Multiply_Gain;
 
-  /* Gain: '<S76>/Gain2' incorporates:
+  /* Gain: '<S75>/Gain2' incorporates:
    *  Inport: '<Root>/CmdBusIn'
    */
   rtb_skeCmd = PX4Controller_P.Gain2_Gain_o * PX4Controller_U.CmdBusIn.tasCmd;
 
-  /* Gain: '<S76>/Multiply5' incorporates:
-   *  Math: '<S76>/Square1'
+  /* Gain: '<S75>/Multiply5' incorporates:
+   *  Math: '<S75>/Square1'
    */
   rtb_skeCmd = rtb_skeCmd * rtb_skeCmd * PX4Controller_P.Multiply5_Gain;
 
-  /* Gain: '<S76>/Multiply1' incorporates:
-   *  Gain: '<S38>/Gain2'
-   *  Gain: '<S76>/Gain1'
+  /* Gain: '<S75>/Multiply1' incorporates:
+   *  Gain: '<S37>/Gain2'
+   *  Gain: '<S75>/Gain1'
    *  Inport: '<Root>/StateBus'
    */
   rtb_spe = PX4Controller_P.Gain2_Gain_c * PX4Controller_U.StateBus_m.xNed[2] *
     PX4Controller_P.Gain1_Gain_h * PX4Controller_P.Multiply1_Gain;
 
-  /* Gain: '<S76>/Gain3' incorporates:
+  /* Gain: '<S75>/Gain3' incorporates:
    *  Inport: '<Root>/StateBus'
    */
   rtb_skeDot = PX4Controller_P.Gain3_Gain_j * PX4Controller_U.StateBus_m.tas;
 
-  /* Gain: '<S76>/Multiply3' incorporates:
-   *  Math: '<S76>/Square'
+  /* Gain: '<S75>/Multiply3' incorporates:
+   *  Math: '<S75>/Square'
    */
-  rtb_ske_0 = rtb_skeDot * rtb_skeDot * PX4Controller_P.Multiply3_Gain;
+  rtb_InterpolationUsingPrelook_0 = rtb_skeDot * rtb_skeDot *
+    PX4Controller_P.Multiply3_Gain;
 
-  /* Sum: '<S77>/Sum' incorporates:
-   *  Constant: '<S77>/Constant'
-   *  Constant: '<S77>/Constant1'
-   *  Product: '<S77>/Product'
-   *  Product: '<S77>/Product1'
-   *  Product: '<S77>/Product2'
-   *  Product: '<S77>/Product3'
-   *  Sum: '<S77>/seb'
-   *  Sum: '<S77>/sebCmd'
+  /* Sum: '<S76>/Sum' incorporates:
+   *  Constant: '<S76>/Constant'
+   *  Constant: '<S76>/Constant1'
+   *  Product: '<S76>/Product'
+   *  Product: '<S76>/Product1'
+   *  Product: '<S76>/Product2'
+   *  Product: '<S76>/Product3'
+   *  Sum: '<S76>/seb'
+   *  Sum: '<S76>/sebCmd'
    */
-  rtb_sebErr = (PX4Controller_P.Constant_Value * rtb_Saturation1 -
+  rtb_sebErr = (PX4Controller_P.Constant_Value * rtb_speCmd -
                 PX4Controller_P.Constant1_Value * rtb_skeCmd) -
     (PX4Controller_P.Constant_Value * rtb_spe - PX4Controller_P.Constant1_Value *
-     rtb_ske_0);
+     rtb_InterpolationUsingPrelook_0);
 
-  /* Interpolation_n-D: '<S81>/Interpolation Using Prelookup' */
+  /* Interpolation_n-D: '<S80>/Interpolation Using Prelookup' */
   frac_0[0] = rtb_f1;
   frac_0[1] = rtb_f2;
   bpIndex_0[0] = rtb_k1;
   bpIndex_0[1] = rtb_k2;
 
-  /* Gain: '<S76>/Multiply4' incorporates:
-   *  Gain: '<S76>/Gain6'
+  /* Gain: '<S75>/Multiply4' incorporates:
+   *  Gain: '<S75>/Gain6'
    *  Inport: '<Root>/CmdBusIn'
    */
   rtb_speDotCmd = PX4Controller_P.Gain6_Gain * PX4Controller_U.CmdBusIn.hDotCmd *
     PX4Controller_P.Multiply4_Gain;
 
-  /* Product: '<S76>/Product1' incorporates:
-   *  Gain: '<S76>/Gain5'
+  /* Product: '<S75>/Product1' incorporates:
+   *  Gain: '<S75>/Gain5'
    *  Inport: '<Root>/CmdBusIn'
    */
   rtb_skeDotCmd = PX4Controller_P.Gain5_Gain *
     PX4Controller_U.CmdBusIn.tasDotCmd * rtb_skeDot;
 
-  /* Gain: '<S76>/Multiply2' incorporates:
-   *  Gain: '<S38>/Gain3'
-   *  Gain: '<S76>/Gain4'
+  /* Gain: '<S75>/Multiply2' incorporates:
+   *  Gain: '<S37>/Gain3'
+   *  Gain: '<S75>/Gain4'
    *  Inport: '<Root>/StateBus'
    */
   rtb_speDot = PX4Controller_P.Gain3_Gain_p * PX4Controller_U.StateBus_m.vNed[2]
     * PX4Controller_P.Gain4_Gain * PX4Controller_P.Multiply2_Gain;
   if (rtmIsMajorTimeStep(PX4Controller_M)) {
-    /* Gain: '<S76>/Gain7' incorporates:
-     *  Constant: '<S38>/Constant'
+    /* Gain: '<S75>/Gain7' incorporates:
+     *  Constant: '<S37>/Constant'
      */
     PX4Controller_B.Gain7 = PX4Controller_P.Gain7_Gain *
       PX4Controller_P.Constant_Value_b;
   }
 
-  /* Product: '<S76>/Product' */
+  /* Product: '<S75>/Product' */
   rtb_skeDot *= PX4Controller_B.Gain7;
 
-  /* Interpolation_n-D: '<S79>/Interpolation Using Prelookup' */
+  /* Interpolation_n-D: '<S78>/Interpolation Using Prelookup' */
   frac_1[0] = rtb_f1;
   frac_1[1] = rtb_f2;
   bpIndex_1[0] = rtb_k1;
   bpIndex_1[1] = rtb_k2;
 
-  /* Gain: '<S77>/Gain1' incorporates:
+  /* Gain: '<S76>/Gain1' incorporates:
    *  Inport: '<Root>/StateBus'
    */
   rtb_f2_p = PX4Controller_P.Gain1_Gain_hh * PX4Controller_U.StateBus_m.tas;
 
-  /* Saturate: '<S77>/Saturation' */
+  /* Saturate: '<S76>/Saturation' */
   if (rtb_f2_p > PX4Controller_P.Saturation_UpperSat_l) {
     rtb_f2_p = PX4Controller_P.Saturation_UpperSat_l;
   } else if (rtb_f2_p < PX4Controller_P.Saturation_LowerSat_b) {
     rtb_f2_p = PX4Controller_P.Saturation_LowerSat_b;
   }
 
-  /* End of Saturate: '<S77>/Saturation' */
+  /* End of Saturate: '<S76>/Saturation' */
 
-  /* Sum: '<S77>/Add1' incorporates:
-   *  Constant: '<S77>/Constant'
-   *  Constant: '<S77>/Constant1'
-   *  Constant: '<S77>/Constant2'
-   *  Integrator: '<S77>/Integrator1'
-   *  Interpolation_n-D: '<S79>/Interpolation Using Prelookup'
-   *  Interpolation_n-D: '<S81>/Interpolation Using Prelookup'
-   *  Product: '<S77>/Divide'
-   *  Product: '<S77>/Product4'
-   *  Product: '<S77>/Product5'
-   *  Product: '<S77>/Product6'
-   *  Product: '<S77>/Product7'
-   *  Product: '<S79>/Product'
-   *  Product: '<S81>/Product'
-   *  Sum: '<S77>/Add'
-   *  Sum: '<S77>/Sum1'
-   *  Sum: '<S77>/sebDot'
-   *  Sum: '<S77>/sebDotCmd '
+  /* Sum: '<S76>/Add1' incorporates:
+   *  Constant: '<S76>/Constant'
+   *  Constant: '<S76>/Constant1'
+   *  Constant: '<S76>/Constant2'
+   *  Integrator: '<S76>/Integrator1'
+   *  Interpolation_n-D: '<S78>/Interpolation Using Prelookup'
+   *  Interpolation_n-D: '<S80>/Interpolation Using Prelookup'
+   *  Product: '<S76>/Divide'
+   *  Product: '<S76>/Product4'
+   *  Product: '<S76>/Product5'
+   *  Product: '<S76>/Product6'
+   *  Product: '<S76>/Product7'
+   *  Product: '<S78>/Product'
+   *  Product: '<S80>/Product'
+   *  Sum: '<S76>/Add'
+   *  Sum: '<S76>/Sum1'
+   *  Sum: '<S76>/sebDot'
+   *  Sum: '<S76>/sebDotCmd '
    */
   rtb_tecsthetaCmd = (((PX4Controller_P.Constant_Value * rtb_speDotCmd -
                         PX4Controller_P.Constant1_Value * rtb_skeDotCmd) -
@@ -674,42 +685,48 @@ void PX4Controller_step(void)
     PX4Controller_X.Integrator1_CSTATE)) / rtb_f2_p +
     PX4Controller_P.Constant2_Value;
 
-  /* Switch: '<S28>/Switch7' incorporates:
-   *  Gain: '<S28>/Gain1'
-   *  Gain: '<S28>/Gain2'
+  /* Switch: '<S27>/Switch7' incorporates:
    *  Inport: '<Root>/CmdBusIn'
    */
   if (PX4Controller_U.CmdBusIn.manualAttitude >
       PX4Controller_P.Switch7_Threshold) {
-    rtb_Switch7_idx_0 = PX4Controller_P.Gain1_Gain_p *
-      PX4Controller_U.CmdBusIn.rc[1];
-    rtb_Switch7_idx_1 = PX4Controller_P.Gain2_Gain_p *
-      PX4Controller_U.CmdBusIn.rc[2];
+    rtb_Switch7_idx_0 = rtb_Gain1_g;
+    rtb_Switch7_idx_1 = rtb_Tan1;
 
-    /* Outport: '<Root>/CmdBusOut' incorporates:
-     *  Gain: '<S28>/Gain1'
-     *  Gain: '<S28>/Gain2'
-     *  Gain: '<S28>/Gain3'
-     */
-    PX4Controller_Y.CmdBusOut.eulerCmd[2] = PX4Controller_P.Gain3_Gain_b *
-      PX4Controller_U.CmdBusIn.rc[3];
+    /* Outport: '<Root>/CmdBusOut' */
+    PX4Controller_Y.CmdBusOut.eulerCmd[2] = rtb_Gain6;
   } else {
     /* Outport: '<Root>/CmdBusOut' incorporates:
-     *  Assignment: '<S75>/Assignment'
-     *  SignalConversion generated from: '<S69>/Assignment'
+     *  Assignment: '<S74>/Assignment'
+     *  SignalConversion generated from: '<S68>/Assignment'
      */
     PX4Controller_Y.CmdBusOut.eulerCmd[2] = PX4Controller_U.CmdBusIn.eulerCmd[2];
 
-    /* Assignment: '<S69>/Assignment' */
+    /* Assignment: '<S68>/Assignment' */
     rtb_Switch7_idx_0 = rtb_Gain2;
 
-    /* Assignment: '<S75>/Assignment' */
+    /* Assignment: '<S74>/Assignment' */
     rtb_Switch7_idx_1 = rtb_tecsthetaCmd;
   }
 
-  /* End of Switch: '<S28>/Switch7' */
+  /* End of Switch: '<S27>/Switch7' */
 
-  /* Logic: '<S27>/OR' incorporates:
+  /* Gain: '<S70>/Gain1' incorporates:
+   *  Inport: '<Root>/CmdBusIn'
+   */
+  rtb_Gain1_a = PX4Controller_P.Gain1_Gain_l * PX4Controller_U.CmdBusIn.rc[1];
+
+  /* Gain: '<S70>/Gain2' incorporates:
+   *  Inport: '<Root>/CmdBusIn'
+   */
+  rtb_Gain2_m = PX4Controller_P.Gain2_Gain_m * PX4Controller_U.CmdBusIn.rc[2];
+
+  /* Gain: '<S70>/Gain3' incorporates:
+   *  Inport: '<Root>/CmdBusIn'
+   */
+  rtb_Switch1_o = PX4Controller_P.Gain3_Gain_k * PX4Controller_U.CmdBusIn.rc[3];
+
+  /* Logic: '<S26>/OR' incorporates:
    *  Inport: '<Root>/CmdBusIn'
    */
   PX4Controller_B.OR_k = ((PX4Controller_U.CmdBusIn.manualRate != 0.0) ||
@@ -746,15 +763,16 @@ void PX4Controller_step(void)
    *  Inport: '<Root>/CmdBusIn'
    */
   rtb_k3 = plook_bincp(PX4Controller_U.CmdBusIn.hCmd,
-                       PX4Controller_P.Prelookup3_BreakpointsData, 1U, &rtb_f3,
+                       PX4Controller_P.Prelookup3_BreakpointsData, 1U,
+                       &rtb_InterpolationUsingPrelook_k,
                        &PX4Controller_DW.Prelookup3_DWORK1);
 
-  /* Interpolation_n-D: '<S32>/Interpolation Using Prelookup' incorporates:
-   *  Constant: '<S32>/Constant'
+  /* Interpolation_n-D: '<S31>/Interpolation Using Prelookup' incorporates:
+   *  Constant: '<S31>/Constant'
    */
   frac_2[0] = rtb_f1_m;
   frac_2[1] = rtb_f2_p;
-  frac_2[2] = rtb_f3;
+  frac_2[2] = rtb_InterpolationUsingPrelook_k;
   bpIndex_2[0] = rtb_k1_g;
   bpIndex_2[1] = rtb_k2_e;
   bpIndex_2[2] = rtb_k3;
@@ -766,15 +784,16 @@ void PX4Controller_step(void)
     bpIndex_2[3] = 0U;
   }
 
-  rtb_Switch1_b = intrp3d_l_pw(bpIndex_2, frac_2,
+  rtb_InterpolationUsingPrelook_5 = intrp3d_l_pw(bpIndex_2, frac_2,
     &PX4Controller_P.SubsystemReference3_table[12U * bpIndex_2[3]],
     PX4Controller_P.InterpolationUsingPrelookup_dim);
 
   /* Gain: '<S3>/   ' */
-  rtb_Saturation7_g = PX4Controller_P._Gain * rtb_Switch1_b;
+  rtb_InterpolationUsingPrelook_4 = PX4Controller_P._Gain_n *
+    rtb_InterpolationUsingPrelook_5;
 
-  /* Interpolation_n-D: '<S32>/Interpolation Using Prelookup' incorporates:
-   *  Constant: '<S32>/Constant'
+  /* Interpolation_n-D: '<S31>/Interpolation Using Prelookup' incorporates:
+   *  Constant: '<S31>/Constant'
    */
   if (PX4Controller_P.Constant_Value_h[1] > 2.0) {
     bpIndex_2[3] = 2U;
@@ -784,23 +803,74 @@ void PX4Controller_step(void)
     bpIndex_2[3] = 0U;
   }
 
-  rtb_Switch1_b = intrp3d_l_pw(bpIndex_2, frac_2,
+  rtb_InterpolationUsingPrelook_5 = intrp3d_l_pw(bpIndex_2, frac_2,
     &PX4Controller_P.SubsystemReference3_table[12U * bpIndex_2[3]],
     PX4Controller_P.InterpolationUsingPrelookup_dim);
 
-  /* Interpolation_n-D: '<S36>/Interpolation Using Prelookup' */
+  /* Switch: '<S27>/Switch2' incorporates:
+   *  Inport: '<Root>/CmdBusIn'
+   */
+  if (PX4Controller_U.CmdBusIn.manualAttitude >
+      PX4Controller_P.Switch2_Threshold) {
+    frac_2[0] = rtb_Gain1_g;
+    frac_2[1] = rtb_Tan1;
+    frac_2[2] = rtb_Gain6;
+  } else {
+    /* Assignment: '<S74>/Assignment1' incorporates:
+     *  SignalConversion generated from: '<S68>/Assignment1'
+     */
+    frac_2[2] = PX4Controller_U.CmdBusIn.eulerSat[2];
+
+    /* Saturate: '<S68>/Saturation1' */
+    if (rtb_Gain2 > PX4Controller_P.Saturation1_UpperSat_g) {
+      /* Assignment: '<S68>/Assignment1' incorporates:
+       *  Assignment: '<S74>/Assignment1'
+       */
+      frac_2[0] = PX4Controller_P.Saturation1_UpperSat_g;
+    } else if (rtb_Gain2 < PX4Controller_P.Saturation1_LowerSat_b) {
+      /* Assignment: '<S68>/Assignment1' incorporates:
+       *  Assignment: '<S74>/Assignment1'
+       */
+      frac_2[0] = PX4Controller_P.Saturation1_LowerSat_b;
+    } else {
+      /* Assignment: '<S68>/Assignment1' incorporates:
+       *  Assignment: '<S74>/Assignment1'
+       */
+      frac_2[0] = rtb_Gain2;
+    }
+
+    /* End of Saturate: '<S68>/Saturation1' */
+
+    /* Saturate: '<S74>/Saturation1' */
+    if (rtb_tecsthetaCmd > PX4Controller_P.Saturation1_UpperSat) {
+      /* Assignment: '<S74>/Assignment1' */
+      frac_2[1] = PX4Controller_P.Saturation1_UpperSat;
+    } else if (rtb_tecsthetaCmd < PX4Controller_P.Saturation1_LowerSat) {
+      /* Assignment: '<S74>/Assignment1' */
+      frac_2[1] = PX4Controller_P.Saturation1_LowerSat;
+    } else {
+      /* Assignment: '<S74>/Assignment1' */
+      frac_2[1] = rtb_tecsthetaCmd;
+    }
+
+    /* End of Saturate: '<S74>/Saturation1' */
+  }
+
+  /* End of Switch: '<S27>/Switch2' */
+
+  /* Interpolation_n-D: '<S35>/Interpolation Using Prelookup' */
   frac_3[0] = rtb_f1;
   frac_3[1] = rtb_f2;
   bpIndex_3[0] = rtb_k1;
   bpIndex_3[1] = rtb_k2;
 
   /* Saturate: '<S3>/Saturation1' */
-  if (rtb_Switch7_idx_0 > PX4Controller_P.Saturation1_UpperSat[0]) {
-    rtb_Saturation7 = PX4Controller_P.Saturation1_UpperSat[0];
-  } else if (rtb_Switch7_idx_0 < PX4Controller_P.Saturation1_LowerSat[0]) {
-    rtb_Saturation7 = PX4Controller_P.Saturation1_LowerSat[0];
+  if (frac_2[0] > PX4Controller_P.Saturation1_UpperSat_e[0]) {
+    rtb_Gain2 = PX4Controller_P.Saturation1_UpperSat_e[0];
+  } else if (frac_2[0] < PX4Controller_P.Saturation1_LowerSat_k[0]) {
+    rtb_Gain2 = PX4Controller_P.Saturation1_LowerSat_k[0];
   } else {
-    rtb_Saturation7 = rtb_Switch7_idx_0;
+    rtb_Gain2 = frac_2[0];
   }
 
   /* Sum: '<S3>/Subtract' incorporates:
@@ -808,11 +878,12 @@ void PX4Controller_step(void)
    *  Gain: '<S3>/Gain2'
    *  Inport: '<Root>/StateBus'
    */
-  frac[0] = (PX4Controller_P.Gain1_Gain_g * rtb_Saturation7 + rtb_Saturation7_g)
-    - PX4Controller_P.Gain2_Gain_c2 * PX4Controller_U.StateBus_m.eulerBody[0];
+  frac[0] = (PX4Controller_P.Gain1_Gain_g * rtb_Gain2 +
+             rtb_InterpolationUsingPrelook_4) - PX4Controller_P.Gain2_Gain_c2 *
+    PX4Controller_U.StateBus_m.eulerBody[0];
 
-  /* Interpolation_n-D: '<S36>/Interpolation Using Prelookup' incorporates:
-   *  Constant: '<S36>/Constant'
+  /* Interpolation_n-D: '<S35>/Interpolation Using Prelookup' incorporates:
+   *  Constant: '<S35>/Constant'
    */
   if (PX4Controller_P.Constant_Value_bd[0] > 1.0) {
     bpIndex_3[2] = 1U;
@@ -823,18 +894,18 @@ void PX4Controller_step(void)
   }
 
   /* Gain: '<S3>/Gain2' incorporates:
-   *  Interpolation_n-D: '<S36>/Interpolation Using Prelookup'
+   *  Interpolation_n-D: '<S35>/Interpolation Using Prelookup'
    */
   frac_0[0] = intrp2d_l_pw(bpIndex_3, frac_3,
     &PX4Controller_P.InterpolationUsingPrelookup_T_i[bpIndex_3[2] << 2], 2U);
 
   /* Saturate: '<S3>/Saturation1' */
-  if (rtb_Switch7_idx_1 > PX4Controller_P.Saturation1_UpperSat[1]) {
-    rtb_Saturation7_g = PX4Controller_P.Saturation1_UpperSat[1];
-  } else if (rtb_Switch7_idx_1 < PX4Controller_P.Saturation1_LowerSat[1]) {
-    rtb_Saturation7_g = PX4Controller_P.Saturation1_LowerSat[1];
+  if (frac_2[1] > PX4Controller_P.Saturation1_UpperSat_e[1]) {
+    rtb_Gain2 = PX4Controller_P.Saturation1_UpperSat_e[1];
+  } else if (frac_2[1] < PX4Controller_P.Saturation1_LowerSat_k[1]) {
+    rtb_Gain2 = PX4Controller_P.Saturation1_LowerSat_k[1];
   } else {
-    rtb_Saturation7_g = rtb_Switch7_idx_1;
+    rtb_Gain2 = frac_2[1];
   }
 
   /* Sum: '<S3>/Subtract' incorporates:
@@ -843,12 +914,12 @@ void PX4Controller_step(void)
    *  Gain: '<S3>/Gain2'
    *  Inport: '<Root>/StateBus'
    */
-  frac[1] = (PX4Controller_P._Gain * rtb_Switch1_b +
-             PX4Controller_P.Gain1_Gain_g * rtb_Saturation7_g) -
+  frac[1] = (PX4Controller_P._Gain_n * rtb_InterpolationUsingPrelook_5 +
+             PX4Controller_P.Gain1_Gain_g * rtb_Gain2) -
     PX4Controller_P.Gain2_Gain_c2 * PX4Controller_U.StateBus_m.eulerBody[1];
 
-  /* Interpolation_n-D: '<S36>/Interpolation Using Prelookup' incorporates:
-   *  Constant: '<S36>/Constant'
+  /* Interpolation_n-D: '<S35>/Interpolation Using Prelookup' incorporates:
+   *  Constant: '<S35>/Constant'
    */
   if (PX4Controller_P.Constant_Value_bd[1] > 1.0) {
     bpIndex_3[2] = 1U;
@@ -858,18 +929,20 @@ void PX4Controller_step(void)
     bpIndex_3[2] = 0U;
   }
 
-  rtb_Switch7_d_idx_0 = intrp2d_l_pw(bpIndex_3, frac_3,
+  rtb_Gain2 = intrp2d_l_pw(bpIndex_3, frac_3,
     &PX4Controller_P.InterpolationUsingPrelookup_T_i[bpIndex_3[2] << 2], 2U);
 
-  /* Trigonometry: '<S37>/sincos' incorporates:
+  /* Trigonometry: '<S36>/sincos' incorporates:
    *  Inport: '<Root>/StateBus'
-   *  Trigonometry: '<S31>/sincos'
+   *  Trigonometry: '<S30>/sincos'
    */
-  rtb_Switch7_d_idx_1 = std::sin(PX4Controller_U.StateBus_m.eulerBody[0]);
-  rtb_Switch7_d_idx_2 = std::cos(PX4Controller_U.StateBus_m.eulerBody[0]);
+  rtb_InterpolationUsingPrelook_5 = std::sin
+    (PX4Controller_U.StateBus_m.eulerBody[0]);
+  rtb_InterpolationUsingPrelook_4 = std::cos
+    (PX4Controller_U.StateBus_m.eulerBody[0]);
 
-  /* Interpolation_n-D: '<S34>/Interpolation Using Prelookup' incorporates:
-   *  Constant: '<S34>/Constant'
+  /* Interpolation_n-D: '<S33>/Interpolation Using Prelookup' incorporates:
+   *  Constant: '<S33>/Constant'
    */
   frac_4[0] = rtb_f1;
   frac_4[1] = rtb_f2;
@@ -883,34 +956,35 @@ void PX4Controller_step(void)
     bpIndex_4[2] = 0U;
   }
 
-  rtb_Switch1_b = intrp2d_l_pw(bpIndex_4, frac_4,
+  rtb_Gain6 = intrp2d_l_pw(bpIndex_4, frac_4,
     &PX4Controller_P.InterpolationUsingPrelookup_T_l[bpIndex_4[2] << 2], 2U);
 
-  /* Trigonometry: '<S37>/sincos' incorporates:
+  /* Trigonometry: '<S36>/sincos' incorporates:
    *  Inport: '<Root>/StateBus'
-   *  Trigonometry: '<S31>/sincos'
+   *  Trigonometry: '<S30>/sincos'
    */
-  rtb_Saturation7_g = std::sin(PX4Controller_U.StateBus_m.eulerBody[1]);
+  rtb_Gain1_g = std::sin(PX4Controller_U.StateBus_m.eulerBody[1]);
 
   /* Sum: '<S3>/Add' incorporates:
-   *  Fcn: '<S37>/phidot'
+   *  Fcn: '<S36>/phidot'
    *  Gain: '<S3>/Gain4'
    *  Gain: '<S3>/Gain5'
    *  Inport: '<Root>/StateBus'
    *  Integrator: '<S3>/Integrator'
-   *  Product: '<S34>/Product'
-   *  Product: '<S36>/Product'
-   *  Trigonometry: '<S37>/sincos'
+   *  Product: '<S33>/Product'
+   *  Product: '<S35>/Product'
+   *  Trigonometry: '<S36>/sincos'
    */
-  rtb_Saturation7 = ((rtb_Switch7_d_idx_1 * PX4Controller_U.StateBus_m.wBody[1]
-                      + rtb_Switch7_d_idx_2 * PX4Controller_U.StateBus_m.wBody[2])
-                     * (rtb_Saturation7_g / rtb_InterpolationUsingPrelook_k) +
-                     PX4Controller_U.StateBus_m.wBody[0]) *
-    PX4Controller_P.Gain4_Gain_g * PX4Controller_P.Gain5_Gain_i * rtb_Switch1_b
-    + (frac[0] * frac_0[0] + PX4Controller_X.Integrator_CSTATE[0]);
+  rtb_Tan1 = ((rtb_InterpolationUsingPrelook_5 *
+               PX4Controller_U.StateBus_m.wBody[1] +
+               rtb_InterpolationUsingPrelook_4 *
+               PX4Controller_U.StateBus_m.wBody[2]) * (rtb_Gain1_g /
+    rtb_InterpolationUsingPrelook_6) + PX4Controller_U.StateBus_m.wBody[0]) *
+    PX4Controller_P.Gain4_Gain_g * PX4Controller_P.Gain5_Gain_i * rtb_Gain6 +
+    (frac[0] * frac_0[0] + PX4Controller_X.Integrator_CSTATE[0]);
 
-  /* Interpolation_n-D: '<S34>/Interpolation Using Prelookup' incorporates:
-   *  Constant: '<S34>/Constant'
+  /* Interpolation_n-D: '<S33>/Interpolation Using Prelookup' incorporates:
+   *  Constant: '<S33>/Constant'
    */
   if (PX4Controller_P.Constant_Value_k[1] > 1.0) {
     bpIndex_4[2] = 1U;
@@ -920,89 +994,89 @@ void PX4Controller_step(void)
     bpIndex_4[2] = 0U;
   }
 
-  rtb_Switch1_b = intrp2d_l_pw(bpIndex_4, frac_4,
+  rtb_Gain6 = intrp2d_l_pw(bpIndex_4, frac_4,
     &PX4Controller_P.InterpolationUsingPrelookup_T_l[bpIndex_4[2] << 2], 2U);
 
   /* Sum: '<S3>/Add' incorporates:
-   *  Fcn: '<S37>/thetadot'
+   *  Fcn: '<S36>/thetadot'
    *  Gain: '<S3>/Gain4'
    *  Gain: '<S3>/Gain5'
    *  Inport: '<Root>/StateBus'
    *  Integrator: '<S3>/Integrator'
-   *  Product: '<S34>/Product'
-   *  Product: '<S36>/Product'
-   *  Trigonometry: '<S37>/sincos'
+   *  Product: '<S33>/Product'
+   *  Product: '<S35>/Product'
+   *  Trigonometry: '<S36>/sincos'
    */
-  rtb_Switch7_d_idx_0 = (rtb_Switch7_d_idx_2 * PX4Controller_U.StateBus_m.wBody
-    [1] - rtb_Switch7_d_idx_1 * PX4Controller_U.StateBus_m.wBody[2]) *
-    PX4Controller_P.Gain4_Gain_g * PX4Controller_P.Gain5_Gain_i * rtb_Switch1_b
-    + (frac[1] * rtb_Switch7_d_idx_0 + PX4Controller_X.Integrator_CSTATE[1]);
+  rtb_Gain2 = (rtb_InterpolationUsingPrelook_4 *
+               PX4Controller_U.StateBus_m.wBody[1] -
+               rtb_InterpolationUsingPrelook_5 *
+               PX4Controller_U.StateBus_m.wBody[2]) *
+    PX4Controller_P.Gain4_Gain_g * PX4Controller_P.Gain5_Gain_i * rtb_Gain6 +
+    (frac[1] * rtb_Gain2 + PX4Controller_X.Integrator_CSTATE[1]);
 
-  /* Saturate: '<S33>/Saturation' incorporates:
+  /* Saturate: '<S32>/Saturation' incorporates:
    *  Inport: '<Root>/StateBus'
    */
   if (PX4Controller_U.StateBus_m.tas > PX4Controller_P.Saturation_UpperSat_ag) {
-    rtb_Assignment1_idx_2 = PX4Controller_P.Saturation_UpperSat_ag;
+    rtb_tecsthetaCmd = PX4Controller_P.Saturation_UpperSat_ag;
   } else if (PX4Controller_U.StateBus_m.tas <
              PX4Controller_P.Saturation_LowerSat_kd) {
-    rtb_Assignment1_idx_2 = PX4Controller_P.Saturation_LowerSat_kd;
+    rtb_tecsthetaCmd = PX4Controller_P.Saturation_LowerSat_kd;
   } else {
-    rtb_Assignment1_idx_2 = PX4Controller_U.StateBus_m.tas;
+    rtb_tecsthetaCmd = PX4Controller_U.StateBus_m.tas;
   }
 
-  /* End of Saturate: '<S33>/Saturation' */
+  /* End of Saturate: '<S32>/Saturation' */
 
   /* Gain: '<S3>/Gain6' incorporates:
-   *  Gain: '<S33>/Gain1'
+   *  Gain: '<S32>/Gain1'
    *  Gain: '<S3>/Gain3'
-   *  Product: '<S33>/Divide1'
-   *  Sum: '<S33>/Add'
-   *  Trigonometry: '<S33>/Tan'
-   *  Trigonometry: '<S33>/Tan1'
+   *  Product: '<S32>/Divide1'
+   *  Sum: '<S32>/Add'
+   *  Trigonometry: '<S32>/Tan'
+   *  Trigonometry: '<S32>/Tan1'
    */
-  rtb_Switch1_b = (std::tan(rtb_Switch7_idx_0) + std::cos(rtb_Switch7_idx_1)) *
-    PX4Controller_P.Gain1_Gain_e / rtb_Assignment1_idx_2 *
+  rtb_Gain6 = (std::tan(rtb_Switch7_idx_0) + std::cos(rtb_Switch7_idx_1)) *
+    PX4Controller_P.Gain1_Gain_e / rtb_tecsthetaCmd *
     PX4Controller_P.Gain3_Gain_g * PX4Controller_P.Gain6_Gain_m;
 
-  /* Fcn: '<S31>/phidot' */
-  rtb_Saturation7 -= rtb_Switch1_b * rtb_Saturation7_g;
+  /* Fcn: '<S30>/phidot' */
+  rtb_Gain1_g = rtb_Tan1 - rtb_Gain6 * rtb_Gain1_g;
 
-  /* Fcn: '<S31>/thetadot' */
-  rtb_Saturation7_g = rtb_Switch1_b * rtb_Switch7_d_idx_1 *
-    rtb_InterpolationUsingPrelook_k + rtb_Switch7_d_idx_2 * rtb_Switch7_d_idx_0;
+  /* Fcn: '<S30>/thetadot' */
+  rtb_Tan1 = rtb_Gain6 * rtb_InterpolationUsingPrelook_5 *
+    rtb_InterpolationUsingPrelook_6 + rtb_InterpolationUsingPrelook_4 *
+    rtb_Gain2;
 
-  /* Fcn: '<S31>/psidot' */
-  rtb_InterpolationUsingPrelook_k = rtb_Switch1_b * rtb_Switch7_d_idx_2 *
-    rtb_InterpolationUsingPrelook_k - rtb_Switch7_d_idx_1 * rtb_Switch7_d_idx_0;
+  /* Fcn: '<S30>/psidot' */
+  rtb_Gain6 = rtb_Gain6 * rtb_InterpolationUsingPrelook_4 *
+    rtb_InterpolationUsingPrelook_6 - rtb_InterpolationUsingPrelook_5 *
+    rtb_Gain2;
 
-  /* Switch: '<S71>/Switch7' incorporates:
-   *  Gain: '<S71>/Gain1'
-   *  Gain: '<S71>/Gain2'
-   *  Gain: '<S71>/Gain3'
+  /* Switch: '<S70>/Switch7' incorporates:
    *  Inport: '<Root>/CmdBusIn'
    */
   if (PX4Controller_U.CmdBusIn.manualRate > PX4Controller_P.Switch7_Threshold_k)
   {
-    rtb_Switch7_d_idx_0 = PX4Controller_P.Gain1_Gain_l *
-      PX4Controller_U.CmdBusIn.rc[1];
-    rtb_Switch7_d_idx_1 = PX4Controller_P.Gain2_Gain_m *
-      PX4Controller_U.CmdBusIn.rc[2];
-    rtb_Switch7_d_idx_2 = PX4Controller_P.Gain3_Gain_k *
-      PX4Controller_U.CmdBusIn.rc[3];
+    /* Outport: '<Root>/CmdBusOut' */
+    PX4Controller_Y.CmdBusOut.wCmd[0] = rtb_Gain1_a;
+    PX4Controller_Y.CmdBusOut.wCmd[1] = rtb_Gain2_m;
+    PX4Controller_Y.CmdBusOut.wCmd[2] = rtb_Switch1_o;
   } else {
-    rtb_Switch7_d_idx_0 = rtb_Saturation7;
-    rtb_Switch7_d_idx_1 = rtb_Saturation7_g;
-    rtb_Switch7_d_idx_2 = rtb_InterpolationUsingPrelook_k;
+    /* Outport: '<Root>/CmdBusOut' */
+    PX4Controller_Y.CmdBusOut.wCmd[0] = rtb_Gain1_g;
+    PX4Controller_Y.CmdBusOut.wCmd[1] = rtb_Tan1;
+    PX4Controller_Y.CmdBusOut.wCmd[2] = rtb_Gain6;
   }
 
-  /* End of Switch: '<S71>/Switch7' */
+  /* End of Switch: '<S70>/Switch7' */
 
-  /* Interpolation_n-D: '<S72>/Interpolation Using Prelookup' incorporates:
-   *  Constant: '<S72>/Constant'
+  /* Interpolation_n-D: '<S71>/Interpolation Using Prelookup' incorporates:
+   *  Constant: '<S71>/Constant'
    */
   frac_5[0] = rtb_f1_m;
   frac_5[1] = rtb_f2_p;
-  frac_5[2] = rtb_f3;
+  frac_5[2] = rtb_InterpolationUsingPrelook_k;
   bpIndex_5[0] = rtb_k1_g;
   bpIndex_5[1] = rtb_k2_e;
   bpIndex_5[2] = rtb_k3;
@@ -1014,7 +1088,7 @@ void PX4Controller_step(void)
     bpIndex_5[3] = 0U;
   }
 
-  rtb_Assignment1_idx_0 = intrp3d_l_pw(bpIndex_5, frac_5,
+  rtb_InterpolationUsingPrelook_4 = intrp3d_l_pw(bpIndex_5, frac_5,
     &PX4Controller_P.SubsystemReference3_table_m[12U * bpIndex_5[3]],
     PX4Controller_P.InterpolationUsingPrelookup_d_f);
   if (PX4Controller_P.Constant_Value_a[1] > 2.0) {
@@ -1025,7 +1099,7 @@ void PX4Controller_step(void)
     bpIndex_5[3] = 0U;
   }
 
-  rtb_Assignment1_idx_1 = intrp3d_l_pw(bpIndex_5, frac_5,
+  rtb_InterpolationUsingPrelook_5 = intrp3d_l_pw(bpIndex_5, frac_5,
     &PX4Controller_P.SubsystemReference3_table_m[12U * bpIndex_5[3]],
     PX4Controller_P.InterpolationUsingPrelookup_d_f);
   if (PX4Controller_P.Constant_Value_a[2] > 2.0) {
@@ -1036,163 +1110,212 @@ void PX4Controller_step(void)
     bpIndex_5[3] = 0U;
   }
 
-  rtb_Assignment1_idx_2 = intrp3d_l_pw(bpIndex_5, frac_5,
+  rtb_InterpolationUsingPrelook_6 = intrp3d_l_pw(bpIndex_5, frac_5,
     &PX4Controller_P.SubsystemReference3_table_m[12U * bpIndex_5[3]],
     PX4Controller_P.InterpolationUsingPrelookup_d_f);
 
-  /* End of Interpolation_n-D: '<S72>/Interpolation Using Prelookup' */
+  /* End of Interpolation_n-D: '<S71>/Interpolation Using Prelookup' */
 
-  /* Interpolation_n-D: '<S73>/Interpolation Using Prelookup' incorporates:
-   *  Constant: '<S73>/Constant'
+  /* Switch: '<S70>/Switch2' incorporates:
+   *  Inport: '<Root>/CmdBusIn'
+   *  Saturate: '<S28>/Saturation'
    */
-  frac_6[0] = rtb_f1;
-  frac_6[1] = rtb_f2;
-  bpIndex_6[0] = rtb_k1;
-  bpIndex_6[1] = rtb_k2;
-  if (PX4Controller_P.Constant_Value_f[0] > 2.0) {
-    bpIndex_6[2] = 2U;
-  } else if (PX4Controller_P.Constant_Value_f[0] >= 0.0) {
-    bpIndex_6[2] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_f[0]);
+  if (PX4Controller_U.CmdBusIn.manualRate > PX4Controller_P.Switch2_Threshold_l)
+  {
+    rtb_Gain1_g = rtb_Gain1_a;
+    rtb_Tan1 = rtb_Gain2_m;
+    rtb_Gain6 = rtb_Switch1_o;
   } else {
-    bpIndex_6[2] = 0U;
+    if (rtb_Gain1_g > PX4Controller_P.Saturation_UpperSat_p[0]) {
+      /* Saturate: '<S28>/Saturation' */
+      rtb_Gain1_g = PX4Controller_P.Saturation_UpperSat_p[0];
+    } else if (rtb_Gain1_g < PX4Controller_P.Saturation_LowerSat_c[0]) {
+      /* Saturate: '<S28>/Saturation' */
+      rtb_Gain1_g = PX4Controller_P.Saturation_LowerSat_c[0];
+    }
+
+    /* Saturate: '<S28>/Saturation' */
+    if (rtb_Tan1 > PX4Controller_P.Saturation_UpperSat_p[1]) {
+      rtb_Tan1 = PX4Controller_P.Saturation_UpperSat_p[1];
+    } else if (rtb_Tan1 < PX4Controller_P.Saturation_LowerSat_c[1]) {
+      rtb_Tan1 = PX4Controller_P.Saturation_LowerSat_c[1];
+    }
+
+    if (rtb_Gain6 > PX4Controller_P.Saturation_UpperSat_p[2]) {
+      rtb_Gain6 = PX4Controller_P.Saturation_UpperSat_p[2];
+    } else if (rtb_Gain6 < PX4Controller_P.Saturation_LowerSat_c[2]) {
+      rtb_Gain6 = PX4Controller_P.Saturation_LowerSat_c[2];
+    }
   }
 
-  rtb_Switch1_b = intrp2d_l_pw(bpIndex_6, frac_6,
-    &PX4Controller_P.InterpolationUsingPrelookup__cs[bpIndex_6[2] << 2], 2U);
+  /* End of Switch: '<S70>/Switch2' */
 
-  /* Saturate: '<S7>/Saturation' incorporates:
-   *  Sum: '<S7>/Subtract'
-   */
-  if (rtb_Switch7_d_idx_0 > PX4Controller_P.Saturation_UpperSat_c[0]) {
-    rtb_Switch7_d_idx_0_0 = PX4Controller_P.Saturation_UpperSat_c[0];
-  } else if (rtb_Switch7_d_idx_0 < PX4Controller_P.Saturation_LowerSat_d[0]) {
-    rtb_Switch7_d_idx_0_0 = PX4Controller_P.Saturation_LowerSat_d[0];
-  } else {
-    rtb_Switch7_d_idx_0_0 = rtb_Switch7_d_idx_0;
-  }
-
-  /* Sum: '<S7>/Add' incorporates:
-   *  Gain: '<S7>/ '
-   *  Gain: '<S7>/   '
-   *  Gain: '<S7>/Gain'
-   *  Gain: '<S7>/Gain1'
-   *  Gain: '<S7>/Gain2'
-   *  Gain: '<S7>/Gain3'
-   *  Inport: '<Root>/StateBus'
-   *  Product: '<S73>/Product'
-   *  Sum: '<S7>/Subtract'
-   */
-  rtb_Assignment1_idx_0 = ((PX4Controller_P._Gain_m * rtb_Assignment1_idx_0 +
-    PX4Controller_P._Gain_o * rtb_Switch7_d_idx_0_0) -
-    PX4Controller_P.Gain_Gain_at * PX4Controller_U.StateBus_m.wBody[0]) *
-    rtb_Switch1_b + PX4Controller_P.Gain1_Gain_f *
-    PX4Controller_U.StateBus_m.wDotBody[0] * PX4Controller_P.Gain2_Gain_k *
-    PX4Controller_P.Gain3_Gain_c;
-
-  /* Interpolation_n-D: '<S73>/Interpolation Using Prelookup' incorporates:
-   *  Constant: '<S73>/Constant'
-   */
-  if (PX4Controller_P.Constant_Value_f[1] > 2.0) {
-    bpIndex_6[2] = 2U;
-  } else if (PX4Controller_P.Constant_Value_f[1] >= 0.0) {
-    bpIndex_6[2] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_f[1]);
-  } else {
-    bpIndex_6[2] = 0U;
-  }
-
-  rtb_Switch1_b = intrp2d_l_pw(bpIndex_6, frac_6,
-    &PX4Controller_P.InterpolationUsingPrelookup__cs[bpIndex_6[2] << 2], 2U);
-
-  /* Saturate: '<S7>/Saturation' incorporates:
-   *  Sum: '<S7>/Subtract'
-   */
-  if (rtb_Switch7_d_idx_1 > PX4Controller_P.Saturation_UpperSat_c[1]) {
-    rtb_Switch7_d_idx_0_0 = PX4Controller_P.Saturation_UpperSat_c[1];
-  } else if (rtb_Switch7_d_idx_1 < PX4Controller_P.Saturation_LowerSat_d[1]) {
-    rtb_Switch7_d_idx_0_0 = PX4Controller_P.Saturation_LowerSat_d[1];
-  } else {
-    rtb_Switch7_d_idx_0_0 = rtb_Switch7_d_idx_1;
-  }
-
-  /* Sum: '<S7>/Add' incorporates:
-   *  Gain: '<S7>/ '
-   *  Gain: '<S7>/   '
-   *  Gain: '<S7>/Gain'
-   *  Gain: '<S7>/Gain1'
-   *  Gain: '<S7>/Gain2'
-   *  Gain: '<S7>/Gain3'
-   *  Inport: '<Root>/StateBus'
-   *  Product: '<S73>/Product'
-   *  Sum: '<S7>/Subtract'
-   */
-  rtb_Assignment1_idx_1 = ((PX4Controller_P._Gain_m * rtb_Assignment1_idx_1 +
-    PX4Controller_P._Gain_o * rtb_Switch7_d_idx_0_0) -
-    PX4Controller_P.Gain_Gain_at * PX4Controller_U.StateBus_m.wBody[1]) *
-    rtb_Switch1_b + PX4Controller_P.Gain1_Gain_f *
-    PX4Controller_U.StateBus_m.wDotBody[1] * PX4Controller_P.Gain2_Gain_k *
-    PX4Controller_P.Gain3_Gain_c;
-
-  /* Interpolation_n-D: '<S73>/Interpolation Using Prelookup' incorporates:
-   *  Constant: '<S73>/Constant'
-   */
-  if (PX4Controller_P.Constant_Value_f[2] > 2.0) {
-    bpIndex_6[2] = 2U;
-  } else if (PX4Controller_P.Constant_Value_f[2] >= 0.0) {
-    bpIndex_6[2] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_f[2]);
-  } else {
-    bpIndex_6[2] = 0U;
-  }
-
-  rtb_Switch1_b = intrp2d_l_pw(bpIndex_6, frac_6,
-    &PX4Controller_P.InterpolationUsingPrelookup__cs[bpIndex_6[2] << 2], 2U);
-
-  /* Saturate: '<S7>/Saturation' incorporates:
-   *  Sum: '<S7>/Subtract'
-   */
-  if (rtb_Switch7_d_idx_2 > PX4Controller_P.Saturation_UpperSat_c[2]) {
-    rtb_Switch7_d_idx_0_0 = PX4Controller_P.Saturation_UpperSat_c[2];
-  } else if (rtb_Switch7_d_idx_2 < PX4Controller_P.Saturation_LowerSat_d[2]) {
-    rtb_Switch7_d_idx_0_0 = PX4Controller_P.Saturation_LowerSat_d[2];
-  } else {
-    rtb_Switch7_d_idx_0_0 = rtb_Switch7_d_idx_2;
-  }
-
-  /* Sum: '<S7>/Add' incorporates:
-   *  Gain: '<S7>/ '
-   *  Gain: '<S7>/   '
-   *  Gain: '<S7>/Gain'
-   *  Gain: '<S7>/Gain1'
-   *  Gain: '<S7>/Gain2'
-   *  Gain: '<S7>/Gain3'
-   *  Inport: '<Root>/StateBus'
-   *  Product: '<S73>/Product'
-   *  Sum: '<S7>/Subtract'
-   */
-  rtb_Switch1_b = ((PX4Controller_P._Gain_m * rtb_Assignment1_idx_2 +
-                    PX4Controller_P._Gain_o * rtb_Switch7_d_idx_0_0) -
-                   PX4Controller_P.Gain_Gain_at *
-                   PX4Controller_U.StateBus_m.wBody[2]) * rtb_Switch1_b +
-    PX4Controller_P.Gain1_Gain_f * PX4Controller_U.StateBus_m.wDotBody[2] *
-    PX4Controller_P.Gain2_Gain_k * PX4Controller_P.Gain3_Gain_c;
-
-  /* Product: '<S7>/Matrix Multiply' incorporates:
+  /* Switch: '<S12>/Switch7' incorporates:
+   *  Constant: '<S72>/Constant'
    *  Constant: '<S7>/Constant'
+   *  Gain: '<S12>/Gain1'
+   *  Gain: '<S12>/Gain2'
+   *  Gain: '<S12>/Gain3'
+   *  Inport: '<Root>/CmdBusIn'
+   *  Interpolation_n-D: '<S72>/Interpolation Using Prelookup'
+   *  Product: '<S7>/Matrix Multiply'
    */
-  for (int32_T i{0}; i < 3; i++) {
-    frac_2[i] = (PX4Controller_P.Constant_Value_i[i + 3] * rtb_Assignment1_idx_1
-                 + PX4Controller_P.Constant_Value_i[i] * rtb_Assignment1_idx_0)
-      + PX4Controller_P.Constant_Value_i[i + 6] * rtb_Switch1_b;
+  if (PX4Controller_U.CmdBusIn.manualFM > PX4Controller_P.Switch7_Threshold_e) {
+    rtb_Switch7_e[0] = PX4Controller_P.Gain1_Gain * PX4Controller_U.CmdBusIn.rc
+      [1];
+    rtb_Switch7_e[1] = PX4Controller_P.Gain2_Gain * PX4Controller_U.CmdBusIn.rc
+      [2];
+    rtb_Switch7_e[2] = PX4Controller_P.Gain3_Gain * PX4Controller_U.CmdBusIn.rc
+      [3];
+  } else {
+    /* Interpolation_n-D: '<S72>/Interpolation Using Prelookup' */
+    frac_6[0] = rtb_f1;
+    frac_6[1] = rtb_f2;
+    bpIndex_6[0] = rtb_k1;
+    bpIndex_6[1] = rtb_k2;
+    if (PX4Controller_P.Constant_Value_f[0] > 2.0) {
+      bpIndex_6[2] = 2U;
+    } else if (PX4Controller_P.Constant_Value_f[0] >= 0.0) {
+      bpIndex_6[2] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_f[0]);
+    } else {
+      bpIndex_6[2] = 0U;
+    }
+
+    /* Interpolation_n-D: '<S72>/Interpolation Using Prelookup' incorporates:
+     *  Constant: '<S72>/Constant'
+     */
+    rtb_Gain2 = intrp2d_l_pw(bpIndex_6, frac_6,
+      &PX4Controller_P.InterpolationUsingPrelookup__cs[bpIndex_6[2] << 2], 2U);
+
+    /* Saturate: '<S7>/Saturation' incorporates:
+     *  Gain: '<S7>/   '
+     */
+    if (rtb_Gain1_g > PX4Controller_P.Saturation_UpperSat_c[0]) {
+      rtb_Switch1_o = PX4Controller_P.Saturation_UpperSat_c[0];
+    } else if (rtb_Gain1_g < PX4Controller_P.Saturation_LowerSat_d[0]) {
+      rtb_Switch1_o = PX4Controller_P.Saturation_LowerSat_d[0];
+    } else {
+      rtb_Switch1_o = rtb_Gain1_g;
+    }
+
+    /* Sum: '<S7>/Add' incorporates:
+     *  Gain: '<S7>/ '
+     *  Gain: '<S7>/   '
+     *  Gain: '<S7>/Gain'
+     *  Gain: '<S7>/Gain1'
+     *  Gain: '<S7>/Gain2'
+     *  Gain: '<S7>/Gain3'
+     *  Inport: '<Root>/StateBus'
+     *  Product: '<S72>/Product'
+     *  Sum: '<S7>/Subtract'
+     */
+    rtb_Switch1_o = ((PX4Controller_P._Gain_m * rtb_InterpolationUsingPrelook_4
+                      + PX4Controller_P._Gain * rtb_Switch1_o) -
+                     PX4Controller_P.Gain_Gain_a *
+                     PX4Controller_U.StateBus_m.wBody[0]) * rtb_Gain2 +
+      PX4Controller_P.Gain1_Gain_f * PX4Controller_U.StateBus_m.wDotBody[0] *
+      PX4Controller_P.Gain2_Gain_k * PX4Controller_P.Gain3_Gain_c;
+    if (PX4Controller_P.Constant_Value_f[1] > 2.0) {
+      bpIndex_6[2] = 2U;
+    } else if (PX4Controller_P.Constant_Value_f[1] >= 0.0) {
+      bpIndex_6[2] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_f[1]);
+    } else {
+      bpIndex_6[2] = 0U;
+    }
+
+    /* Interpolation_n-D: '<S72>/Interpolation Using Prelookup' incorporates:
+     *  Constant: '<S72>/Constant'
+     */
+    rtb_Gain2 = intrp2d_l_pw(bpIndex_6, frac_6,
+      &PX4Controller_P.InterpolationUsingPrelookup__cs[bpIndex_6[2] << 2], 2U);
+
+    /* Saturate: '<S7>/Saturation' incorporates:
+     *  Gain: '<S7>/   '
+     */
+    if (rtb_Tan1 > PX4Controller_P.Saturation_UpperSat_c[1]) {
+      rtb_Gain1_a = PX4Controller_P.Saturation_UpperSat_c[1];
+    } else if (rtb_Tan1 < PX4Controller_P.Saturation_LowerSat_d[1]) {
+      rtb_Gain1_a = PX4Controller_P.Saturation_LowerSat_d[1];
+    } else {
+      rtb_Gain1_a = rtb_Tan1;
+    }
+
+    /* Sum: '<S7>/Add' incorporates:
+     *  Gain: '<S7>/ '
+     *  Gain: '<S7>/   '
+     *  Gain: '<S7>/Gain'
+     *  Gain: '<S7>/Gain1'
+     *  Gain: '<S7>/Gain2'
+     *  Gain: '<S7>/Gain3'
+     *  Inport: '<Root>/StateBus'
+     *  Product: '<S72>/Product'
+     *  Sum: '<S7>/Subtract'
+     */
+    rtb_Gain1_a = ((PX4Controller_P._Gain_m * rtb_InterpolationUsingPrelook_5 +
+                    PX4Controller_P._Gain * rtb_Gain1_a) -
+                   PX4Controller_P.Gain_Gain_a *
+                   PX4Controller_U.StateBus_m.wBody[1]) * rtb_Gain2 +
+      PX4Controller_P.Gain1_Gain_f * PX4Controller_U.StateBus_m.wDotBody[1] *
+      PX4Controller_P.Gain2_Gain_k * PX4Controller_P.Gain3_Gain_c;
+    if (PX4Controller_P.Constant_Value_f[2] > 2.0) {
+      bpIndex_6[2] = 2U;
+    } else if (PX4Controller_P.Constant_Value_f[2] >= 0.0) {
+      bpIndex_6[2] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_f[2]);
+    } else {
+      bpIndex_6[2] = 0U;
+    }
+
+    /* Interpolation_n-D: '<S72>/Interpolation Using Prelookup' incorporates:
+     *  Constant: '<S72>/Constant'
+     */
+    rtb_Gain2 = intrp2d_l_pw(bpIndex_6, frac_6,
+      &PX4Controller_P.InterpolationUsingPrelookup__cs[bpIndex_6[2] << 2], 2U);
+
+    /* Saturate: '<S7>/Saturation' incorporates:
+     *  Gain: '<S7>/   '
+     */
+    if (rtb_Gain6 > PX4Controller_P.Saturation_UpperSat_c[2]) {
+      rtb_Gain2_m = PX4Controller_P.Saturation_UpperSat_c[2];
+    } else if (rtb_Gain6 < PX4Controller_P.Saturation_LowerSat_d[2]) {
+      rtb_Gain2_m = PX4Controller_P.Saturation_LowerSat_d[2];
+    } else {
+      rtb_Gain2_m = rtb_Gain6;
+    }
+
+    /* Sum: '<S7>/Add' incorporates:
+     *  Gain: '<S7>/ '
+     *  Gain: '<S7>/   '
+     *  Gain: '<S7>/Gain'
+     *  Gain: '<S7>/Gain1'
+     *  Gain: '<S7>/Gain2'
+     *  Gain: '<S7>/Gain3'
+     *  Inport: '<Root>/StateBus'
+     *  Product: '<S72>/Product'
+     *  Sum: '<S7>/Subtract'
+     */
+    rtb_Gain2 = ((PX4Controller_P._Gain_m * rtb_InterpolationUsingPrelook_6 +
+                  PX4Controller_P._Gain * rtb_Gain2_m) -
+                 PX4Controller_P.Gain_Gain_a * PX4Controller_U.StateBus_m.wBody
+                 [2]) * rtb_Gain2 + PX4Controller_P.Gain1_Gain_f *
+      PX4Controller_U.StateBus_m.wDotBody[2] * PX4Controller_P.Gain2_Gain_k *
+      PX4Controller_P.Gain3_Gain_c;
+    for (int32_T i{0}; i < 3; i++) {
+      rtb_Switch7_e[i] = (PX4Controller_P.Constant_Value_i[i + 3] * rtb_Gain1_a
+                          + PX4Controller_P.Constant_Value_i[i] * rtb_Switch1_o)
+        + PX4Controller_P.Constant_Value_i[i + 6] * rtb_Gain2;
+    }
   }
 
-  /* End of Product: '<S7>/Matrix Multiply' */
+  /* End of Switch: '<S12>/Switch7' */
 
-  /* Sum: '<S78>/Sum' incorporates:
-   *  Sum: '<S78>/ste'
-   *  Sum: '<S78>/steCmd'
+  /* Sum: '<S77>/Sum' incorporates:
+   *  Sum: '<S77>/ste'
+   *  Sum: '<S77>/steCmd'
    */
-  PX4Controller_B.steErr = (rtb_Saturation1 + rtb_skeCmd) - (rtb_spe + rtb_ske_0);
+  PX4Controller_B.steErr = (rtb_speCmd + rtb_skeCmd) - (rtb_spe +
+    rtb_InterpolationUsingPrelook_0);
 
-  /* Integrator: '<S78>/Integrator' */
+  /* Integrator: '<S77>/Integrator' */
   if (rtsiIsModeUpdateTimeStep(&PX4Controller_M->solverInfo)) {
     didZcEventOccur = (((PX4Controller_PrevZCX.Integrator_Reset_ZCE_l ==
                          POS_ZCSIG) != PX4Controller_B.OR) &&
@@ -1206,1212 +1329,667 @@ void PX4Controller_step(void)
     }
   }
 
-  /* Switch: '<S71>/Switch1' incorporates:
-   *  Gain: '<S71>/Gain'
+  /* Switch: '<S12>/Switch1' incorporates:
+   *  Gain: '<S12>/Gain'
    *  Inport: '<Root>/CmdBusIn'
-   *  Switch: '<S28>/Switch1'
+   *  Switch: '<S27>/Switch1'
+   *  Switch: '<S70>/Switch1'
    */
-  if (PX4Controller_U.CmdBusIn.manualRate > PX4Controller_P.Switch1_Threshold_g)
-  {
-    rtb_Switch1_b = PX4Controller_P.Gain_Gain_d * PX4Controller_U.CmdBusIn.rc[0];
+  if (PX4Controller_U.CmdBusIn.manualFM > PX4Controller_P.Switch1_Threshold_l) {
+    rtb_Switch1_o = PX4Controller_P.Gain_Gain * PX4Controller_U.CmdBusIn.rc[0];
+  } else if (PX4Controller_U.CmdBusIn.manualRate >
+             PX4Controller_P.Switch1_Threshold_g) {
+    /* Switch: '<S70>/Switch1' incorporates:
+     *  Gain: '<S70>/Gain'
+     */
+    rtb_Switch1_o = PX4Controller_P.Gain_Gain_d * PX4Controller_U.CmdBusIn.rc[0];
   } else if (PX4Controller_U.CmdBusIn.manualAttitude >
              PX4Controller_P.Switch1_Threshold) {
-    /* Switch: '<S28>/Switch1' incorporates:
-     *  Gain: '<S28>/Gain'
+    /* Switch: '<S27>/Switch1' incorporates:
+     *  Gain: '<S27>/Gain'
+     *  Switch: '<S70>/Switch1'
      */
-    rtb_Switch1_b = PX4Controller_P.Gain_Gain_g * PX4Controller_U.CmdBusIn.rc[0];
+    rtb_Switch1_o = PX4Controller_P.Gain_Gain_g * PX4Controller_U.CmdBusIn.rc[0];
   } else {
-    /* Interpolation_n-D: '<S82>/Interpolation Using Prelookup' incorporates:
-     *  Switch: '<S28>/Switch1'
+    /* Interpolation_n-D: '<S81>/Interpolation Using Prelookup' incorporates:
+     *  Switch: '<S27>/Switch1'
+     *  Switch: '<S70>/Switch1'
      */
     frac_7[0] = rtb_f1;
     frac_7[1] = rtb_f2;
     bpIndex_7[0] = rtb_k1;
     bpIndex_7[1] = rtb_k2;
 
-    /* Interpolation_n-D: '<S84>/Interpolation Using Prelookup' incorporates:
-     *  Switch: '<S28>/Switch1'
-     */
-    frac_8[0] = rtb_f1;
-    frac_8[1] = rtb_f2;
-    bpIndex_8[0] = rtb_k1;
-    bpIndex_8[1] = rtb_k2;
-
     /* Interpolation_n-D: '<S83>/Interpolation Using Prelookup' incorporates:
-     *  Switch: '<S28>/Switch1'
+     *  Switch: '<S27>/Switch1'
+     *  Switch: '<S70>/Switch1'
      */
     frac_a[0] = rtb_f1;
     frac_a[1] = rtb_f2;
     bpIndex_a[0] = rtb_k1;
     bpIndex_a[1] = rtb_k2;
 
-    /* Saturate: '<S78>/Saturation' incorporates:
+    /* Interpolation_n-D: '<S82>/Interpolation Using Prelookup' incorporates:
+     *  Switch: '<S27>/Switch1'
+     *  Switch: '<S70>/Switch1'
+     */
+    frac_b[0] = rtb_f1;
+    frac_b[1] = rtb_f2;
+    bpIndex_b[0] = rtb_k1;
+    bpIndex_b[1] = rtb_k2;
+
+    /* Saturate: '<S77>/Saturation' incorporates:
      *  Inport: '<Root>/StateBus'
-     *  Switch: '<S28>/Switch1'
+     *  Switch: '<S27>/Switch1'
+     *  Switch: '<S70>/Switch1'
      */
     if (PX4Controller_U.StateBus_m.tas > PX4Controller_P.Saturation_UpperSat) {
-      rtb_Assignment1_idx_2 = PX4Controller_P.Saturation_UpperSat;
+      rtb_tecsthetaCmd = PX4Controller_P.Saturation_UpperSat;
     } else if (PX4Controller_U.StateBus_m.tas <
                PX4Controller_P.Saturation_LowerSat) {
-      rtb_Assignment1_idx_2 = PX4Controller_P.Saturation_LowerSat;
+      rtb_tecsthetaCmd = PX4Controller_P.Saturation_LowerSat;
     } else {
-      rtb_Assignment1_idx_2 = PX4Controller_U.StateBus_m.tas;
+      rtb_tecsthetaCmd = PX4Controller_U.StateBus_m.tas;
     }
 
-    /* End of Saturate: '<S78>/Saturation' */
+    /* End of Saturate: '<S77>/Saturation' */
 
-    /* Switch: '<S28>/Switch1' incorporates:
-     *  Gain: '<S78>/M'
-     *  Integrator: '<S78>/Integrator'
+    /* Switch: '<S27>/Switch1' incorporates:
+     *  Gain: '<S77>/M'
+     *  Integrator: '<S77>/Integrator'
+     *  Interpolation_n-D: '<S81>/Interpolation Using Prelookup'
      *  Interpolation_n-D: '<S82>/Interpolation Using Prelookup'
      *  Interpolation_n-D: '<S83>/Interpolation Using Prelookup'
-     *  Interpolation_n-D: '<S84>/Interpolation Using Prelookup'
-     *  Product: '<S78>/Divide'
+     *  Product: '<S77>/Divide'
+     *  Product: '<S81>/Product'
      *  Product: '<S82>/Product'
      *  Product: '<S83>/Product'
-     *  Product: '<S84>/Product'
-     *  Sum: '<S78>/Sum2'
-     *  TransferFcn: '<S78>/Low pass'
+     *  Sum: '<S77>/Sum2'
+     *  Switch: '<S70>/Switch1'
+     *  TransferFcn: '<S77>/Low pass'
      */
-    rtb_Switch1_b = ((PX4Controller_P.Lowpass_C * PX4Controller_X.Lowpass_CSTATE
-                      * intrp2d_l_pw(bpIndex_a, frac_a,
+    rtb_Switch1_o = ((PX4Controller_P.Lowpass_C * PX4Controller_X.Lowpass_CSTATE
+                      * intrp2d_l_pw(bpIndex_b, frac_b,
       PX4Controller_P.InterpolationUsingPrelookup_T_c, 2U) +
-                      PX4Controller_B.steErr * intrp2d_l_pw(bpIndex_8, frac_8,
+                      PX4Controller_B.steErr * intrp2d_l_pw(bpIndex_a, frac_a,
       PX4Controller_P.InterpolationUsingPrelookup_T_n, 2U)) +
                      PX4Controller_X.Integrator_CSTATE_f * intrp2d_l_pw
                      (bpIndex_7, frac_7,
                       PX4Controller_P.InterpolationUsingPrelookup_Tab, 2U)) *
-      PX4Controller_P.M_Gain / rtb_Assignment1_idx_2;
+      PX4Controller_P.M_Gain / rtb_tecsthetaCmd;
   }
 
-  /* End of Switch: '<S71>/Switch1' */
+  /* End of Switch: '<S12>/Switch1' */
 
-  /* Outport: '<Root>/CmdBusOut' incorporates:
-   *  Inport: '<Root>/CmdBusIn'
-   *  SignalConversion generated from: '<S69>/Assignment1'
+  /* Interpolation_n-D: '<S18>/Interpolation Using Prelookup' incorporates:
+   *  Constant: '<S18>/Constant'
    */
-  PX4Controller_Y.CmdBusOut.eulerSat[2] = PX4Controller_U.CmdBusIn.eulerSat[2];
+  frac_8[0] = rtb_f1;
+  frac_8[1] = rtb_f2;
+  bpIndex_8[0] = rtb_k1;
+  bpIndex_8[1] = rtb_k2;
+  for (int32_T i{0}; i < 84; i++) {
+    if (PX4Controller_P.Constant_Value_n[i] > 83.0) {
+      bpIndex_8[2] = 83U;
+    } else if (PX4Controller_P.Constant_Value_n[i] >= 0.0) {
+      bpIndex_8[2] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_n[i]);
+    } else {
+      bpIndex_8[2] = 0U;
+    }
 
-  /* Saturate: '<S69>/Saturation1' */
-  if (rtb_Gain2 > PX4Controller_P.Saturation1_UpperSat_g) {
-    /* Assignment: '<S69>/Assignment1' incorporates:
-     *  Outport: '<Root>/CmdBusOut'
-     */
-    PX4Controller_Y.CmdBusOut.eulerSat[0] =
-      PX4Controller_P.Saturation1_UpperSat_g;
-  } else if (rtb_Gain2 < PX4Controller_P.Saturation1_LowerSat_b) {
-    /* Assignment: '<S69>/Assignment1' incorporates:
-     *  Outport: '<Root>/CmdBusOut'
-     */
-    PX4Controller_Y.CmdBusOut.eulerSat[0] =
-      PX4Controller_P.Saturation1_LowerSat_b;
-  } else {
-    /* Assignment: '<S69>/Assignment1' incorporates:
-     *  Outport: '<Root>/CmdBusOut'
-     */
-    PX4Controller_Y.CmdBusOut.eulerSat[0] = rtb_Gain2;
+    rtb_InterpolationUsingPreloo_dw[i] = intrp2d_l_pw(bpIndex_8, frac_8,
+      &PX4Controller_P.InterpolationUsingPrelookup_T_p[bpIndex_8[2] << 2], 2U);
   }
 
-  /* End of Saturate: '<S69>/Saturation1' */
+  /* End of Interpolation_n-D: '<S18>/Interpolation Using Prelookup' */
 
-  /* Saturate: '<S75>/Saturation1' */
-  if (rtb_tecsthetaCmd > PX4Controller_P.Saturation1_UpperSat_k) {
-    /* Assignment: '<S75>/Assignment1' incorporates:
-     *  Outport: '<Root>/CmdBusOut'
-     */
-    PX4Controller_Y.CmdBusOut.eulerSat[1] =
-      PX4Controller_P.Saturation1_UpperSat_k;
-  } else if (rtb_tecsthetaCmd < PX4Controller_P.Saturation1_LowerSat_n) {
-    /* Assignment: '<S75>/Assignment1' incorporates:
-     *  Outport: '<Root>/CmdBusOut'
-     */
-    PX4Controller_Y.CmdBusOut.eulerSat[1] =
-      PX4Controller_P.Saturation1_LowerSat_n;
-  } else {
-    /* Assignment: '<S75>/Assignment1' incorporates:
-     *  Outport: '<Root>/CmdBusOut'
-     */
-    PX4Controller_Y.CmdBusOut.eulerSat[1] = rtb_tecsthetaCmd;
-  }
-
-  /* End of Saturate: '<S75>/Saturation1' */
-
-  /* Saturate: '<S29>/Saturation' */
-  if (rtb_Saturation7 > PX4Controller_P.Saturation_UpperSat_p[0]) {
-    /* Outport: '<Root>/CmdBusOut' */
-    PX4Controller_Y.CmdBusOut.wSat[0] = PX4Controller_P.Saturation_UpperSat_p[0];
-  } else if (rtb_Saturation7 < PX4Controller_P.Saturation_LowerSat_c[0]) {
-    /* Outport: '<Root>/CmdBusOut' */
-    PX4Controller_Y.CmdBusOut.wSat[0] = PX4Controller_P.Saturation_LowerSat_c[0];
-  } else {
-    /* Outport: '<Root>/CmdBusOut' */
-    PX4Controller_Y.CmdBusOut.wSat[0] = rtb_Saturation7;
-  }
-
-  if (rtb_Saturation7_g > PX4Controller_P.Saturation_UpperSat_p[1]) {
-    /* Outport: '<Root>/CmdBusOut' */
-    PX4Controller_Y.CmdBusOut.wSat[1] = PX4Controller_P.Saturation_UpperSat_p[1];
-  } else if (rtb_Saturation7_g < PX4Controller_P.Saturation_LowerSat_c[1]) {
-    /* Outport: '<Root>/CmdBusOut' */
-    PX4Controller_Y.CmdBusOut.wSat[1] = PX4Controller_P.Saturation_LowerSat_c[1];
-  } else {
-    /* Outport: '<Root>/CmdBusOut' */
-    PX4Controller_Y.CmdBusOut.wSat[1] = rtb_Saturation7_g;
-  }
-
-  if (rtb_InterpolationUsingPrelook_k > PX4Controller_P.Saturation_UpperSat_p[2])
-  {
-    /* Outport: '<Root>/CmdBusOut' */
-    PX4Controller_Y.CmdBusOut.wSat[2] = PX4Controller_P.Saturation_UpperSat_p[2];
-  } else if (rtb_InterpolationUsingPrelook_k <
-             PX4Controller_P.Saturation_LowerSat_c[2]) {
-    /* Outport: '<Root>/CmdBusOut' */
-    PX4Controller_Y.CmdBusOut.wSat[2] = PX4Controller_P.Saturation_LowerSat_c[2];
-  } else {
-    /* Outport: '<Root>/CmdBusOut' */
-    PX4Controller_Y.CmdBusOut.wSat[2] = rtb_InterpolationUsingPrelook_k;
-  }
-
-  /* End of Saturate: '<S29>/Saturation' */
-
-  /* Interpolation_n-D: '<S22>/Interpolation Using Prelookup' incorporates:
-   *  Constant: '<S22>/Constant'
+  /* Interpolation_n-D: '<S25>/Interpolation Using Prelookup' incorporates:
+   *  Constant: '<S25>/Constant'
    */
   frac_9[0] = rtb_f1;
   frac_9[1] = rtb_f2;
   bpIndex_9[0] = rtb_k1;
   bpIndex_9[1] = rtb_k2;
-  for (int32_T i{0}; i < 84; i++) {
-    if (PX4Controller_P.Constant_Value_n[i] > 83.0) {
-      bpIndex_9[2] = 83U;
-    } else if (PX4Controller_P.Constant_Value_n[i] >= 0.0) {
-      bpIndex_9[2] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_n[i]);
-    } else {
-      bpIndex_9[2] = 0U;
-    }
-
-    rtb_InterpolationUsingPrelook_g[i] = intrp2d_l_pw(bpIndex_9, frac_9,
-      &PX4Controller_P.InterpolationUsingPrelookup__cj[bpIndex_9[2] << 2], 2U);
+  if (PX4Controller_P.Constant_Value_np[0] > 3.0) {
+    bpIndex_9[2] = 3U;
+  } else if (PX4Controller_P.Constant_Value_np[0] >= 0.0) {
+    bpIndex_9[2] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_np[0]);
+  } else {
+    bpIndex_9[2] = 0U;
   }
 
-  /* End of Interpolation_n-D: '<S22>/Interpolation Using Prelookup' */
+  rtb_InterpolationUsingPrelook_0 = intrp2d_l_pw(bpIndex_9, frac_9,
+    &PX4Controller_P.InterpolationUsingPrelookup_T_m[bpIndex_9[2] << 2], 2U);
+  if (PX4Controller_P.Constant_Value_np[1] > 3.0) {
+    bpIndex_9[2] = 3U;
+  } else if (PX4Controller_P.Constant_Value_np[1] >= 0.0) {
+    bpIndex_9[2] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_np[1]);
+  } else {
+    bpIndex_9[2] = 0U;
+  }
+
+  rtb_spe = intrp2d_l_pw(bpIndex_9, frac_9,
+    &PX4Controller_P.InterpolationUsingPrelookup_T_m[bpIndex_9[2] << 2], 2U);
+  if (PX4Controller_P.Constant_Value_np[2] > 3.0) {
+    bpIndex_9[2] = 3U;
+  } else if (PX4Controller_P.Constant_Value_np[2] >= 0.0) {
+    bpIndex_9[2] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_np[2]);
+  } else {
+    bpIndex_9[2] = 0U;
+  }
+
+  rtb_skeCmd = intrp2d_l_pw(bpIndex_9, frac_9,
+    &PX4Controller_P.InterpolationUsingPrelookup_T_m[bpIndex_9[2] << 2], 2U);
+  if (PX4Controller_P.Constant_Value_np[3] > 3.0) {
+    bpIndex_9[2] = 3U;
+  } else if (PX4Controller_P.Constant_Value_np[3] >= 0.0) {
+    bpIndex_9[2] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_np[3]);
+  } else {
+    bpIndex_9[2] = 0U;
+  }
+
+  rtb_speCmd = intrp2d_l_pw(bpIndex_9, frac_9,
+    &PX4Controller_P.InterpolationUsingPrelookup_T_m[bpIndex_9[2] << 2], 2U);
+
+  /* End of Interpolation_n-D: '<S25>/Interpolation Using Prelookup' */
+
+  /* Assignment: '<S14>/Assignment' incorporates:
+   *  Assignment: '<S14>/Assignment2'
+   *  Constant: '<S14>/Constant'
+   *  Interpolation_n-D: '<S19>/Interpolation Using Prelookup'
+   */
+  std::memcpy(&rtb_Assignment2[0], &PX4Controller_P.Constant_Value_bp[0], 84U *
+              sizeof(real_T));
+  rtb_Assignment2[0] = rtb_InterpolationUsingPrelook_0;
+  rtb_Assignment2[1] = rtb_spe;
+  rtb_Assignment2[2] = rtb_skeCmd;
+  rtb_Assignment2[3] = rtb_speCmd;
+
+  /* SignalConversion generated from: '<S13>/Vector Concatenate' incorporates:
+   *  Concatenate: '<S13>/Vector Concatenate'
+   */
+  PX4Controller_B.VectorConcatenate[0] = rtb_Switch1_o;
   if (rtmIsMajorTimeStep(PX4Controller_M)) {
-    for (int32_T i{0}; i < 14; i++) {
-      /* Selector: '<S14>/Selector5' incorporates:
-       *  Constant: '<S14>/allLimits'
+    /* Constant: '<S13>/Constant1' incorporates:
+     *  Concatenate: '<S13>/Vector Concatenate'
+     */
+    PX4Controller_B.VectorConcatenate[1] = PX4Controller_P.Constant1_Value_e[0];
+    PX4Controller_B.VectorConcatenate[2] = PX4Controller_P.Constant1_Value_e[1];
+    for (int32_T i{0}; i < 6; i++) {
+      /* Gain: '<S15>/Gain' incorporates:
+       *  Constant: '<S2>/Constant'
        */
-      PX4Controller_B.Selector5[i] = PX4Controller_P.allLimits_Value[(i << 1) +
-        1];
+      PX4Controller_B.Gain[i] = PX4Controller_P.SubsystemReference_fmMask[i] *
+        PX4Controller_P.Constant_Value_hr[i];
     }
   }
 
-  /* Interpolation_n-D: '<S17>/Interpolation Using Prelookup' incorporates:
-   *  Constant: '<S17>/Constant'
+  /* SignalConversion generated from: '<S13>/Vector Concatenate' incorporates:
+   *  Concatenate: '<S13>/Vector Concatenate'
    */
-  frac_b[0] = rtb_f1_m;
-  frac_b[1] = rtb_f2_p;
-  frac_b[2] = rtb_f3;
-  bpIndex_b[0] = rtb_k1_g;
-  bpIndex_b[1] = rtb_k2_e;
-  bpIndex_b[2] = rtb_k3;
-  if (PX4Controller_P.Constant_Value_e[0] > 3.0) {
-    bpIndex_b[3] = 3U;
-  } else if (PX4Controller_P.Constant_Value_e[0] >= 0.0) {
-    bpIndex_b[3] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_e[0]);
-  } else {
-    bpIndex_b[3] = 0U;
-  }
+  PX4Controller_B.VectorConcatenate[3] = rtb_Switch7_e[0];
+  PX4Controller_B.VectorConcatenate[4] = rtb_Switch7_e[1];
+  PX4Controller_B.VectorConcatenate[5] = rtb_Switch7_e[2];
 
-  rtb_spe = intrp3d_l_pw(bpIndex_b, frac_b,
-    &PX4Controller_P.SubsystemReference3_table_p[12U * bpIndex_b[3]],
-    PX4Controller_P.InterpolationUsingPrelookup_d_d);
-  if (PX4Controller_P.Constant_Value_e[1] > 3.0) {
-    bpIndex_b[3] = 3U;
-  } else if (PX4Controller_P.Constant_Value_e[1] >= 0.0) {
-    bpIndex_b[3] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_e[1]);
-  } else {
-    bpIndex_b[3] = 0U;
-  }
-
-  rtb_skeCmd = intrp3d_l_pw(bpIndex_b, frac_b,
-    &PX4Controller_P.SubsystemReference3_table_p[12U * bpIndex_b[3]],
-    PX4Controller_P.InterpolationUsingPrelookup_d_d);
-  if (PX4Controller_P.Constant_Value_e[2] > 3.0) {
-    bpIndex_b[3] = 3U;
-  } else if (PX4Controller_P.Constant_Value_e[2] >= 0.0) {
-    bpIndex_b[3] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_e[2]);
-  } else {
-    bpIndex_b[3] = 0U;
-  }
-
-  rtb_Gain2 = intrp3d_l_pw(bpIndex_b, frac_b,
-    &PX4Controller_P.SubsystemReference3_table_p[12U * bpIndex_b[3]],
-    PX4Controller_P.InterpolationUsingPrelookup_d_d);
-  if (PX4Controller_P.Constant_Value_e[3] > 3.0) {
-    bpIndex_b[3] = 3U;
-  } else if (PX4Controller_P.Constant_Value_e[3] >= 0.0) {
-    bpIndex_b[3] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_e[3]);
-  } else {
-    bpIndex_b[3] = 0U;
-  }
-
-  rtb_Saturation1 = intrp3d_l_pw(bpIndex_b, frac_b,
-    &PX4Controller_P.SubsystemReference3_table_p[12U * bpIndex_b[3]],
-    PX4Controller_P.InterpolationUsingPrelookup_d_d);
-
-  /* End of Interpolation_n-D: '<S17>/Interpolation Using Prelookup' */
-
-  /* Interpolation_n-D: '<S18>/Interpolation Using Prelookup' incorporates:
-   *  Constant: '<S18>/Constant'
+  /* Sum: '<S15>/Subtract' incorporates:
+   *  Gain: '<S15>/Gain1'
    */
-  frac_c[0] = rtb_f1_m;
-  frac_c[1] = rtb_f2_p;
-  frac_c[2] = rtb_f3;
-  bpIndex_c[0] = rtb_k1_g;
-  bpIndex_c[1] = rtb_k2_e;
-  bpIndex_c[2] = rtb_k3;
   for (int32_T i{0}; i < 6; i++) {
-    if (PX4Controller_P.Constant_Value_m[i] > 5.0) {
-      bpIndex_c[3] = 5U;
-    } else if (PX4Controller_P.Constant_Value_m[i] >= 0.0) {
-      bpIndex_c[3] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_m[i]);
-    } else {
-      bpIndex_c[3] = 0U;
-    }
-
-    rtb_MatrixMultiply1_k[i] = intrp3d_l_pw(bpIndex_c, frac_c,
-      &PX4Controller_P.SubsystemReference4_table[12U * bpIndex_c[3]],
-      PX4Controller_P.InterpolationUsingPrelookup_d_o);
+    rtb_Subtract1[i] = PX4Controller_P.SubsystemReference_fmMask[i] *
+      PX4Controller_B.VectorConcatenate[i] - PX4Controller_B.Gain[i];
   }
 
-  /* End of Interpolation_n-D: '<S18>/Interpolation Using Prelookup' */
+  /* End of Sum: '<S15>/Subtract' */
+
+  /* Product: '<S15>/Matrix Multiply2' incorporates:
+   *  Assignment: '<S14>/Assignment2'
+   */
+  std::memset(&rtb_Saturation_az[0], 0, 14U * sizeof(real_T));
+  for (int32_T i_0{0}; i_0 < 6; i_0++) {
+    for (int32_T i{0}; i < 14; i++) {
+      rtb_Saturation_az[i] += rtb_Assignment2[14 * i_0 + i] * rtb_Subtract1[i_0];
+    }
+  }
+
+  /* End of Product: '<S15>/Matrix Multiply2' */
 
   /* Interpolation_n-D: '<S19>/Interpolation Using Prelookup' incorporates:
    *  Constant: '<S19>/Constant'
    */
-  frac_d[0] = rtb_f1_m;
-  frac_d[1] = rtb_f2_p;
-  frac_d[2] = rtb_f3;
-  bpIndex_d[0] = rtb_k1_g;
-  bpIndex_d[1] = rtb_k2_e;
-  bpIndex_d[2] = rtb_k3;
-  if (PX4Controller_P.Constant_Value_e4[0] > 1.0) {
-    bpIndex_d[3] = 1U;
-  } else if (PX4Controller_P.Constant_Value_e4[0] >= 0.0) {
-    bpIndex_d[3] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_e4[0]);
+  frac_c[0] = rtb_f1_m;
+  frac_c[1] = rtb_f2_p;
+  frac_c[2] = rtb_InterpolationUsingPrelook_k;
+  bpIndex_c[0] = rtb_k1_g;
+  bpIndex_c[1] = rtb_k2_e;
+  bpIndex_c[2] = rtb_k3;
+  if (PX4Controller_P.Constant_Value_e[0] > 3.0) {
+    bpIndex_c[3] = 3U;
+  } else if (PX4Controller_P.Constant_Value_e[0] >= 0.0) {
+    bpIndex_c[3] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_e[0]);
   } else {
-    bpIndex_d[3] = 0U;
+    bpIndex_c[3] = 0U;
   }
 
-  frac_0[0] = intrp3d_l_pw(bpIndex_d, frac_d,
-    &PX4Controller_P.SubsystemReference5_table[12U * bpIndex_d[3]],
-    PX4Controller_P.InterpolationUsingPrelookup_d_m);
-  if (PX4Controller_P.Constant_Value_e4[1] > 1.0) {
-    bpIndex_d[3] = 1U;
-  } else if (PX4Controller_P.Constant_Value_e4[1] >= 0.0) {
-    bpIndex_d[3] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_e4[1]);
+  /* SignalConversion generated from: '<S15>/Matrix Multiply' incorporates:
+   *  Interpolation_n-D: '<S19>/Interpolation Using Prelookup'
+   */
+  rtb_Saturation_j[0] = intrp3d_l_pw(bpIndex_c, frac_c,
+    &PX4Controller_P.SubsystemReference3_table_p[12U * bpIndex_c[3]],
+    PX4Controller_P.InterpolationUsingPrelookup_d_d);
+
+  /* Interpolation_n-D: '<S19>/Interpolation Using Prelookup' incorporates:
+   *  Constant: '<S19>/Constant'
+   */
+  if (PX4Controller_P.Constant_Value_e[1] > 3.0) {
+    bpIndex_c[3] = 3U;
+  } else if (PX4Controller_P.Constant_Value_e[1] >= 0.0) {
+    bpIndex_c[3] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_e[1]);
   } else {
-    bpIndex_d[3] = 0U;
+    bpIndex_c[3] = 0U;
   }
 
-  frac_0[1] = intrp3d_l_pw(bpIndex_d, frac_d,
-    &PX4Controller_P.SubsystemReference5_table[12U * bpIndex_d[3]],
-    PX4Controller_P.InterpolationUsingPrelookup_d_m);
+  /* SignalConversion generated from: '<S15>/Matrix Multiply' incorporates:
+   *  Interpolation_n-D: '<S19>/Interpolation Using Prelookup'
+   */
+  rtb_Saturation_j[1] = intrp3d_l_pw(bpIndex_c, frac_c,
+    &PX4Controller_P.SubsystemReference3_table_p[12U * bpIndex_c[3]],
+    PX4Controller_P.InterpolationUsingPrelookup_d_d);
 
-  /* End of Interpolation_n-D: '<S19>/Interpolation Using Prelookup' */
+  /* Interpolation_n-D: '<S19>/Interpolation Using Prelookup' incorporates:
+   *  Constant: '<S19>/Constant'
+   */
+  if (PX4Controller_P.Constant_Value_e[2] > 3.0) {
+    bpIndex_c[3] = 3U;
+  } else if (PX4Controller_P.Constant_Value_e[2] >= 0.0) {
+    bpIndex_c[3] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_e[2]);
+  } else {
+    bpIndex_c[3] = 0U;
+  }
+
+  /* SignalConversion generated from: '<S15>/Matrix Multiply' incorporates:
+   *  Interpolation_n-D: '<S19>/Interpolation Using Prelookup'
+   */
+  rtb_Saturation_j[2] = intrp3d_l_pw(bpIndex_c, frac_c,
+    &PX4Controller_P.SubsystemReference3_table_p[12U * bpIndex_c[3]],
+    PX4Controller_P.InterpolationUsingPrelookup_d_d);
+
+  /* Interpolation_n-D: '<S19>/Interpolation Using Prelookup' incorporates:
+   *  Constant: '<S19>/Constant'
+   */
+  if (PX4Controller_P.Constant_Value_e[3] > 3.0) {
+    bpIndex_c[3] = 3U;
+  } else if (PX4Controller_P.Constant_Value_e[3] >= 0.0) {
+    bpIndex_c[3] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_e[3]);
+  } else {
+    bpIndex_c[3] = 0U;
+  }
+
+  /* SignalConversion generated from: '<S15>/Matrix Multiply' incorporates:
+   *  Interpolation_n-D: '<S19>/Interpolation Using Prelookup'
+   */
+  rtb_Saturation_j[3] = intrp3d_l_pw(bpIndex_c, frac_c,
+    &PX4Controller_P.SubsystemReference3_table_p[12U * bpIndex_c[3]],
+    PX4Controller_P.InterpolationUsingPrelookup_d_d);
 
   /* Interpolation_n-D: '<S20>/Interpolation Using Prelookup' incorporates:
    *  Constant: '<S20>/Constant'
    */
-  frac_e[0] = rtb_f1_m;
-  frac_e[1] = rtb_f2_p;
-  frac_e[2] = rtb_f3;
-  bpIndex_e[0] = rtb_k1_g;
-  bpIndex_e[1] = rtb_k2_e;
-  bpIndex_e[2] = rtb_k3;
-  if (PX4Controller_P.Constant_Value_ns[0] > 1.0) {
-    bpIndex_e[3] = 1U;
-  } else if (PX4Controller_P.Constant_Value_ns[0] >= 0.0) {
-    bpIndex_e[3] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_ns[0]);
-  } else {
-    bpIndex_e[3] = 0U;
-  }
+  frac_d[0] = rtb_f1_m;
+  frac_d[1] = rtb_f2_p;
+  frac_d[2] = rtb_InterpolationUsingPrelook_k;
+  bpIndex_d[0] = rtb_k1_g;
+  bpIndex_d[1] = rtb_k2_e;
+  bpIndex_d[2] = rtb_k3;
+  for (int32_T i{0}; i < 6; i++) {
+    if (PX4Controller_P.Constant_Value_m[i] > 5.0) {
+      bpIndex_d[3] = 5U;
+    } else if (PX4Controller_P.Constant_Value_m[i] >= 0.0) {
+      bpIndex_d[3] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_m[i]);
+    } else {
+      bpIndex_d[3] = 0U;
+    }
 
-  frac_3[0] = intrp3d_l_pw(bpIndex_e, frac_e,
-    &PX4Controller_P.SubsystemReference6_table[12U * bpIndex_e[3]],
-    PX4Controller_P.InterpolationUsingPrelookup__mi);
-  if (PX4Controller_P.Constant_Value_ns[1] > 1.0) {
-    bpIndex_e[3] = 1U;
-  } else if (PX4Controller_P.Constant_Value_ns[1] >= 0.0) {
-    bpIndex_e[3] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_ns[1]);
-  } else {
-    bpIndex_e[3] = 0U;
+    rtb_Subtract1[i] = intrp3d_l_pw(bpIndex_d, frac_d,
+      &PX4Controller_P.SubsystemReference4_table[12U * bpIndex_d[3]],
+      PX4Controller_P.InterpolationUsingPrelookup_d_o);
   }
-
-  frac_3[1] = intrp3d_l_pw(bpIndex_e, frac_e,
-    &PX4Controller_P.SubsystemReference6_table[12U * bpIndex_e[3]],
-    PX4Controller_P.InterpolationUsingPrelookup__mi);
 
   /* End of Interpolation_n-D: '<S20>/Interpolation Using Prelookup' */
 
   /* Interpolation_n-D: '<S21>/Interpolation Using Prelookup' incorporates:
    *  Constant: '<S21>/Constant'
    */
-  frac_f[0] = rtb_f1;
-  frac_f[1] = rtb_f2;
-  bpIndex_f[0] = rtb_k1;
-  bpIndex_f[1] = rtb_k2;
-  for (int32_T i{0}; i < 84; i++) {
-    if (PX4Controller_P.Constant_Value_fu[i] > 83.0) {
-      bpIndex_f[2] = 83U;
-    } else if (PX4Controller_P.Constant_Value_fu[i] >= 0.0) {
-      bpIndex_f[2] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_fu[i]);
-    } else {
-      bpIndex_f[2] = 0U;
-    }
-
-    rtb_InterpolationUsingPrelook_l[i] = intrp2d_l_pw(bpIndex_f, frac_f,
-      &PX4Controller_P.InterpolationUsingPrelookup__nf[bpIndex_f[2] << 2], 2U);
+  frac_e[0] = rtb_f1_m;
+  frac_e[1] = rtb_f2_p;
+  frac_e[2] = rtb_InterpolationUsingPrelook_k;
+  bpIndex_e[0] = rtb_k1_g;
+  bpIndex_e[1] = rtb_k2_e;
+  bpIndex_e[2] = rtb_k3;
+  if (PX4Controller_P.Constant_Value_e4[0] > 1.0) {
+    bpIndex_e[3] = 1U;
+  } else if (PX4Controller_P.Constant_Value_e4[0] >= 0.0) {
+    bpIndex_e[3] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_e4[0]);
+  } else {
+    bpIndex_e[3] = 0U;
   }
+
+  frac_0[0] = intrp3d_l_pw(bpIndex_e, frac_e,
+    &PX4Controller_P.SubsystemReference5_table[12U * bpIndex_e[3]],
+    PX4Controller_P.InterpolationUsingPrelookup_d_m);
+  if (PX4Controller_P.Constant_Value_e4[1] > 1.0) {
+    bpIndex_e[3] = 1U;
+  } else if (PX4Controller_P.Constant_Value_e4[1] >= 0.0) {
+    bpIndex_e[3] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_e4[1]);
+  } else {
+    bpIndex_e[3] = 0U;
+  }
+
+  frac_0[1] = intrp3d_l_pw(bpIndex_e, frac_e,
+    &PX4Controller_P.SubsystemReference5_table[12U * bpIndex_e[3]],
+    PX4Controller_P.InterpolationUsingPrelookup_d_m);
 
   /* End of Interpolation_n-D: '<S21>/Interpolation Using Prelookup' */
 
-  /* Switch: '<S12>/Switch1' incorporates:
-   *  Gain: '<S12>/Gain'
-   *  Inport: '<Root>/CmdBusIn'
+  /* Interpolation_n-D: '<S22>/Interpolation Using Prelookup' incorporates:
+   *  Constant: '<S22>/Constant'
    */
-  if (PX4Controller_U.CmdBusIn.manualFM > PX4Controller_P.Switch1_Threshold_l) {
-    rtb_InterpolationUsingPrelook_k = PX4Controller_P.Gain_Gain *
-      PX4Controller_U.CmdBusIn.rc[0];
+  frac_f[0] = rtb_f1_m;
+  frac_f[1] = rtb_f2_p;
+  frac_f[2] = rtb_InterpolationUsingPrelook_k;
+  bpIndex_f[0] = rtb_k1_g;
+  bpIndex_f[1] = rtb_k2_e;
+  bpIndex_f[2] = rtb_k3;
+  if (PX4Controller_P.Constant_Value_ns[0] > 1.0) {
+    bpIndex_f[3] = 1U;
+  } else if (PX4Controller_P.Constant_Value_ns[0] >= 0.0) {
+    bpIndex_f[3] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_ns[0]);
   } else {
-    rtb_InterpolationUsingPrelook_k = rtb_Switch1_b;
+    bpIndex_f[3] = 0U;
   }
 
-  /* End of Switch: '<S12>/Switch1' */
-
-  /* Switch: '<S12>/Switch7' incorporates:
-   *  Gain: '<S12>/Gain1'
-   *  Gain: '<S12>/Gain2'
-   *  Gain: '<S12>/Gain3'
-   *  Inport: '<Root>/CmdBusIn'
-   */
-  if (PX4Controller_U.CmdBusIn.manualFM > PX4Controller_P.Switch7_Threshold_e) {
-    rtb_Assignment1_idx_0 = PX4Controller_P.Gain1_Gain *
-      PX4Controller_U.CmdBusIn.rc[1];
-    rtb_Assignment1_idx_1 = PX4Controller_P.Gain2_Gain *
-      PX4Controller_U.CmdBusIn.rc[2];
-    rtb_Assignment1_idx_2 = PX4Controller_P.Gain3_Gain *
-      PX4Controller_U.CmdBusIn.rc[3];
+  frac_3[0] = intrp3d_l_pw(bpIndex_f, frac_f,
+    &PX4Controller_P.SubsystemReference6_table[12U * bpIndex_f[3]],
+    PX4Controller_P.InterpolationUsingPrelookup__mi);
+  if (PX4Controller_P.Constant_Value_ns[1] > 1.0) {
+    bpIndex_f[3] = 1U;
+  } else if (PX4Controller_P.Constant_Value_ns[1] >= 0.0) {
+    bpIndex_f[3] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_ns[1]);
   } else {
-    rtb_Assignment1_idx_0 = frac_2[0];
-    rtb_Assignment1_idx_1 = frac_2[1];
-    rtb_Assignment1_idx_2 = frac_2[2];
+    bpIndex_f[3] = 0U;
   }
 
-  /* End of Switch: '<S12>/Switch7' */
+  frac_3[1] = intrp3d_l_pw(bpIndex_f, frac_f,
+    &PX4Controller_P.SubsystemReference6_table[12U * bpIndex_f[3]],
+    PX4Controller_P.InterpolationUsingPrelookup__mi);
 
-  /* Product: '<S13>/Product' incorporates:
-   *  Constant: '<S13>/Constant5'
-   *  Constant: '<S13>/Constant6'
-   */
-  rtb_InterpolationUsingPrelook_d[0] = rtb_InterpolationUsingPrelook_k *
-    PX4Controller_P.Constant6_Value[0];
-  rtb_InterpolationUsingPrelook_d[1] = PX4Controller_P.Constant5_Value[0] *
-    PX4Controller_P.Constant6_Value[1];
-  rtb_InterpolationUsingPrelook_d[2] = PX4Controller_P.Constant5_Value[1] *
-    PX4Controller_P.Constant6_Value[2];
-  rtb_InterpolationUsingPrelook_d[3] = rtb_Assignment1_idx_0 *
-    PX4Controller_P.Constant6_Value[3];
-  rtb_InterpolationUsingPrelook_d[4] = rtb_Assignment1_idx_1 *
-    PX4Controller_P.Constant6_Value[4];
-  rtb_InterpolationUsingPrelook_d[5] = rtb_Assignment1_idx_2 *
-    PX4Controller_P.Constant6_Value[5];
+  /* End of Interpolation_n-D: '<S22>/Interpolation Using Prelookup' */
 
-  /* Product: '<S14>/Matrix Multiply' incorporates:
-   *  Interpolation_n-D: '<S26>/Interpolation Using Prelookup'
-   */
-  std::memset(&rtb_Sum2_d[0], 0, 14U * sizeof(real_T));
-  for (int32_T i_0{0}; i_0 < 6; i_0++) {
-    for (int32_T i{0}; i < 14; i++) {
-      rtb_Sum2_d[i] += rtb_InterpolationUsingPrelook_l[14 * i_0 + i] *
-        rtb_InterpolationUsingPrelook_d[i_0];
-    }
-  }
-
-  /* End of Product: '<S14>/Matrix Multiply' */
-
-  /* Saturate: '<S14>/Saturation5' */
-  if (rtb_Sum2_d[0] > PX4Controller_P.Saturation5_UpperSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation5_UpperSat;
-  } else if (rtb_Sum2_d[0] < PX4Controller_P.Saturation5_LowerSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation5_LowerSat;
-  } else {
-    rtb_ske_0 = rtb_Sum2_d[0];
-  }
-
-  /* Product: '<S14>/Divide' incorporates:
-   *  Product: '<S16>/Divide2'
-   *  Selector: '<S14>/Selector5'
-   *  Sum: '<S14>/Sum'
-   */
-  rtb_Divide2[0] = (PX4Controller_B.Selector5[0] - rtb_spe) / rtb_ske_0;
-
-  /* Saturate: '<S14>/Saturation5' */
-  if (rtb_Sum2_d[1] > PX4Controller_P.Saturation5_UpperSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation5_UpperSat;
-  } else if (rtb_Sum2_d[1] < PX4Controller_P.Saturation5_LowerSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation5_LowerSat;
-  } else {
-    rtb_ske_0 = rtb_Sum2_d[1];
-  }
-
-  /* Product: '<S14>/Divide' incorporates:
-   *  Product: '<S16>/Divide2'
-   *  Selector: '<S14>/Selector5'
-   *  Sum: '<S14>/Sum'
-   */
-  rtb_Divide2[1] = (PX4Controller_B.Selector5[1] - rtb_skeCmd) / rtb_ske_0;
-
-  /* Saturate: '<S14>/Saturation5' */
-  if (rtb_Sum2_d[2] > PX4Controller_P.Saturation5_UpperSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation5_UpperSat;
-  } else if (rtb_Sum2_d[2] < PX4Controller_P.Saturation5_LowerSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation5_LowerSat;
-  } else {
-    rtb_ske_0 = rtb_Sum2_d[2];
-  }
-
-  /* Product: '<S14>/Divide' incorporates:
-   *  Product: '<S16>/Divide2'
-   *  Selector: '<S14>/Selector5'
-   *  Sum: '<S14>/Sum'
-   */
-  rtb_Divide2[2] = (PX4Controller_B.Selector5[2] - rtb_Gain2) / rtb_ske_0;
-
-  /* Saturate: '<S14>/Saturation5' */
-  if (rtb_Sum2_d[3] > PX4Controller_P.Saturation5_UpperSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation5_UpperSat;
-  } else if (rtb_Sum2_d[3] < PX4Controller_P.Saturation5_LowerSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation5_LowerSat;
-  } else {
-    rtb_ske_0 = rtb_Sum2_d[3];
-  }
-
-  /* Product: '<S14>/Divide' incorporates:
-   *  Product: '<S16>/Divide2'
-   *  Selector: '<S14>/Selector5'
-   *  Sum: '<S14>/Sum'
-   */
-  rtb_Divide2[3] = (PX4Controller_B.Selector5[3] - rtb_Saturation1) / rtb_ske_0;
+  /* SignalConversion generated from: '<S15>/Matrix Multiply' */
   for (int32_T i{0}; i < 6; i++) {
-    /* Saturate: '<S14>/Saturation5' */
-    rtb_f3 = rtb_Sum2_d[i + 4];
-    if (rtb_f3 > PX4Controller_P.Saturation5_UpperSat) {
-      rtb_f3 = PX4Controller_P.Saturation5_UpperSat;
-    } else if (rtb_f3 < PX4Controller_P.Saturation5_LowerSat) {
-      rtb_f3 = PX4Controller_P.Saturation5_LowerSat;
-    }
-
-    rtb_Divide2[i + 4] = (PX4Controller_B.Selector5[i + 4] -
-                          rtb_MatrixMultiply1_k[i]) / rtb_f3;
+    rtb_Saturation_j[i + 4] = rtb_Subtract1[i];
   }
 
-  /* Saturate: '<S14>/Saturation5' */
-  if (rtb_Sum2_d[10] > PX4Controller_P.Saturation5_UpperSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation5_UpperSat;
-  } else if (rtb_Sum2_d[10] < PX4Controller_P.Saturation5_LowerSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation5_LowerSat;
-  } else {
-    rtb_ske_0 = rtb_Sum2_d[10];
-  }
+  rtb_Saturation_j[10] = frac_0[0];
+  rtb_Saturation_j[12] = frac_3[0];
+  rtb_Saturation_j[11] = frac_0[1];
+  rtb_Saturation_j[13] = frac_3[1];
 
-  /* Product: '<S14>/Divide' incorporates:
-   *  Product: '<S16>/Divide2'
-   *  Selector: '<S14>/Selector5'
-   *  Sum: '<S14>/Sum'
+  /* Saturate: '<S15>/Saturation' incorporates:
+   *  Sum: '<S15>/Sum1'
    */
-  rtb_Divide2[10] = (PX4Controller_B.Selector5[10] - frac_0[0]) / rtb_ske_0;
-
-  /* Saturate: '<S14>/Saturation5' */
-  if (rtb_Sum2_d[12] > PX4Controller_P.Saturation5_UpperSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation5_UpperSat;
-  } else if (rtb_Sum2_d[12] < PX4Controller_P.Saturation5_LowerSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation5_LowerSat;
-  } else {
-    rtb_ske_0 = rtb_Sum2_d[12];
-  }
-
-  /* Product: '<S14>/Divide' incorporates:
-   *  Product: '<S16>/Divide2'
-   *  Selector: '<S14>/Selector5'
-   *  Sum: '<S14>/Sum'
-   */
-  rtb_Divide2[12] = (PX4Controller_B.Selector5[12] - frac_3[0]) / rtb_ske_0;
-
-  /* Saturate: '<S14>/Saturation5' */
-  if (rtb_Sum2_d[11] > PX4Controller_P.Saturation5_UpperSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation5_UpperSat;
-  } else if (rtb_Sum2_d[11] < PX4Controller_P.Saturation5_LowerSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation5_LowerSat;
-  } else {
-    rtb_ske_0 = rtb_Sum2_d[11];
-  }
-
-  /* Product: '<S14>/Divide' incorporates:
-   *  Product: '<S16>/Divide2'
-   *  Selector: '<S14>/Selector5'
-   *  Sum: '<S14>/Sum'
-   */
-  rtb_Divide2[11] = (PX4Controller_B.Selector5[11] - frac_0[1]) / rtb_ske_0;
-
-  /* Saturate: '<S14>/Saturation5' */
-  if (rtb_Sum2_d[13] > PX4Controller_P.Saturation5_UpperSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation5_UpperSat;
-  } else if (rtb_Sum2_d[13] < PX4Controller_P.Saturation5_LowerSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation5_LowerSat;
-  } else {
-    rtb_ske_0 = rtb_Sum2_d[13];
-  }
-
-  /* Product: '<S14>/Divide' incorporates:
-   *  Product: '<S16>/Divide2'
-   *  Selector: '<S14>/Selector5'
-   *  Sum: '<S14>/Sum'
-   */
-  rtb_Divide2[13] = (PX4Controller_B.Selector5[13] - frac_3[1]) / rtb_ske_0;
-
-  /* MinMax: '<S14>/Min' incorporates:
-   *  Product: '<S16>/Divide2'
-   */
-  rtb_ske_0 = rtb_Divide2[0];
-  for (int32_T i{0}; i < 13; i++) {
-    rtb_ske_0 = std::fmin(rtb_ske_0, rtb_Divide2[i + 1]);
-  }
-
-  /* End of MinMax: '<S14>/Min' */
-
-  /* Saturate: '<S14>/Saturation4' */
-  if (rtb_ske_0 > PX4Controller_P.Saturation4_UpperSat) {
-    rtb_Saturation7_g = PX4Controller_P.Saturation4_UpperSat;
-  } else if (rtb_ske_0 < PX4Controller_P.Saturation4_LowerSat) {
-    rtb_Saturation7_g = PX4Controller_P.Saturation4_LowerSat;
-  } else {
-    rtb_Saturation7_g = rtb_ske_0;
-  }
-
-  /* End of Saturate: '<S14>/Saturation4' */
-  if (rtmIsMajorTimeStep(PX4Controller_M)) {
-    for (int32_T i{0}; i < 14; i++) {
-      /* Selector: '<S14>/Selector4' incorporates:
-       *  Constant: '<S14>/allLimits'
-       */
-      PX4Controller_B.Selector4[i] = PX4Controller_P.allLimits_Value[i << 1];
-    }
-  }
-
-  /* Saturate: '<S14>/Saturation6' */
-  if (rtb_Sum2_d[0] > PX4Controller_P.Saturation6_UpperSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation6_UpperSat;
-  } else if (rtb_Sum2_d[0] < PX4Controller_P.Saturation6_LowerSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation6_LowerSat;
-  } else {
-    rtb_ske_0 = rtb_Sum2_d[0];
-  }
-
-  /* Product: '<S14>/Divide2' incorporates:
-   *  Selector: '<S14>/Selector4'
-   *  Sum: '<S14>/Sum1'
-   *  Sum: '<S15>/Sum2'
-   */
-  rtb_Sum2_f[0] = 1.0 / rtb_ske_0 * (PX4Controller_B.Selector4[0] - rtb_spe);
-
-  /* Saturate: '<S14>/Saturation6' */
-  if (rtb_Sum2_d[1] > PX4Controller_P.Saturation6_UpperSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation6_UpperSat;
-  } else if (rtb_Sum2_d[1] < PX4Controller_P.Saturation6_LowerSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation6_LowerSat;
-  } else {
-    rtb_ske_0 = rtb_Sum2_d[1];
-  }
-
-  /* Product: '<S14>/Divide2' incorporates:
-   *  Selector: '<S14>/Selector4'
-   *  Sum: '<S14>/Sum1'
-   *  Sum: '<S15>/Sum2'
-   */
-  rtb_Sum2_f[1] = 1.0 / rtb_ske_0 * (PX4Controller_B.Selector4[1] - rtb_skeCmd);
-
-  /* Saturate: '<S14>/Saturation6' */
-  if (rtb_Sum2_d[2] > PX4Controller_P.Saturation6_UpperSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation6_UpperSat;
-  } else if (rtb_Sum2_d[2] < PX4Controller_P.Saturation6_LowerSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation6_LowerSat;
-  } else {
-    rtb_ske_0 = rtb_Sum2_d[2];
-  }
-
-  /* Product: '<S14>/Divide2' incorporates:
-   *  Selector: '<S14>/Selector4'
-   *  Sum: '<S14>/Sum1'
-   *  Sum: '<S15>/Sum2'
-   */
-  rtb_Sum2_f[2] = 1.0 / rtb_ske_0 * (PX4Controller_B.Selector4[2] - rtb_Gain2);
-
-  /* Saturate: '<S14>/Saturation6' */
-  if (rtb_Sum2_d[3] > PX4Controller_P.Saturation6_UpperSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation6_UpperSat;
-  } else if (rtb_Sum2_d[3] < PX4Controller_P.Saturation6_LowerSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation6_LowerSat;
-  } else {
-    rtb_ske_0 = rtb_Sum2_d[3];
-  }
-
-  /* Product: '<S14>/Divide2' incorporates:
-   *  Selector: '<S14>/Selector4'
-   *  Sum: '<S14>/Sum1'
-   *  Sum: '<S15>/Sum2'
-   */
-  rtb_Sum2_f[3] = 1.0 / rtb_ske_0 * (PX4Controller_B.Selector4[3] -
-    rtb_Saturation1);
-  for (int32_T i{0}; i < 6; i++) {
-    /* Saturate: '<S14>/Saturation6' */
-    rtb_f3 = rtb_Sum2_d[i + 4];
-    if (rtb_f3 > PX4Controller_P.Saturation6_UpperSat) {
-      rtb_f3 = PX4Controller_P.Saturation6_UpperSat;
-    } else if (rtb_f3 < PX4Controller_P.Saturation6_LowerSat) {
-      rtb_f3 = PX4Controller_P.Saturation6_LowerSat;
-    }
-
-    rtb_Sum2_f[i + 4] = (PX4Controller_B.Selector4[i + 4] -
-                         rtb_MatrixMultiply1_k[i]) * (1.0 / rtb_f3);
-  }
-
-  /* Saturate: '<S14>/Saturation6' */
-  if (rtb_Sum2_d[10] > PX4Controller_P.Saturation6_UpperSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation6_UpperSat;
-  } else if (rtb_Sum2_d[10] < PX4Controller_P.Saturation6_LowerSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation6_LowerSat;
-  } else {
-    rtb_ske_0 = rtb_Sum2_d[10];
-  }
-
-  /* Product: '<S14>/Divide2' incorporates:
-   *  Selector: '<S14>/Selector4'
-   *  Sum: '<S14>/Sum1'
-   *  Sum: '<S15>/Sum2'
-   */
-  rtb_Sum2_f[10] = 1.0 / rtb_ske_0 * (PX4Controller_B.Selector4[10] - frac_0[0]);
-
-  /* Saturate: '<S14>/Saturation6' */
-  if (rtb_Sum2_d[12] > PX4Controller_P.Saturation6_UpperSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation6_UpperSat;
-  } else if (rtb_Sum2_d[12] < PX4Controller_P.Saturation6_LowerSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation6_LowerSat;
-  } else {
-    rtb_ske_0 = rtb_Sum2_d[12];
-  }
-
-  /* Product: '<S14>/Divide2' incorporates:
-   *  Selector: '<S14>/Selector4'
-   *  Sum: '<S14>/Sum1'
-   *  Sum: '<S15>/Sum2'
-   */
-  rtb_Sum2_f[12] = 1.0 / rtb_ske_0 * (PX4Controller_B.Selector4[12] - frac_3[0]);
-
-  /* Saturate: '<S14>/Saturation6' */
-  if (rtb_Sum2_d[11] > PX4Controller_P.Saturation6_UpperSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation6_UpperSat;
-  } else if (rtb_Sum2_d[11] < PX4Controller_P.Saturation6_LowerSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation6_LowerSat;
-  } else {
-    rtb_ske_0 = rtb_Sum2_d[11];
-  }
-
-  /* Product: '<S14>/Divide2' incorporates:
-   *  Selector: '<S14>/Selector4'
-   *  Sum: '<S14>/Sum1'
-   *  Sum: '<S15>/Sum2'
-   */
-  rtb_Sum2_f[11] = 1.0 / rtb_ske_0 * (PX4Controller_B.Selector4[11] - frac_0[1]);
-
-  /* Saturate: '<S14>/Saturation6' */
-  if (rtb_Sum2_d[13] > PX4Controller_P.Saturation6_UpperSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation6_UpperSat;
-  } else if (rtb_Sum2_d[13] < PX4Controller_P.Saturation6_LowerSat) {
-    rtb_ske_0 = PX4Controller_P.Saturation6_LowerSat;
-  } else {
-    rtb_ske_0 = rtb_Sum2_d[13];
-  }
-
-  /* Product: '<S14>/Divide2' incorporates:
-   *  Selector: '<S14>/Selector4'
-   *  Sum: '<S14>/Sum1'
-   *  Sum: '<S15>/Sum2'
-   */
-  rtb_Sum2_f[13] = 1.0 / rtb_ske_0 * (PX4Controller_B.Selector4[13] - frac_3[1]);
-
-  /* MinMax: '<S14>/Min1' incorporates:
-   *  Sum: '<S15>/Sum2'
-   */
-  rtb_ske_0 = rtb_Sum2_f[0];
-  for (int32_T i{0}; i < 13; i++) {
-    rtb_ske_0 = std::fmin(rtb_ske_0, rtb_Sum2_f[i + 1]);
-  }
-
-  /* End of MinMax: '<S14>/Min1' */
-
-  /* Saturate: '<S14>/Saturation7' */
-  if (rtb_ske_0 > PX4Controller_P.Saturation7_UpperSat) {
-    rtb_Saturation7 = PX4Controller_P.Saturation7_UpperSat;
-  } else if (rtb_ske_0 < PX4Controller_P.Saturation7_LowerSat) {
-    rtb_Saturation7 = PX4Controller_P.Saturation7_LowerSat;
-  } else {
-    rtb_Saturation7 = rtb_ske_0;
-  }
-
-  /* End of Saturate: '<S14>/Saturation7' */
-
-  /* Product: '<S14>/Divide1' */
   for (int32_T i{0}; i < 14; i++) {
-    rtb_Sum2_d[i] = rtb_Saturation7_g * rtb_Sum2_d[i] * rtb_Saturation7;
+    /* Sum: '<S15>/Sum1' */
+    rtb_f2_p = rtb_Saturation_az[i] + rtb_Saturation_j[i];
+
+    /* Saturate: '<S15>/Saturation' incorporates:
+     *  Sum: '<S15>/Sum1'
+     */
+    rtb_f1_m = PX4Controller_P.Saturation_LowerSat_bc[i];
+    rtb_InterpolationUsingPrelook_k = PX4Controller_P.Saturation_UpperSat_pe[i];
+    if (rtb_f2_p > rtb_InterpolationUsingPrelook_k) {
+      rtb_f2_p = rtb_InterpolationUsingPrelook_k;
+    } else if (rtb_f2_p < rtb_f1_m) {
+      rtb_f2_p = rtb_f1_m;
+    }
+
+    rtb_Saturation_az[i] = rtb_f2_p;
   }
 
-  /* End of Product: '<S14>/Divide1' */
-
-  /* Product: '<S14>/Matrix Multiply1' incorporates:
-   *  Interpolation_n-D: '<S25>/Interpolation Using Prelookup'
-   */
+  /* End of Saturate: '<S15>/Saturation' */
   for (int32_T i{0}; i < 6; i++) {
-    rtb_Sum2_a[i] = 0.0;
+    /* Product: '<S15>/Matrix Multiply3' incorporates:
+     *  Product: '<S16>/Matrix Multiply'
+     */
+    rtb_Subtract1_tmp[i] = 0.0;
   }
 
   for (int32_T i_0{0}; i_0 < 14; i_0++) {
     for (int32_T i{0}; i < 6; i++) {
-      rtb_Sum2_a[i] += rtb_InterpolationUsingPrelook_g[6 * i_0 + i] *
-        rtb_Sum2_d[i_0];
+      /* Product: '<S15>/Matrix Multiply3' incorporates:
+       *  Interpolation_n-D: '<S18>/Interpolation Using Prelookup'
+       */
+      rtb_Subtract1_tmp[i] += rtb_InterpolationUsingPreloo_dw[6 * i_0 + i] *
+        rtb_Saturation_az[i_0];
     }
   }
 
-  /* End of Product: '<S14>/Matrix Multiply1' */
+  /* Sum: '<S15>/Subtract1' incorporates:
+   *  Constant: '<S2>/Constant'
+   *  Interpolation_n-D: '<S18>/Interpolation Using Prelookup'
+   *  Product: '<S15>/Matrix Multiply'
+   *  Product: '<S15>/Matrix Multiply3'
+   */
+  for (int32_T i{0}; i < 6; i++) {
+    rtb_tecsthetaCmd = 0.0;
+    for (int32_T i_0{0}; i_0 < 14; i_0++) {
+      rtb_tecsthetaCmd += rtb_InterpolationUsingPreloo_dw[6 * i_0 + i] *
+        rtb_Saturation_j[i_0];
+    }
 
-  /* Interpolation_n-D: '<S24>/Interpolation Using Prelookup' incorporates:
-   *  Constant: '<S24>/Constant'
+    rtb_Subtract1[i] = (PX4Controller_P.Constant_Value_hr[i] +
+                        rtb_Subtract1_tmp[i]) - rtb_tecsthetaCmd;
+  }
+
+  /* End of Sum: '<S15>/Subtract1' */
+
+  /* Interpolation_n-D: '<S23>/Interpolation Using Prelookup' incorporates:
+   *  Constant: '<S23>/Constant'
    */
   frac_g[0] = rtb_f1;
   frac_g[1] = rtb_f2;
   bpIndex_g[0] = rtb_k1;
   bpIndex_g[1] = rtb_k2;
-  for (int32_T i{0}; i < 84; i++) {
-    if (PX4Controller_P.Constant_Value_nh[i] > 83.0) {
-      bpIndex_g[2] = 83U;
-    } else if (PX4Controller_P.Constant_Value_nh[i] >= 0.0) {
-      bpIndex_g[2] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_nh[i]);
-    } else {
-      bpIndex_g[2] = 0U;
-    }
-
-    rtb_InterpolationUsingPrelook_l[i] = intrp2d_l_pw(bpIndex_g, frac_g,
-      &PX4Controller_P.InterpolationUsingPrelookup__bc[bpIndex_g[2] << 2], 2U);
+  if (PX4Controller_P.Constant_Value_ke[0] > 1.0) {
+    bpIndex_g[2] = 1U;
+  } else if (PX4Controller_P.Constant_Value_ke[0] >= 0.0) {
+    bpIndex_g[2] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_ke[0]);
+  } else {
+    bpIndex_g[2] = 0U;
   }
 
-  /* End of Interpolation_n-D: '<S24>/Interpolation Using Prelookup' */
-  if (rtmIsMajorTimeStep(PX4Controller_M)) {
-    for (int32_T i{0}; i < 14; i++) {
-      /* Selector: '<S15>/Selector5' incorporates:
-       *  Constant: '<S15>/allLimits'
-       */
-      PX4Controller_B.Selector5_l[i] = PX4Controller_P.allLimits_Value_e[(i << 1)
-        + 1];
-    }
+  frac_0[0] = intrp2d_l_pw(bpIndex_g, frac_g,
+    &PX4Controller_P.InterpolationUsingPrelookup__pv[bpIndex_g[2] << 2], 2U);
+  if (PX4Controller_P.Constant_Value_ke[1] > 1.0) {
+    bpIndex_g[2] = 1U;
+  } else if (PX4Controller_P.Constant_Value_ke[1] >= 0.0) {
+    bpIndex_g[2] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_ke[1]);
+  } else {
+    bpIndex_g[2] = 0U;
   }
 
-  /* Sum: '<S14>/Sum2' */
-  rtb_Divide2[0] = rtb_Sum2_d[0] + rtb_spe;
-  rtb_Divide2[1] = rtb_Sum2_d[1] + rtb_skeCmd;
-  rtb_Divide2[2] = rtb_Sum2_d[2] + rtb_Gain2;
-  rtb_Divide2[3] = rtb_Sum2_d[3] + rtb_Saturation1;
+  frac_0[1] = intrp2d_l_pw(bpIndex_g, frac_g,
+    &PX4Controller_P.InterpolationUsingPrelookup__pv[bpIndex_g[2] << 2], 2U);
+
+  /* End of Interpolation_n-D: '<S23>/Interpolation Using Prelookup' */
+
+  /* Assignment: '<S14>/Assignment1' incorporates:
+   *  Assignment: '<S14>/Assignment2'
+   *  Constant: '<S14>/Constant'
+   *  Interpolation_n-D: '<S34>/Interpolation Using Prelookup'
+   */
+  std::memcpy(&rtb_Assignment2[0], &PX4Controller_P.Constant_Value_bp[0], 84U *
+              sizeof(real_T));
+  rtb_Assignment2[82] = frac_0[0];
+  rtb_Assignment2[83] = frac_0[1];
+
+  /* Sum: '<S16>/Subtract' incorporates:
+   *  Gain: '<S16>/Gain'
+   *  Gain: '<S16>/Gain1'
+   */
   for (int32_T i{0}; i < 6; i++) {
-    rtb_Divide2[i + 4] = rtb_Sum2_d[i + 4] + rtb_MatrixMultiply1_k[i];
+    tmp[i] = PX4Controller_P.SubsystemReference1_fmMask[i] *
+      PX4Controller_B.VectorConcatenate[i] -
+      PX4Controller_P.SubsystemReference1_fmMask[i] * rtb_Subtract1[i];
   }
 
-  rtb_Divide2[10] = frac_0[0] + rtb_Sum2_d[10];
-  rtb_Divide2[12] = frac_3[0] + rtb_Sum2_d[12];
-  rtb_Divide2[11] = frac_0[1] + rtb_Sum2_d[11];
-  rtb_Divide2[13] = frac_3[1] + rtb_Sum2_d[13];
-  std::memcpy(&rtb_Sum2_d[0], &rtb_Divide2[0], 14U * sizeof(real_T));
+  /* End of Sum: '<S16>/Subtract' */
+  for (int32_T i{0}; i < 14; i++) {
+    /* Sum: '<S16>/Sum1' incorporates:
+     *  Assignment: '<S14>/Assignment2'
+     *  Product: '<S16>/Matrix Multiply2'
+     */
+    rtb_tecsthetaCmd = 0.0;
+    for (int32_T i_0{0}; i_0 < 6; i_0++) {
+      rtb_tecsthetaCmd += rtb_Assignment2[14 * i_0 + i] * tmp[i_0];
+    }
 
-  /* End of Sum: '<S14>/Sum2' */
+    rtb_f2_p = rtb_tecsthetaCmd + rtb_Saturation_az[i];
 
-  /* Interpolation_n-D: '<S23>/Interpolation Using Prelookup' incorporates:
-   *  Constant: '<S23>/Constant'
+    /* End of Sum: '<S16>/Sum1' */
+
+    /* Saturate: '<S16>/Saturation' */
+    rtb_f1_m = PX4Controller_P.Saturation_LowerSat_c1[i];
+    rtb_InterpolationUsingPrelook_k = PX4Controller_P.Saturation_UpperSat_cb[i];
+    if (rtb_f2_p > rtb_InterpolationUsingPrelook_k) {
+      rtb_Saturation_j[i] = rtb_InterpolationUsingPrelook_k;
+    } else if (rtb_f2_p < rtb_f1_m) {
+      rtb_Saturation_j[i] = rtb_f1_m;
+    } else {
+      rtb_Saturation_j[i] = rtb_f2_p;
+    }
+
+    /* End of Saturate: '<S16>/Saturation' */
+  }
+
+  for (int32_T i{0}; i < 6; i++) {
+    /* Product: '<S16>/Matrix Multiply3' incorporates:
+     *  Product: '<S17>/Matrix Multiply'
+     */
+    rtb_Subtract1_tmp_0[i] = 0.0;
+  }
+
+  for (int32_T i_0{0}; i_0 < 14; i_0++) {
+    for (int32_T i{0}; i < 6; i++) {
+      /* Product: '<S16>/Matrix Multiply3' incorporates:
+       *  Interpolation_n-D: '<S18>/Interpolation Using Prelookup'
+       */
+      rtb_Subtract1_tmp_0[i] += rtb_InterpolationUsingPreloo_dw[6 * i_0 + i] *
+        rtb_Saturation_j[i_0];
+    }
+  }
+
+  /* Sum: '<S16>/Subtract1' incorporates:
+   *  Product: '<S16>/Matrix Multiply'
+   *  Product: '<S16>/Matrix Multiply3'
+   */
+  for (int32_T i{0}; i < 6; i++) {
+    rtb_Subtract1[i] = (rtb_Subtract1[i] + rtb_Subtract1_tmp_0[i]) -
+      rtb_Subtract1_tmp[i];
+  }
+
+  /* End of Sum: '<S16>/Subtract1' */
+
+  /* Interpolation_n-D: '<S24>/Interpolation Using Prelookup' incorporates:
+   *  Constant: '<S24>/Constant'
    */
   frac_h[0] = rtb_f1;
   frac_h[1] = rtb_f2;
   bpIndex_h[0] = rtb_k1;
   bpIndex_h[1] = rtb_k2;
-  for (int32_T i{0}; i < 84; i++) {
-    if (PX4Controller_P.Constant_Value_c[i] > 83.0) {
-      bpIndex_h[2] = 83U;
-    } else if (PX4Controller_P.Constant_Value_c[i] >= 0.0) {
-      bpIndex_h[2] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_c[i]);
+  for (int32_T i{0}; i < 16; i++) {
+    if (PX4Controller_P.Constant_Value_l[i] > 15.0) {
+      bpIndex_h[2] = 15U;
+    } else if (PX4Controller_P.Constant_Value_l[i] >= 0.0) {
+      bpIndex_h[2] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_l[i]);
     } else {
       bpIndex_h[2] = 0U;
     }
 
-    rtb_InterpolationUsingPrelook_g[i] = intrp2d_l_pw(bpIndex_h, frac_h,
-      &PX4Controller_P.InterpolationUsingPrelookup_T_a[bpIndex_h[2] << 2], 2U);
+    rtb_InterpolationUsingPrelook_c[i] = intrp2d_l_pw(bpIndex_h, frac_h,
+      &PX4Controller_P.InterpolationUsingPrelookup__m0[bpIndex_h[2] << 2], 2U);
   }
 
-  /* End of Interpolation_n-D: '<S23>/Interpolation Using Prelookup' */
+  /* End of Interpolation_n-D: '<S24>/Interpolation Using Prelookup' */
 
-  /* Product: '<S13>/Product1' incorporates:
-   *  Constant: '<S13>/Constant1'
-   *  Constant: '<S13>/Constant5'
+  /* Assignment: '<S14>/Assignment2' incorporates:
+   *  Constant: '<S14>/Constant'
+   *  Interpolation_n-D: '<S24>/Interpolation Using Prelookup'
    */
-  rtb_InterpolationUsingPrelook_d[0] = rtb_InterpolationUsingPrelook_k *
-    PX4Controller_P.Constant1_Value_k[0];
-  rtb_InterpolationUsingPrelook_d[1] = PX4Controller_P.Constant5_Value[0] *
-    PX4Controller_P.Constant1_Value_k[1];
-  rtb_InterpolationUsingPrelook_d[2] = PX4Controller_P.Constant5_Value[1] *
-    PX4Controller_P.Constant1_Value_k[2];
-  rtb_InterpolationUsingPrelook_d[3] = rtb_Assignment1_idx_0 *
-    PX4Controller_P.Constant1_Value_k[3];
-  rtb_InterpolationUsingPrelook_d[4] = rtb_Assignment1_idx_1 *
-    PX4Controller_P.Constant1_Value_k[4];
-  rtb_InterpolationUsingPrelook_d[5] = rtb_Assignment1_idx_2 *
-    PX4Controller_P.Constant1_Value_k[5];
-
-  /* Product: '<S15>/Matrix Multiply' incorporates:
-   *  Interpolation_n-D: '<S25>/Interpolation Using Prelookup'
-   */
-  std::memset(&rtb_Sum2_f[0], 0, 14U * sizeof(real_T));
-  for (int32_T i_0{0}; i_0 < 6; i_0++) {
-    for (int32_T i{0}; i < 14; i++) {
-      rtb_Sum2_f[i] += rtb_InterpolationUsingPrelook_g[14 * i_0 + i] *
-        rtb_InterpolationUsingPrelook_d[i_0];
-    }
+  std::memcpy(&rtb_Assignment2[0], &PX4Controller_P.Constant_Value_bp[0], 84U *
+              sizeof(real_T));
+  for (int32_T i{0}; i < 2; i++) {
+    std::memcpy(&rtb_Assignment2[i * 14 + 46],
+                &rtb_InterpolationUsingPrelook_c[i << 3], sizeof(real_T) << 3U);
   }
 
-  /* End of Product: '<S15>/Matrix Multiply' */
+  /* End of Assignment: '<S14>/Assignment2' */
 
-  /* Product: '<S15>/Divide' incorporates:
-   *  Product: '<S16>/Divide2'
-   *  Selector: '<S15>/Selector5'
-   *  Sum: '<S15>/Sum'
-   */
-  for (int32_T i{0}; i < 14; i++) {
-    /* Saturate: '<S15>/Saturation5' */
-    rtb_f3 = rtb_Sum2_f[i];
-    if (rtb_f3 > PX4Controller_P.Saturation5_UpperSat_a) {
-      rtb_f3 = PX4Controller_P.Saturation5_UpperSat_a;
-    } else if (rtb_f3 < PX4Controller_P.Saturation5_LowerSat_g) {
-      rtb_f3 = PX4Controller_P.Saturation5_LowerSat_g;
-    }
-
-    /* End of Saturate: '<S15>/Saturation5' */
-    rtb_Divide2[i] = (PX4Controller_B.Selector5_l[i] - rtb_Sum2_d[i]) / rtb_f3;
-  }
-
-  /* End of Product: '<S15>/Divide' */
-
-  /* MinMax: '<S15>/Min' incorporates:
-   *  Product: '<S16>/Divide2'
-   */
-  rtb_ske_0 = rtb_Divide2[0];
-  for (int32_T i{0}; i < 13; i++) {
-    rtb_ske_0 = std::fmin(rtb_ske_0, rtb_Divide2[i + 1]);
-  }
-
-  /* End of MinMax: '<S15>/Min' */
-
-  /* Saturate: '<S15>/Saturation4' */
-  if (rtb_ske_0 > PX4Controller_P.Saturation4_UpperSat_k) {
-    rtb_Saturation7_g = PX4Controller_P.Saturation4_UpperSat_k;
-  } else if (rtb_ske_0 < PX4Controller_P.Saturation4_LowerSat_k) {
-    rtb_Saturation7_g = PX4Controller_P.Saturation4_LowerSat_k;
-  } else {
-    rtb_Saturation7_g = rtb_ske_0;
-  }
-
-  /* End of Saturate: '<S15>/Saturation4' */
-  if (rtmIsMajorTimeStep(PX4Controller_M)) {
-    for (int32_T i{0}; i < 14; i++) {
-      /* Selector: '<S15>/Selector4' incorporates:
-       *  Constant: '<S15>/allLimits'
-       */
-      PX4Controller_B.Selector4_b[i] = PX4Controller_P.allLimits_Value_e[i << 1];
-    }
-  }
-
-  /* Product: '<S15>/Divide2' incorporates:
-   *  Product: '<S16>/Divide2'
-   *  Selector: '<S15>/Selector4'
-   *  Sum: '<S15>/Sum1'
-   */
-  for (int32_T i{0}; i < 14; i++) {
-    /* Saturate: '<S15>/Saturation6' */
-    rtb_f3 = rtb_Sum2_f[i];
-    if (rtb_f3 > PX4Controller_P.Saturation6_UpperSat_h) {
-      rtb_f3 = PX4Controller_P.Saturation6_UpperSat_h;
-    } else if (rtb_f3 < PX4Controller_P.Saturation6_LowerSat_h) {
-      rtb_f3 = PX4Controller_P.Saturation6_LowerSat_h;
-    }
-
-    /* End of Saturate: '<S15>/Saturation6' */
-    rtb_Divide2[i] = 1.0 / rtb_f3 * (PX4Controller_B.Selector4_b[i] -
-      rtb_Sum2_d[i]);
-  }
-
-  /* End of Product: '<S15>/Divide2' */
-
-  /* MinMax: '<S15>/Min1' incorporates:
-   *  Product: '<S16>/Divide2'
-   */
-  rtb_ske_0 = rtb_Divide2[0];
-  for (int32_T i{0}; i < 13; i++) {
-    rtb_ske_0 = std::fmin(rtb_ske_0, rtb_Divide2[i + 1]);
-  }
-
-  /* End of MinMax: '<S15>/Min1' */
-
-  /* Saturate: '<S15>/Saturation7' */
-  if (rtb_ske_0 > PX4Controller_P.Saturation7_UpperSat_p) {
-    rtb_Saturation7 = PX4Controller_P.Saturation7_UpperSat_p;
-  } else if (rtb_ske_0 < PX4Controller_P.Saturation7_LowerSat_d) {
-    rtb_Saturation7 = PX4Controller_P.Saturation7_LowerSat_d;
-  } else {
-    rtb_Saturation7 = rtb_ske_0;
-  }
-
-  /* End of Saturate: '<S15>/Saturation7' */
-
-  /* Product: '<S15>/Divide1' */
-  for (int32_T i{0}; i < 14; i++) {
-    rtb_Sum2_f[i] = rtb_Saturation7_g * rtb_Sum2_f[i] * rtb_Saturation7;
-  }
-
-  /* End of Product: '<S15>/Divide1' */
-
-  /* Product: '<S15>/Matrix Multiply1' incorporates:
-   *  Interpolation_n-D: '<S26>/Interpolation Using Prelookup'
+  /* Sum: '<S17>/Subtract' incorporates:
+   *  Gain: '<S17>/Gain'
+   *  Gain: '<S17>/Gain1'
    */
   for (int32_T i{0}; i < 6; i++) {
-    rtb_MatrixMultiply1_k[i] = 0.0;
+    tmp[i] = PX4Controller_P.SubsystemReference2_fmMask[i] *
+      PX4Controller_B.VectorConcatenate[i] -
+      PX4Controller_P.SubsystemReference2_fmMask[i] * rtb_Subtract1[i];
   }
 
-  for (int32_T i_0{0}; i_0 < 14; i_0++) {
-    for (int32_T i{0}; i < 6; i++) {
-      rtb_MatrixMultiply1_k[i] += rtb_InterpolationUsingPrelook_l[6 * i_0 + i] *
-        rtb_Sum2_f[i_0];
+  /* End of Sum: '<S17>/Subtract' */
+  for (int32_T i{0}; i < 14; i++) {
+    /* Sum: '<S17>/Sum1' incorporates:
+     *  Assignment: '<S14>/Assignment2'
+     *  Product: '<S17>/Matrix Multiply2'
+     */
+    rtb_tecsthetaCmd = 0.0;
+    for (int32_T i_0{0}; i_0 < 6; i_0++) {
+      rtb_tecsthetaCmd += rtb_Assignment2[14 * i_0 + i] * tmp[i_0];
     }
-  }
 
-  /* End of Product: '<S15>/Matrix Multiply1' */
+    rtb_f2_p = rtb_tecsthetaCmd + rtb_Saturation_j[i];
 
-  /* Interpolation_n-D: '<S26>/Interpolation Using Prelookup' incorporates:
-   *  Constant: '<S26>/Constant'
-   */
-  frac_i[0] = rtb_f1;
-  frac_i[1] = rtb_f2;
-  bpIndex_i[0] = rtb_k1;
-  bpIndex_i[1] = rtb_k2;
-  for (int32_T i{0}; i < 84; i++) {
-    if (PX4Controller_P.Constant_Value_p[i] > 83.0) {
-      bpIndex_i[2] = 83U;
-    } else if (PX4Controller_P.Constant_Value_p[i] >= 0.0) {
-      bpIndex_i[2] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_p[i]);
+    /* End of Sum: '<S17>/Sum1' */
+
+    /* Saturate: '<S17>/Saturation' */
+    rtb_f1_m = PX4Controller_P.Saturation_LowerSat_ey[i];
+    rtb_InterpolationUsingPrelook_k = PX4Controller_P.Saturation_UpperSat_l4[i];
+    if (rtb_f2_p > rtb_InterpolationUsingPrelook_k) {
+      rtb_Saturation_az[i] = rtb_InterpolationUsingPrelook_k;
+    } else if (rtb_f2_p < rtb_f1_m) {
+      rtb_Saturation_az[i] = rtb_f1_m;
     } else {
-      bpIndex_i[2] = 0U;
+      rtb_Saturation_az[i] = rtb_f2_p;
     }
 
-    rtb_InterpolationUsingPrelook_l[i] = intrp2d_l_pw(bpIndex_i, frac_i,
-      &PX4Controller_P.InterpolationUsingPrelookup_T_g[bpIndex_i[2] << 2], 2U);
+    /* End of Saturate: '<S17>/Saturation' */
   }
 
-  /* End of Interpolation_n-D: '<S26>/Interpolation Using Prelookup' */
-  if (rtmIsMajorTimeStep(PX4Controller_M)) {
-    for (int32_T i{0}; i < 14; i++) {
-      /* Selector: '<S16>/Selector5' incorporates:
-       *  Constant: '<S16>/allLimits'
-       */
-      PX4Controller_B.Selector5_k[i] = PX4Controller_P.allLimits_Value_i[(i << 1)
-        + 1];
-    }
-  }
-
-  /* Sum: '<S15>/Sum2' */
-  for (int32_T i{0}; i < 14; i++) {
-    rtb_Sum2_f[i] += rtb_Sum2_d[i];
-  }
-
-  /* End of Sum: '<S15>/Sum2' */
-
-  /* Interpolation_n-D: '<S25>/Interpolation Using Prelookup' incorporates:
-   *  Constant: '<S25>/Constant'
-   */
-  frac_j[0] = rtb_f1;
-  frac_j[1] = rtb_f2;
-  bpIndex_j[0] = rtb_k1;
-  bpIndex_j[1] = rtb_k2;
-  for (int32_T i{0}; i < 84; i++) {
-    if (PX4Controller_P.Constant_Value_pv[i] > 83.0) {
-      bpIndex_j[2] = 83U;
-    } else if (PX4Controller_P.Constant_Value_pv[i] >= 0.0) {
-      bpIndex_j[2] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_pv[i]);
-    } else {
-      bpIndex_j[2] = 0U;
-    }
-
-    rtb_InterpolationUsingPrelook_g[i] = intrp2d_l_pw(bpIndex_j, frac_j,
-      &PX4Controller_P.InterpolationUsingPrelookup__is[bpIndex_j[2] << 2], 2U);
-  }
-
-  /* End of Interpolation_n-D: '<S25>/Interpolation Using Prelookup' */
-
-  /* Product: '<S13>/Product2' incorporates:
-   *  Constant: '<S13>/Constant2'
-   *  Constant: '<S13>/Constant5'
-   */
-  rtb_InterpolationUsingPrelook_d[0] = rtb_InterpolationUsingPrelook_k *
-    PX4Controller_P.Constant2_Value_e[0];
-  rtb_InterpolationUsingPrelook_d[1] = PX4Controller_P.Constant5_Value[0] *
-    PX4Controller_P.Constant2_Value_e[1];
-  rtb_InterpolationUsingPrelook_d[2] = PX4Controller_P.Constant5_Value[1] *
-    PX4Controller_P.Constant2_Value_e[2];
-  rtb_InterpolationUsingPrelook_d[3] = rtb_Assignment1_idx_0 *
-    PX4Controller_P.Constant2_Value_e[3];
-  rtb_InterpolationUsingPrelook_d[4] = rtb_Assignment1_idx_1 *
-    PX4Controller_P.Constant2_Value_e[4];
-  rtb_InterpolationUsingPrelook_d[5] = rtb_Assignment1_idx_2 *
-    PX4Controller_P.Constant2_Value_e[5];
-
-  /* Product: '<S16>/Matrix Multiply' incorporates:
-   *  Interpolation_n-D: '<S25>/Interpolation Using Prelookup'
-   */
-  std::memset(&rtb_Sum2_d[0], 0, 14U * sizeof(real_T));
-  for (int32_T i_0{0}; i_0 < 6; i_0++) {
-    for (int32_T i{0}; i < 14; i++) {
-      rtb_Sum2_d[i] += rtb_InterpolationUsingPrelook_g[14 * i_0 + i] *
-        rtb_InterpolationUsingPrelook_d[i_0];
-    }
-  }
-
-  /* End of Product: '<S16>/Matrix Multiply' */
-
-  /* Product: '<S16>/Divide' incorporates:
-   *  Product: '<S16>/Divide2'
-   *  Selector: '<S16>/Selector5'
-   *  Sum: '<S16>/Sum'
-   */
-  for (int32_T i{0}; i < 14; i++) {
-    /* Saturate: '<S16>/Saturation5' */
-    rtb_f3 = rtb_Sum2_d[i];
-    if (rtb_f3 > PX4Controller_P.Saturation5_UpperSat_f) {
-      rtb_f3 = PX4Controller_P.Saturation5_UpperSat_f;
-    } else if (rtb_f3 < PX4Controller_P.Saturation5_LowerSat_f) {
-      rtb_f3 = PX4Controller_P.Saturation5_LowerSat_f;
-    }
-
-    /* End of Saturate: '<S16>/Saturation5' */
-    rtb_Divide2[i] = (PX4Controller_B.Selector5_k[i] - rtb_Sum2_f[i]) / rtb_f3;
-  }
-
-  /* End of Product: '<S16>/Divide' */
-
-  /* MinMax: '<S16>/Min' incorporates:
-   *  Product: '<S16>/Divide2'
-   */
-  rtb_ske_0 = rtb_Divide2[0];
-  for (int32_T i{0}; i < 13; i++) {
-    rtb_ske_0 = std::fmin(rtb_ske_0, rtb_Divide2[i + 1]);
-  }
-
-  /* End of MinMax: '<S16>/Min' */
-
-  /* Saturate: '<S16>/Saturation4' */
-  if (rtb_ske_0 > PX4Controller_P.Saturation4_UpperSat_m) {
-    rtb_InterpolationUsingPrelook_k = PX4Controller_P.Saturation4_UpperSat_m;
-  } else if (rtb_ske_0 < PX4Controller_P.Saturation4_LowerSat_o) {
-    rtb_InterpolationUsingPrelook_k = PX4Controller_P.Saturation4_LowerSat_o;
-  } else {
-    rtb_InterpolationUsingPrelook_k = rtb_ske_0;
-  }
-
-  /* End of Saturate: '<S16>/Saturation4' */
-  if (rtmIsMajorTimeStep(PX4Controller_M)) {
-    for (int32_T i{0}; i < 14; i++) {
-      /* Selector: '<S16>/Selector4' incorporates:
-       *  Constant: '<S16>/allLimits'
-       */
-      PX4Controller_B.Selector4_g[i] = PX4Controller_P.allLimits_Value_i[i << 1];
-    }
-  }
-
-  /* Product: '<S16>/Divide2' incorporates:
-   *  Selector: '<S16>/Selector4'
-   *  Sum: '<S16>/Sum1'
-   */
-  for (int32_T i{0}; i < 14; i++) {
-    /* Saturate: '<S16>/Saturation6' */
-    rtb_f3 = rtb_Sum2_d[i];
-    if (rtb_f3 > PX4Controller_P.Saturation6_UpperSat_p) {
-      rtb_f3 = PX4Controller_P.Saturation6_UpperSat_p;
-    } else if (rtb_f3 < PX4Controller_P.Saturation6_LowerSat_g) {
-      rtb_f3 = PX4Controller_P.Saturation6_LowerSat_g;
-    }
-
-    /* End of Saturate: '<S16>/Saturation6' */
-    rtb_Divide2[i] = 1.0 / rtb_f3 * (PX4Controller_B.Selector4_g[i] -
-      rtb_Sum2_f[i]);
-  }
-
-  /* End of Product: '<S16>/Divide2' */
-
-  /* MinMax: '<S16>/Min1' incorporates:
-   *  Product: '<S16>/Divide2'
-   */
-  rtb_ske_0 = rtb_Divide2[0];
-  for (int32_T i{0}; i < 13; i++) {
-    rtb_ske_0 = std::fmin(rtb_ske_0, rtb_Divide2[i + 1]);
-  }
-
-  /* End of MinMax: '<S16>/Min1' */
-
-  /* Saturate: '<S16>/Saturation7' */
-  if (rtb_ske_0 > PX4Controller_P.Saturation7_UpperSat_i) {
-    rtb_Saturation7_g = PX4Controller_P.Saturation7_UpperSat_i;
-  } else if (rtb_ske_0 < PX4Controller_P.Saturation7_LowerSat_g) {
-    rtb_Saturation7_g = PX4Controller_P.Saturation7_LowerSat_g;
-  } else {
-    rtb_Saturation7_g = rtb_ske_0;
-  }
-
-  /* End of Saturate: '<S16>/Saturation7' */
-
-  /* Product: '<S16>/Divide1' */
-  for (int32_T i{0}; i < 14; i++) {
-    rtb_Sum2_d[i] = rtb_InterpolationUsingPrelook_k * rtb_Sum2_d[i] *
-      rtb_Saturation7_g;
-  }
-
-  /* End of Product: '<S16>/Divide1' */
-
-  /* Sum: '<S2>/Sum2' incorporates:
-   *  Interpolation_n-D: '<S26>/Interpolation Using Prelookup'
-   *  Product: '<S16>/Matrix Multiply1'
+  /* Sum: '<S17>/Subtract1' incorporates:
+   *  Interpolation_n-D: '<S18>/Interpolation Using Prelookup'
+   *  Product: '<S17>/Matrix Multiply'
+   *  Product: '<S17>/Matrix Multiply3'
    */
   for (int32_T i{0}; i < 6; i++) {
-    rtb_Assignment1_idx_2 = 0.0;
+    rtb_tecsthetaCmd = 0.0;
     for (int32_T i_0{0}; i_0 < 14; i_0++) {
-      rtb_Assignment1_idx_2 += rtb_InterpolationUsingPrelook_l[6 * i_0 + i] *
-        rtb_Sum2_d[i_0];
+      rtb_tecsthetaCmd += rtb_InterpolationUsingPreloo_dw[6 * i_0 + i] *
+        rtb_Saturation_az[i_0];
     }
 
-    rtb_Sum2_a[i] = (rtb_Sum2_a[i] + rtb_MatrixMultiply1_k[i]) +
-      rtb_Assignment1_idx_2;
+    rtb_Subtract1[i] = (rtb_Subtract1[i] + rtb_tecsthetaCmd) -
+      rtb_Subtract1_tmp_0[i];
   }
 
-  /* End of Sum: '<S2>/Sum2' */
+  /* End of Sum: '<S17>/Subtract1' */
 
   /* Outport: '<Root>/CmdBusOut' incorporates:
    *  BusCreator generated from: '<Root>/CmdBusOut'
@@ -2429,24 +2007,27 @@ void PX4Controller_step(void)
     PX4Controller_U.CmdBusIn.manualAttitude;
   PX4Controller_Y.CmdBusOut.manualRate = PX4Controller_U.CmdBusIn.manualRate;
   PX4Controller_Y.CmdBusOut.manualFM = PX4Controller_U.CmdBusIn.manualFM;
-  PX4Controller_Y.CmdBusOut.FCmd = rtb_Switch1_b;
+  PX4Controller_Y.CmdBusOut.FCmd = rtb_Switch1_o;
   PX4Controller_Y.CmdBusOut.manualActuation =
     PX4Controller_U.CmdBusIn.manualActuation;
   PX4Controller_Y.CmdBusOut.trackLine[0] = PX4Controller_U.CmdBusIn.trackLine[0];
   PX4Controller_Y.CmdBusOut.eulerCmd[0] = rtb_Switch7_idx_0;
-  PX4Controller_Y.CmdBusOut.wCmd[0] = rtb_Switch7_d_idx_0;
-  PX4Controller_Y.CmdBusOut.MCmd[0] = frac_2[0];
-  PX4Controller_Y.CmdBusOut.MSat[0] = rtb_Sum2_a[3];
+  PX4Controller_Y.CmdBusOut.MCmd[0] = rtb_Switch7_e[0];
+  PX4Controller_Y.CmdBusOut.eulerSat[0] = frac_2[0];
+  PX4Controller_Y.CmdBusOut.wSat[0] = rtb_Gain1_g;
+  PX4Controller_Y.CmdBusOut.MSat[0] = rtb_Subtract1[3];
   PX4Controller_Y.CmdBusOut.trackLine[1] = PX4Controller_U.CmdBusIn.trackLine[1];
   PX4Controller_Y.CmdBusOut.eulerCmd[1] = rtb_Switch7_idx_1;
-  PX4Controller_Y.CmdBusOut.wCmd[1] = rtb_Switch7_d_idx_1;
-  PX4Controller_Y.CmdBusOut.MCmd[1] = frac_2[1];
-  PX4Controller_Y.CmdBusOut.MSat[1] = rtb_Sum2_a[4];
+  PX4Controller_Y.CmdBusOut.MCmd[1] = rtb_Switch7_e[1];
+  PX4Controller_Y.CmdBusOut.eulerSat[1] = frac_2[1];
+  PX4Controller_Y.CmdBusOut.wSat[1] = rtb_Tan1;
+  PX4Controller_Y.CmdBusOut.MSat[1] = rtb_Subtract1[4];
   PX4Controller_Y.CmdBusOut.trackLine[2] = PX4Controller_U.CmdBusIn.trackLine[2];
-  PX4Controller_Y.CmdBusOut.wCmd[2] = rtb_Switch7_d_idx_2;
-  PX4Controller_Y.CmdBusOut.MCmd[2] = frac_2[2];
-  PX4Controller_Y.CmdBusOut.MSat[2] = rtb_Sum2_a[5];
-  PX4Controller_Y.CmdBusOut.FSat = rtb_Sum2_a[0];
+  PX4Controller_Y.CmdBusOut.MCmd[2] = rtb_Switch7_e[2];
+  PX4Controller_Y.CmdBusOut.eulerSat[2] = frac_2[2];
+  PX4Controller_Y.CmdBusOut.wSat[2] = rtb_Gain6;
+  PX4Controller_Y.CmdBusOut.MSat[2] = rtb_Subtract1[5];
+  PX4Controller_Y.CmdBusOut.FSat = rtb_Subtract1[0];
   if (rtmIsMajorTimeStep(PX4Controller_M)) {
     /* Memory generated from: '<S1>/Memory' */
     PX4Controller_Y.ActBus_e.motors[0] =
@@ -2481,13 +2062,6 @@ void PX4Controller_step(void)
       PX4Controller_DW.Memory_4_PreviousInput[1];
   }
 
-  /* Sum: '<S16>/Sum2' */
-  for (int32_T i{0}; i < 14; i++) {
-    rtb_Sum2_d[i] += rtb_Sum2_f[i];
-  }
-
-  /* End of Sum: '<S16>/Sum2' */
-
   /* Switch: '<S11>/Switch1' incorporates:
    *  Inport: '<Root>/CmdBusIn'
    */
@@ -2507,10 +2081,10 @@ void PX4Controller_step(void)
       PX4Controller_P.Constant_Value_j[3];
   } else {
     /* Switch: '<S11>/Switch1' */
-    PX4Controller_B.Switch1[0] = rtb_Sum2_d[0];
-    PX4Controller_B.Switch1[1] = rtb_Sum2_d[1];
-    PX4Controller_B.Switch1[2] = rtb_Sum2_d[2];
-    PX4Controller_B.Switch1[3] = rtb_Sum2_d[3];
+    PX4Controller_B.Switch1[0] = rtb_Saturation_az[0];
+    PX4Controller_B.Switch1[1] = rtb_Saturation_az[1];
+    PX4Controller_B.Switch1[2] = rtb_Saturation_az[2];
+    PX4Controller_B.Switch1[3] = rtb_Saturation_az[3];
   }
 
   /* End of Switch: '<S11>/Switch1' */
@@ -2519,7 +2093,7 @@ void PX4Controller_step(void)
    *  Inport: '<Root>/CmdBusIn'
    */
   if (PX4Controller_U.CmdBusIn.manualActuation >
-      PX4Controller_P.Switch2_Threshold) {
+      PX4Controller_P.Switch2_Threshold_o) {
     /* Switch: '<S11>/Switch2' incorporates:
      *  Constant: '<S11>/Constant1'
      *  Product: '<S11>/Product1'
@@ -2531,7 +2105,7 @@ void PX4Controller_step(void)
   } else {
     /* Switch: '<S11>/Switch2' */
     for (int32_T i{0}; i < 6; i++) {
-      PX4Controller_B.Switch2[i] = rtb_Sum2_d[i + 4];
+      PX4Controller_B.Switch2[i] = rtb_Saturation_az[i + 4];
     }
   }
 
@@ -2552,8 +2126,8 @@ void PX4Controller_step(void)
       PX4Controller_U.CmdBusIn.rc[2];
   } else {
     /* Switch: '<S11>/Switch3' */
-    PX4Controller_B.Switch3[0] = rtb_Sum2_d[10];
-    PX4Controller_B.Switch3[1] = rtb_Sum2_d[11];
+    PX4Controller_B.Switch3[0] = rtb_Saturation_az[10];
+    PX4Controller_B.Switch3[1] = rtb_Saturation_az[11];
   }
 
   /* End of Switch: '<S11>/Switch3' */
@@ -2573,65 +2147,65 @@ void PX4Controller_step(void)
       PX4Controller_U.CmdBusIn.rc[3];
   } else {
     /* Switch: '<S11>/Switch4' */
-    PX4Controller_B.Switch4[0] = rtb_Sum2_d[12];
-    PX4Controller_B.Switch4[1] = rtb_Sum2_d[13];
+    PX4Controller_B.Switch4[0] = rtb_Saturation_az[12];
+    PX4Controller_B.Switch4[1] = rtb_Saturation_az[13];
   }
 
   /* End of Switch: '<S11>/Switch4' */
 
-  /* Interpolation_n-D: '<S35>/Interpolation Using Prelookup' incorporates:
-   *  Constant: '<S35>/Constant'
+  /* Interpolation_n-D: '<S34>/Interpolation Using Prelookup' incorporates:
+   *  Constant: '<S34>/Constant'
    */
-  frac_k[0] = rtb_f1;
-  frac_k[1] = rtb_f2;
-  bpIndex_k[0] = rtb_k1;
-  bpIndex_k[1] = rtb_k2;
-  if (PX4Controller_P.Constant_Value_cn[0] > 1.0) {
-    bpIndex_k[2] = 1U;
-  } else if (PX4Controller_P.Constant_Value_cn[0] >= 0.0) {
-    bpIndex_k[2] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_cn[0]);
+  frac_i[0] = rtb_f1;
+  frac_i[1] = rtb_f2;
+  bpIndex_i[0] = rtb_k1;
+  bpIndex_i[1] = rtb_k2;
+  if (PX4Controller_P.Constant_Value_c[0] > 1.0) {
+    bpIndex_i[2] = 1U;
+  } else if (PX4Controller_P.Constant_Value_c[0] >= 0.0) {
+    bpIndex_i[2] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_c[0]);
   } else {
-    bpIndex_k[2] = 0U;
+    bpIndex_i[2] = 0U;
   }
 
-  rtb_Switch7_d_idx_0 = intrp2d_l_pw(bpIndex_k, frac_k,
-    &PX4Controller_P.InterpolationUsingPrelookup__ho[bpIndex_k[2] << 2], 2U);
+  rtb_Gain2 = intrp2d_l_pw(bpIndex_i, frac_i,
+    &PX4Controller_P.InterpolationUsingPrelookup__ho[bpIndex_i[2] << 2], 2U);
 
-  /* Product: '<S35>/Product' */
-  PX4Controller_B.Product[0] = frac[0] * rtb_Switch7_d_idx_0;
+  /* Product: '<S34>/Product' */
+  PX4Controller_B.Product[0] = frac[0] * rtb_Gain2;
 
-  /* Interpolation_n-D: '<S35>/Interpolation Using Prelookup' incorporates:
-   *  Constant: '<S35>/Constant'
+  /* Interpolation_n-D: '<S34>/Interpolation Using Prelookup' incorporates:
+   *  Constant: '<S34>/Constant'
    */
-  if (PX4Controller_P.Constant_Value_cn[1] > 1.0) {
-    bpIndex_k[2] = 1U;
-  } else if (PX4Controller_P.Constant_Value_cn[1] >= 0.0) {
-    bpIndex_k[2] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_cn[1]);
+  if (PX4Controller_P.Constant_Value_c[1] > 1.0) {
+    bpIndex_i[2] = 1U;
+  } else if (PX4Controller_P.Constant_Value_c[1] >= 0.0) {
+    bpIndex_i[2] = static_cast<uint32_T>(PX4Controller_P.Constant_Value_c[1]);
   } else {
-    bpIndex_k[2] = 0U;
+    bpIndex_i[2] = 0U;
   }
 
-  rtb_Switch7_d_idx_0 = intrp2d_l_pw(bpIndex_k, frac_k,
-    &PX4Controller_P.InterpolationUsingPrelookup__ho[bpIndex_k[2] << 2], 2U);
+  rtb_Gain2 = intrp2d_l_pw(bpIndex_i, frac_i,
+    &PX4Controller_P.InterpolationUsingPrelookup__ho[bpIndex_i[2] << 2], 2U);
 
-  /* Product: '<S35>/Product' */
-  PX4Controller_B.Product[1] = frac[1] * rtb_Switch7_d_idx_0;
+  /* Product: '<S34>/Product' */
+  PX4Controller_B.Product[1] = frac[1] * rtb_Gain2;
 
-  /* Interpolation_n-D: '<S80>/Interpolation Using Prelookup' */
-  frac_l[0] = rtb_f1;
-  frac_l[1] = rtb_f2;
-  bpIndex_l[0] = rtb_k1;
-  bpIndex_l[1] = rtb_k2;
+  /* Interpolation_n-D: '<S79>/Interpolation Using Prelookup' */
+  frac_j[0] = rtb_f1;
+  frac_j[1] = rtb_f2;
+  bpIndex_j[0] = rtb_k1;
+  bpIndex_j[1] = rtb_k2;
 
-  /* Product: '<S80>/Product' incorporates:
-   *  Interpolation_n-D: '<S80>/Interpolation Using Prelookup'
+  /* Product: '<S79>/Product' incorporates:
+   *  Interpolation_n-D: '<S79>/Interpolation Using Prelookup'
    */
-  PX4Controller_B.Product_g = rtb_sebErr * intrp2d_l_pw(bpIndex_l, frac_l,
-    PX4Controller_P.InterpolationUsingPrelookup_T_m, 2U);
+  PX4Controller_B.Product_g = rtb_sebErr * intrp2d_l_pw(bpIndex_j, frac_j,
+    PX4Controller_P.InterpolationUsingPrelookup__mw, 2U);
 
-  /* Sum: '<S78>/Sum1' incorporates:
-   *  Sum: '<S78>/steDot'
-   *  Sum: '<S78>/steDotCmd '
+  /* Sum: '<S77>/Sum1' incorporates:
+   *  Sum: '<S77>/steDot'
+   *  Sum: '<S77>/steDotCmd '
    */
   PX4Controller_B.steDotErr = (rtb_speDotCmd + rtb_skeDotCmd) - (rtb_speDot +
     rtb_skeDot);
@@ -2705,7 +2279,7 @@ void PX4Controller_derivatives(void)
   XDot_PX4Controller_T *_rtXdot;
   _rtXdot = ((XDot_PX4Controller_T *) PX4Controller_M->derivs);
 
-  /* Derivatives for Integrator: '<S77>/Integrator1' */
+  /* Derivatives for Integrator: '<S76>/Integrator1' */
   if (!PX4Controller_B.OR) {
     _rtXdot->Integrator1_CSTATE = PX4Controller_B.Product_g;
   } else {
@@ -2713,7 +2287,7 @@ void PX4Controller_derivatives(void)
     _rtXdot->Integrator1_CSTATE = 0.0;
   }
 
-  /* End of Derivatives for Integrator: '<S77>/Integrator1' */
+  /* End of Derivatives for Integrator: '<S76>/Integrator1' */
 
   /* Derivatives for Integrator: '<S3>/Integrator' */
   if (!PX4Controller_B.OR_k) {
@@ -2727,12 +2301,12 @@ void PX4Controller_derivatives(void)
 
   /* End of Derivatives for Integrator: '<S3>/Integrator' */
 
-  /* Derivatives for TransferFcn: '<S78>/Low pass' */
+  /* Derivatives for TransferFcn: '<S77>/Low pass' */
   _rtXdot->Lowpass_CSTATE = PX4Controller_P.Lowpass_A *
     PX4Controller_X.Lowpass_CSTATE;
   _rtXdot->Lowpass_CSTATE += PX4Controller_B.steDotErr;
 
-  /* Derivatives for Integrator: '<S78>/Integrator' */
+  /* Derivatives for Integrator: '<S77>/Integrator' */
   if (!PX4Controller_B.OR) {
     _rtXdot->Integrator_CSTATE_f = PX4Controller_B.steErr;
   } else {
@@ -2740,7 +2314,7 @@ void PX4Controller_derivatives(void)
     _rtXdot->Integrator_CSTATE_f = 0.0;
   }
 
-  /* End of Derivatives for Integrator: '<S78>/Integrator' */
+  /* End of Derivatives for Integrator: '<S77>/Integrator' */
 }
 
 /* Model initialize function */
@@ -2757,57 +2331,6 @@ void PX4Controller_initialize(void)
   PX4Controller_P.Saturation_UpperSat_a = rtInf;
   PX4Controller_P.Saturation_UpperSat_l = rtInf;
   PX4Controller_P.Saturation_UpperSat_ag = rtInf;
-  PX4Controller_P.allLimits_Value[0] = rtMinusInf;
-  PX4Controller_P.allLimits_Value[2] = rtMinusInf;
-  PX4Controller_P.allLimits_Value[3] = rtInf;
-  PX4Controller_P.allLimits_Value[4] = rtMinusInf;
-  PX4Controller_P.allLimits_Value[5] = rtInf;
-  PX4Controller_P.allLimits_Value[6] = rtMinusInf;
-  PX4Controller_P.allLimits_Value[7] = rtInf;
-  PX4Controller_P.allLimits_Value[12] = rtMinusInf;
-  PX4Controller_P.allLimits_Value[13] = rtInf;
-  PX4Controller_P.allLimits_Value[14] = rtMinusInf;
-  PX4Controller_P.allLimits_Value[15] = rtInf;
-  PX4Controller_P.allLimits_Value[22] = rtMinusInf;
-  PX4Controller_P.allLimits_Value[23] = rtInf;
-  PX4Controller_P.allLimits_Value[26] = rtMinusInf;
-  PX4Controller_P.allLimits_Value[27] = rtInf;
-  PX4Controller_P.Saturation5_UpperSat = rtInf;
-  PX4Controller_P.Saturation6_LowerSat = rtMinusInf;
-  PX4Controller_P.allLimits_Value_e[0] = rtMinusInf;
-  PX4Controller_P.allLimits_Value_e[2] = rtMinusInf;
-  PX4Controller_P.allLimits_Value_e[3] = rtInf;
-  PX4Controller_P.allLimits_Value_e[4] = rtMinusInf;
-  PX4Controller_P.allLimits_Value_e[5] = rtInf;
-  PX4Controller_P.allLimits_Value_e[6] = rtMinusInf;
-  PX4Controller_P.allLimits_Value_e[7] = rtInf;
-  PX4Controller_P.allLimits_Value_e[12] = rtMinusInf;
-  PX4Controller_P.allLimits_Value_e[13] = rtInf;
-  PX4Controller_P.allLimits_Value_e[14] = rtMinusInf;
-  PX4Controller_P.allLimits_Value_e[15] = rtInf;
-  PX4Controller_P.allLimits_Value_e[22] = rtMinusInf;
-  PX4Controller_P.allLimits_Value_e[23] = rtInf;
-  PX4Controller_P.allLimits_Value_e[26] = rtMinusInf;
-  PX4Controller_P.allLimits_Value_e[27] = rtInf;
-  PX4Controller_P.Saturation5_UpperSat_a = rtInf;
-  PX4Controller_P.Saturation6_LowerSat_h = rtMinusInf;
-  PX4Controller_P.allLimits_Value_i[0] = rtMinusInf;
-  PX4Controller_P.allLimits_Value_i[2] = rtMinusInf;
-  PX4Controller_P.allLimits_Value_i[3] = rtInf;
-  PX4Controller_P.allLimits_Value_i[4] = rtMinusInf;
-  PX4Controller_P.allLimits_Value_i[5] = rtInf;
-  PX4Controller_P.allLimits_Value_i[6] = rtMinusInf;
-  PX4Controller_P.allLimits_Value_i[7] = rtInf;
-  PX4Controller_P.allLimits_Value_i[12] = rtMinusInf;
-  PX4Controller_P.allLimits_Value_i[13] = rtInf;
-  PX4Controller_P.allLimits_Value_i[14] = rtMinusInf;
-  PX4Controller_P.allLimits_Value_i[15] = rtInf;
-  PX4Controller_P.allLimits_Value_i[22] = rtMinusInf;
-  PX4Controller_P.allLimits_Value_i[23] = rtInf;
-  PX4Controller_P.allLimits_Value_i[26] = rtMinusInf;
-  PX4Controller_P.allLimits_Value_i[27] = rtInf;
-  PX4Controller_P.Saturation5_UpperSat_f = rtInf;
-  PX4Controller_P.Saturation6_LowerSat_g = rtMinusInf;
 
   {
     /* Setup solver object */
@@ -2869,17 +2392,17 @@ void PX4Controller_initialize(void)
   PX4Controller_PrevZCX.Integrator_Reset_ZCE = UNINITIALIZED_ZCSIG;
   PX4Controller_PrevZCX.Integrator_Reset_ZCE_l = UNINITIALIZED_ZCSIG;
 
-  /* InitializeConditions for Integrator: '<S77>/Integrator1' */
+  /* InitializeConditions for Integrator: '<S76>/Integrator1' */
   PX4Controller_X.Integrator1_CSTATE = PX4Controller_P.Integrator1_IC;
 
   /* InitializeConditions for Integrator: '<S3>/Integrator' */
   PX4Controller_X.Integrator_CSTATE[0] = PX4Controller_P.Integrator_IC;
   PX4Controller_X.Integrator_CSTATE[1] = PX4Controller_P.Integrator_IC;
 
-  /* InitializeConditions for TransferFcn: '<S78>/Low pass' */
+  /* InitializeConditions for TransferFcn: '<S77>/Low pass' */
   PX4Controller_X.Lowpass_CSTATE = 0.0;
 
-  /* InitializeConditions for Integrator: '<S78>/Integrator' */
+  /* InitializeConditions for Integrator: '<S77>/Integrator' */
   PX4Controller_X.Integrator_CSTATE_f = PX4Controller_P.Integrator_IC_a;
 
   /* InitializeConditions for Memory generated from: '<S1>/Memory' */

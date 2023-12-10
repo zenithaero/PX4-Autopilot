@@ -3,9 +3,9 @@
  *
  * Code generation for model "PX4Controller".
  *
- * Model version              : 1.277
+ * Model version              : 1.278
  * Simulink Coder version : 9.7 (R2022a) 13-Nov-2021
- * C++ source code generated on : Fri Dec  8 03:03:21 2023
+ * C++ source code generated on : Sun Dec 10 03:06:45 2023
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping

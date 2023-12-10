@@ -28,6 +28,11 @@ ZenithControl::~ZenithControl()
 
 bool ZenithControl::init()
 {
+	// if (!_vehicle_angular_velocity_sub.registerCallback()) {
+	// 	PX4_ERR("callback registration failed");
+	// 	return false;
+	// }
+
 	// Initialize model
 	PX4Controller_initialize();
 	// kick off work queue
@@ -45,8 +50,31 @@ void ZenithControl::Run()
 	}
 	perf_begin(_loop_perf);
 
+	// Reset input structure
+	PX4Controller_U.CmdBusIn.manualAttitude = false;
+	PX4Controller_U.CmdBusIn.manualRate = false;
+	PX4Controller_U.CmdBusIn.manualFM = false;
+	PX4Controller_U.CmdBusIn.manualActuation = false;
+
+
+	_vehicle_control_mode_sub.update(&_vcontrol_mode);
+
 	// Manual pass-through
-	PX4Controller_U.CmdBusIn.manualActuation = true;
+	if (_vcontrol_mode.flag_control_position_enabled) {
+		// Not manual
+		PX4_INFO("Auto control");
+	} else if (_vcontrol_mode.flag_control_attitude_enabled) {
+		PX4_INFO("Manual attitude control");
+		PX4Controller_U.CmdBusIn.manualAttitude = true;
+	} else if (_vcontrol_mode.flag_control_rates_enabled) {
+		PX4_INFO("Manual rate control");
+		PX4Controller_U.CmdBusIn.manualRate = true;
+	}
+	else {
+		PX4_INFO("Manual control");
+		PX4Controller_U.CmdBusIn.manualActuation = true;
+	}
+
 
 	// Populate input
 	if (_manual_control_setpoint_sub.copy(&_manual_control_setpoint)) {
@@ -56,6 +84,28 @@ void ZenithControl::Run()
 		PX4Controller_U.CmdBusIn.rc[3] = _manual_control_setpoint.yaw;
 	}
 
+	// Populate position readings
+	float _current_altitude{0.f};
+	float _body_acceleration_x{0.f};
+	float _body_velocity_x{0.f};
+
+
+	// Populate attitude readings
+	vehicle_attitude_s att{};
+	_att_sub.copy(&att);
+	_R = matrix::Quatf(att.q);
+	const matrix::Eulerf euler_angles(_R);
+	PX4Controller_U.StateBus_m.eulerBody[0] = euler_angles.phi();
+	PX4Controller_U.StateBus_m.eulerBody[1] = euler_angles.theta();
+	PX4Controller_U.StateBus_m.eulerBody[2] = euler_angles.psi();
+
+	// Populate rate readings
+	vehicle_angular_velocity_s angular_velocity{};
+	_vehicle_angular_velocity_sub.copy(&angular_velocity);
+	Vector3f rates(angular_velocity.xyz);
+	PX4Controller_U.StateBus_m.wBody[0] = rates(0);
+	PX4Controller_U.StateBus_m.wBody[1] = rates(1);
+	PX4Controller_U.StateBus_m.wBody[2] = rates(2);
 
 	// Step the controller
 	PX4Controller_step();
@@ -99,7 +149,7 @@ void ZenithControl::Run()
 
 
 	// backup schedule
-	ScheduleDelayed(10_ms);
+	ScheduleDelayed(5_ms);
 	perf_end(_loop_perf);
 }
 
