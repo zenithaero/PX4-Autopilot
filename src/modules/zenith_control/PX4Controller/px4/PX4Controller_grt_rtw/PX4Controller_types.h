@@ -3,9 +3,9 @@
  *
  * Code generation for model "PX4Controller".
  *
- * Model version              : 1.278
+ * Model version              : 1.279
  * Simulink Coder version : 9.7 (R2022a) 13-Nov-2021
- * C++ source code generated on : Sun Dec 10 03:06:45 2023
+ * C++ source code generated on : Wed Dec 13 02:35:10 2023
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -25,7 +25,8 @@
 struct CmdBus
 {
   real_T rc[4];
-  real_T trackLine[3];
+  real_T trackNE[2];
+  real_T trackYaw;
   real_T hCmd;
   real_T hDotCmd;
   real_T tasCmd;
@@ -42,46 +43,6 @@ struct CmdBus
   real_T wSat[3];
   real_T MSat[3];
   real_T FSat;
-};
-
-#endif
-
-#ifndef DEFINED_TYPEDEF_FOR_StateBus_
-#define DEFINED_TYPEDEF_FOR_StateBus_
-
-struct StateBus
-{
-  real_T vDotMeas[3];
-  real_T vDotBody[3];
-  real_T qBody[4];
-  real_T wDotBody[3];
-  real_T vNed[3];
-  real_T eulerBody[3];
-  real_T vBody[3];
-  real_T wBody[3];
-  real_T xNed[3];
-  real_T lla[3];
-  real_T alpha;
-  real_T beta;
-  real_T tas;
-  real_T vAirBody[3];
-  real_T wAirBody[3];
-  real_T q;
-  real_T rho;
-  real_T gamma;
-};
-
-#endif
-
-#ifndef DEFINED_TYPEDEF_FOR_ActBus_
-#define DEFINED_TYPEDEF_FOR_ActBus_
-
-struct ActBus
-{
-  real_T motors[4];
-  real_T ailerons[6];
-  real_T elevators[2];
-  real_T rudders[2];
 };
 
 #endif
@@ -103,6 +64,19 @@ struct EstBus
   real_T tasEst;
   real_T hEst;
   real_T qEst;
+};
+
+#endif
+
+#ifndef DEFINED_TYPEDEF_FOR_ActBus_
+#define DEFINED_TYPEDEF_FOR_ActBus_
+
+struct ActBus
+{
+  real_T motors[4];
+  real_T ailerons[6];
+  real_T elevators[2];
+  real_T rudders[2];
 };
 
 #endif

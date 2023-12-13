@@ -35,6 +35,11 @@
 #include <uORB/topics/vehicle_status.h>
 #include <uORB/topics/vehicle_thrust_setpoint.h>
 #include <uORB/topics/vehicle_torque_setpoint.h>
+#include <uORB/topics/vehicle_local_position.h>
+#include <uORB/topics/vehicle_local_position_setpoint.h>
+#include <uORB/topics/position_setpoint_triplet.h>
+#include <uORB/topics/trajectory_setpoint.h>
+#include <uORB/topics/airspeed_validated.h>
 
 #include <uORB/topics/actuator_motors.h>
 #include <uORB/topics/actuator_servos.h>
@@ -61,12 +66,14 @@ public:
 	static int print_usage(const char *reason = nullptr);
 
 	bool init();
+	void setTrack(matrix::Vector3f currentPos, float currentYaw);
 
 private:
 	void Run() override;
 
 	// uORB::SubscriptionCallbackWorkItem _vehicle_angular_velocity_sub{this, ORB_ID(vehicle_angular_velocity)};
 	// uORB::SubscriptionCallbackWorkItem _att_sub{this, ORB_ID(vehicle_attitude)};
+	uORB::Subscription _local_pos_sub{ORB_ID(vehicle_local_position)};
 	uORB::Subscription _vehicle_angular_velocity_sub{ORB_ID(vehicle_angular_velocity)};
 	uORB::Subscription _att_sub{ORB_ID(vehicle_attitude)};
 
@@ -74,6 +81,9 @@ private:
 //
 	// uORB::Subscription _battery_status_sub{ORB_ID(battery_status)};
 	uORB::Subscription _manual_control_setpoint_sub{ORB_ID(manual_control_setpoint)};
+	uORB::Subscription _trajectory_setpoint_sub{ORB_ID(trajectory_setpoint)};
+	uORB::Subscription _airspeed_validated_sub{ORB_ID(airspeed_validated)};
+
 	// uORB::Subscription _rates_sp_sub{ORB_ID(vehicle_rates_setpoint)};
 	uORB::Subscription _vehicle_control_mode_sub{ORB_ID(vehicle_control_mode)};
 	// uORB::Subscription _vehicle_land_detected_sub{ORB_ID(vehicle_land_detected)};
@@ -87,7 +97,6 @@ private:
 //
 
 	//
-	manual_control_setpoint_s		_manual_control_setpoint{};
 	uORB::Publication<actuator_motors_s>	_actuator_motors_pub{ORB_ID(actuator_motors)};
 	uORB::Publication<actuator_servos_s>	_actuator_servos_pub{ORB_ID(actuator_servos)};
 
@@ -99,7 +108,6 @@ private:
 	// uORB::Publication<normalized_unsigned_setpoint_s> _flaps_setpoint_pub{ORB_ID(flaps_setpoint)};
 	// uORB::Publication<normalized_unsigned_setpoint_s> _spoilers_setpoint_pub{ORB_ID(spoilers_setpoint)};
 //
-	vehicle_control_mode_s			_vcontrol_mode{};
 	// vehicle_thrust_setpoint_s		_vehicle_thrust_setpoint{};
 	// vehicle_torque_setpoint_s		_vehicle_torque_setpoint{};
 	// vehicle_rates_setpoint_s		_rates_sp{};
@@ -108,5 +116,10 @@ private:
 	perf_counter_t _loop_perf;
 	matrix::Dcmf _R{matrix::eye<float, 3>()};
 
+	// Waypoint mode
+	bool _trackEnabled = false;
+	matrix::Vector3f _trackPos;
+	float _trackYaw = 0;
+	float _trackTas = 15;
 	// hrt_abstime _last_run{0};
 };

@@ -40,6 +40,15 @@ bool ZenithControl::init()
 	return true;
 }
 
+void ZenithControl::setTrack(Vector3f currentPos, float currentYaw)
+{
+	_trackEnabled = true;
+	_trackPos = currentPos;
+	_trackYaw = currentYaw;
+	PX4_INFO("Track set to: [%.2f %.2f %.2f] yaw: %.2f",
+	 _trackPos(0), _trackPos(1), _trackPos(2), _trackYaw);
+}
+
 
 void ZenithControl::Run()
 {
@@ -50,33 +59,8 @@ void ZenithControl::Run()
 	}
 	perf_begin(_loop_perf);
 
-	// Reset input structure
-	PX4Controller_U.CmdBusIn.manualAttitude = false;
-	PX4Controller_U.CmdBusIn.manualRate = false;
-	PX4Controller_U.CmdBusIn.manualFM = false;
-	PX4Controller_U.CmdBusIn.manualActuation = false;
-
-
-	_vehicle_control_mode_sub.update(&_vcontrol_mode);
-
-	// Manual pass-through
-	if (_vcontrol_mode.flag_control_position_enabled) {
-		// Not manual
-		PX4_INFO("Auto control");
-	} else if (_vcontrol_mode.flag_control_attitude_enabled) {
-		PX4_INFO("Manual attitude control");
-		PX4Controller_U.CmdBusIn.manualAttitude = true;
-	} else if (_vcontrol_mode.flag_control_rates_enabled) {
-		PX4_INFO("Manual rate control");
-		PX4Controller_U.CmdBusIn.manualRate = true;
-	}
-	else {
-		PX4_INFO("Manual control");
-		PX4Controller_U.CmdBusIn.manualActuation = true;
-	}
-
-
 	// Populate input
+	manual_control_setpoint_s _manual_control_setpoint{};
 	if (_manual_control_setpoint_sub.copy(&_manual_control_setpoint)) {
 		PX4Controller_U.CmdBusIn.rc[0] = (_manual_control_setpoint.throttle + 1.f) * 0.5f;
 		PX4Controller_U.CmdBusIn.rc[1] = _manual_control_setpoint.roll;
@@ -85,9 +69,62 @@ void ZenithControl::Run()
 	}
 
 	// Populate position readings
-	float _current_altitude{0.f};
-	float _body_acceleration_x{0.f};
-	float _body_velocity_x{0.f};
+	vehicle_local_position_s _local_pos{};
+	_local_pos_sub.copy(&_local_pos);
+	Vector3f currentPos(_local_pos.x, _local_pos.y, _local_pos.z);
+
+	PX4Controller_U.EstBus_m.vNedEst[0] = _local_pos.vx;
+	PX4Controller_U.EstBus_m.vNedEst[1] = _local_pos.vy;
+	PX4Controller_U.EstBus_m.vNedEst[2] = _local_pos.vz;
+
+
+	PX4Controller_U.EstBus_m.xNedEst[0] = _local_pos.x;
+	PX4Controller_U.EstBus_m.xNedEst[1] = _local_pos.y;
+	PX4Controller_U.EstBus_m.xNedEst[2] = _local_pos.z;
+
+	// Height & height rate
+
+	airspeed_validated_s airspeed_validated{};
+	_airspeed_validated_sub.copy(&airspeed_validated);
+
+
+	float tas = airspeed_validated.true_airspeed_m_s;
+	PX4Controller_U.EstBus_m.hDotEst = -_local_pos.vz;
+	PX4Controller_U.EstBus_m.hEst = -_local_pos.z;
+	PX4Controller_U.EstBus_m.tasEst = tas;
+	PX4Controller_U.EstBus_m.tasDotEst = 0;
+	PX4Controller_U.EstBus_m.alphaEst = 0;
+	PX4Controller_U.EstBus_m.betaEst = 0;
+
+	// Populate track commands
+	PX4Controller_U.CmdBusIn.tasCmd = _trackTas;
+	PX4Controller_U.CmdBusIn.tasDotCmd = 0;
+	PX4Controller_U.CmdBusIn.hCmd = -_trackPos(2);
+	PX4Controller_U.CmdBusIn.hDotCmd = 0;
+	PX4Controller_U.CmdBusIn.trackYaw = _trackYaw;
+	PX4Controller_U.CmdBusIn.trackNE[0] = _trackPos(0);
+	PX4Controller_U.CmdBusIn.trackNE[1] = _trackPos(1);
+
+
+	// Position command
+	// position_setpoint_triplet_s pos_sp_triplet{};
+	// _pos_sp_triplet_sub.copy(&pos_sp_triplet);
+	// bool prevValid = PX4_ISFINITE(pos_sp_triplet.previous.lat)
+	// 		&& PX4_ISFINITE(pos_sp_triplet.previous.lon)
+	// 		&& PX4_ISFINITE(pos_sp_triplet.previous.alt);
+	// bool currValid = PX4_ISFINITE(pos_sp_triplet.current.lat)
+	// 		&& PX4_ISFINITE(pos_sp_triplet.current.lon)
+	// 		&& PX4_ISFINITE(pos_sp_triplet.current.alt);
+
+	// if (pos_sp_triplet.previous.valid && pos_sp_triplet.current.valid) {
+	// }
+
+
+	//  PX4_INFO("hCmd: %.2f hEst %.2f tasEst %.2f", hCmd, -_local_pos.z, tas);
+
+
+	// float current_altitude = -_local_pos.z + _local_pos.ref_alt; // Altitude AMSL in meters
+
 
 
 	// Populate attitude readings
@@ -95,17 +132,56 @@ void ZenithControl::Run()
 	_att_sub.copy(&att);
 	_R = matrix::Quatf(att.q);
 	const matrix::Eulerf euler_angles(_R);
-	PX4Controller_U.StateBus_m.eulerBody[0] = euler_angles.phi();
-	PX4Controller_U.StateBus_m.eulerBody[1] = euler_angles.theta();
-	PX4Controller_U.StateBus_m.eulerBody[2] = euler_angles.psi();
+	PX4Controller_U.EstBus_m.eulerBodyEst[0] = euler_angles.phi();
+	PX4Controller_U.EstBus_m.eulerBodyEst[1] = euler_angles.theta();
+	PX4Controller_U.EstBus_m.eulerBodyEst[2] = euler_angles.psi();
+
+
+	//  PX4_INFO("x y z %.2f %.2f %.2f yaw: %.2f", _local_pos.x, _local_pos.y, _local_pos.z, euler_angles.psi());
+
 
 	// Populate rate readings
 	vehicle_angular_velocity_s angular_velocity{};
 	_vehicle_angular_velocity_sub.copy(&angular_velocity);
 	Vector3f rates(angular_velocity.xyz);
-	PX4Controller_U.StateBus_m.wBody[0] = rates(0);
-	PX4Controller_U.StateBus_m.wBody[1] = rates(1);
-	PX4Controller_U.StateBus_m.wBody[2] = rates(2);
+	PX4Controller_U.EstBus_m.wBodyEst[0] = rates(0);
+	PX4Controller_U.EstBus_m.wBodyEst[1] = rates(1);
+	PX4Controller_U.EstBus_m.wBodyEst[2] = rates(2);
+
+
+
+	// Reset manual mode
+	PX4Controller_U.CmdBusIn.manualAttitude = false;
+	PX4Controller_U.CmdBusIn.manualRate = false;
+	PX4Controller_U.CmdBusIn.manualFM = false;
+	PX4Controller_U.CmdBusIn.manualActuation = false;
+
+	vehicle_control_mode_s	_vcontrol_mode{};
+	_vehicle_control_mode_sub.copy(&_vcontrol_mode);
+	// Manual pass-through
+	if (_vcontrol_mode.flag_control_position_enabled) {
+		// Not manual
+		if (!_trackEnabled) setTrack(currentPos, euler_angles.psi());
+
+	} else {
+		// Manual control mode
+		_trackEnabled = false;
+		if (_vcontrol_mode.flag_control_attitude_enabled) {
+			// PX4_INFO("Manual attitude control");
+			PX4Controller_U.CmdBusIn.manualAttitude = true;
+		} else if (_vcontrol_mode.flag_control_rates_enabled) {
+			// PX4_INFO("Manual rate control");
+			PX4Controller_U.CmdBusIn.manualRate = true;
+		}
+		else {
+			// PX4_INFO("Manual control");
+			PX4Controller_U.CmdBusIn.manualActuation = true;
+		}
+	}
+
+
+
+
 
 	// Step the controller
 	PX4Controller_step();
