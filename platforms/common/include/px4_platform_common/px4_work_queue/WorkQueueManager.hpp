@@ -66,6 +66,7 @@ static constexpr wq_config_t I2C4{"wq:I2C4", 2336, -12};
 
 // PX4 att/pos controllers, highest priority after sensors.
 static constexpr wq_config_t nav_and_controllers{"wq:nav_and_controllers", 2240, -13};
+static constexpr wq_config_t zenith_controller{"wq:zenith_controller", 8192, -13};
 
 static constexpr wq_config_t INS0{"wq:INS0", 6000, -14};
 static constexpr wq_config_t INS1{"wq:INS1", 6000, -15};

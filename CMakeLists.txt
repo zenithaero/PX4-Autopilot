@@ -110,7 +110,13 @@ include(px4_parse_function_args)
 
 # https://github.com/PX4/PX4-Autopilot/issues/20550
 set(CMAKE_OSX_SYSROOT "/Library/Developer/CommandLineTools/SDKs/MacOSX12.sdk")
-
+# Fix NuttX build with GCC on macOS
+add_compile_options(-Wno-error=uninitialized)
+add_compile_options(-Wno-error=maybe-uninitialized)
+add_compile_options(-Wno-error=dangling-pointer)
+add_compile_options(-Wno-uninitialized)
+add_compile_options(-Wno-maybe-uninitialized)
+add_compile_options(-Wno-dangling-pointer)
 
 #=============================================================================
 # git

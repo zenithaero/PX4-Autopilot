@@ -1,6 +1,8 @@
 px4_add_module(
 	MODULE modules__zenith_control
 	MAIN zenith_control
+	STACK_MAX 8192
+	STACK_MAIN 8192
 	INCLUDES
 		PX4Controller/px4/PX4Controller_grt_rtw
 		PX4Controller/MATLAB_R2022a.app/extern/include

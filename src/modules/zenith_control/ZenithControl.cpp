@@ -10,7 +10,7 @@ using math::radians;
 
 ZenithControl::ZenithControl() :
 	ModuleParams(nullptr),
-	ScheduledWorkItem(MODULE_NAME, px4::wq_configurations::nav_and_controllers),
+	ScheduledWorkItem(MODULE_NAME, px4::wq_configurations::zenith_controller),
 	_actuator_controls_status_pub(ORB_ID(actuator_controls_status_0)),
 	_vehicle_torque_setpoint_pub(ORB_ID(vehicle_torque_setpoint)),
 	_vehicle_thrust_setpoint_pub(ORB_ID(vehicle_thrust_setpoint)),
@@ -222,10 +222,21 @@ void ZenithControl::Run()
 	actuator_servos.control[rudIdx] = PX4Controller_Y.ActBus_e.rudders[0];
 	_actuator_servos_pub.publish(actuator_servos);
 
+	// static int counter = 0;
+	// if (counter ++ % 100 == 0) {
+	// 	PX4_INFO("Actuation [%.2f %.2f %.2f %.2f %.2f %.2f]",
+	// 		actuator_servos.control[leftAilIdx],
+	// 		actuator_servos.control[rightAilIdx],
+	// 		actuator_servos.control[leftFlapIdx],
+	// 		actuator_servos.control[rightFlapIdx],
+	// 		actuator_servos.control[elevIdx],
+	// 		actuator_servos.control[rudIdx]);
+	// }
+
 
 
 	// backup schedule
-	ScheduleDelayed(5_ms);
+	ScheduleDelayed(10_ms);
 	perf_end(_loop_perf);
 }
 
@@ -241,7 +252,7 @@ int ZenithControl::task_spawn(int argc, char *argv[])
 			return PX4_OK;
 		}
 	} else {
-		PX4_ERR("alloc failed");
+		PX4_ERR("alloc failed!");
 	}
 
 	delete instance;

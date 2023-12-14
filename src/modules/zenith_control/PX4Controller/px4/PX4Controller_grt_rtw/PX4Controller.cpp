@@ -368,6 +368,8 @@ void PX4Controller_step(void)
   uint32_T rtb_k2;
   uint32_T rtb_k2_e;
   uint32_T rtb_k3;
+
+
   if (rtmIsMajorTimeStep(PX4Controller_M)) {
     /* set solver stop time */
     if (!(PX4Controller_M->Timing.clockTick0+1)) {
@@ -1249,6 +1251,7 @@ void PX4Controller_step(void)
       bpIndex_7[2] = 0U;
     }
 
+
     /* Interpolation_n-D: '<S45>/Interpolation Using Prelookup' incorporates:
      *  Constant: '<S45>/Constant'
      */
@@ -1842,6 +1845,7 @@ void PX4Controller_step(void)
     rtb_Saturation_az[i] = rtb_Switch7_d_idx_0;
   }
 
+
   /* End of Saturate: '<S14>/Saturation' */
   for (int32_T i{0}; i < 6; i++) {
     /* Product: '<S14>/Matrix Multiply3' incorporates:
@@ -2006,6 +2010,7 @@ void PX4Controller_step(void)
       &PX4Controller_P.InterpolationUsingPrelookup__m0[bpIndex_k[2] << 2], 2U);
   }
 
+
   /* End of Interpolation_n-D: '<S23>/Interpolation Using Prelookup' */
 
   /* Assignment: '<S13>/Assignment2' incorporates:
@@ -2018,6 +2023,8 @@ void PX4Controller_step(void)
     std::memcpy(&rtb_Assignment2[i * 14 + 46],
                 &rtb_InterpolationUsingPrelook_l[i << 3], sizeof(real_T) << 3U);
   }
+
+
 
   /* End of Assignment: '<S13>/Assignment2' */
 
@@ -2199,6 +2206,8 @@ void PX4Controller_step(void)
 
   /* End of Switch: '<S10>/Switch1' */
 
+
+
   /* Switch: '<S10>/Switch2' incorporates:
    *  Inport: '<Root>/CmdBusIn'
    */
@@ -2261,6 +2270,8 @@ void PX4Controller_step(void)
     PX4Controller_B.Switch4[1] = rtb_Saturation_az[13];
   }
 
+
+
   /* End of Switch: '<S10>/Switch4' */
 
   /* Interpolation_n-D: '<S35>/Interpolation Using Prelookup' */
@@ -2289,6 +2300,8 @@ void PX4Controller_step(void)
   rtb_Gain2 = intrp2d_l_pw(bpIndex_l, frac_l,
     &PX4Controller_P.InterpolationUsingPrelookup__ho[bpIndex_l[2] << 2], 2U);
 
+
+
   /* Product: '<S35>/Product' */
   PX4Controller_B.Product[0] = frac_0[0] * rtb_Gain2;
 
@@ -2309,6 +2322,8 @@ void PX4Controller_step(void)
     bpIndex_l[2] = 0U;
   }
 
+
+
   rtb_Gain2 = intrp2d_l_pw(bpIndex_l, frac_l,
     &PX4Controller_P.InterpolationUsingPrelookup__ho[bpIndex_l[2] << 2], 2U);
 
@@ -2324,6 +2339,7 @@ void PX4Controller_step(void)
   /* Product: '<S54>/Product' incorporates:
    *  Interpolation_n-D: '<S54>/Interpolation Using Prelookup'
    */
+
   PX4Controller_B.Product_g = rtb_sebErr * intrp2d_l_pw(bpIndex_m, frac_m,
     PX4Controller_P.InterpolationUsingPrelookup__mw, 2U);
 
@@ -2333,6 +2349,10 @@ void PX4Controller_step(void)
    */
   PX4Controller_B.steDotErr = (rtb_speDotCmd + rtb_skeDotCmd) - (rtb_speDot +
     rtb_skeDot_0);
+
+      // return;
+
+
   if (rtmIsMajorTimeStep(PX4Controller_M)) {
     if (rtmIsMajorTimeStep(PX4Controller_M)) {
       /* Update for Memory generated from: '<S1>/Memory' */
@@ -2359,6 +2379,8 @@ void PX4Controller_step(void)
       PX4Controller_DW.Memory_4_PreviousInput[1] = PX4Controller_B.Switch4[1];
     }
   }                                    /* end MajorTimeStep */
+
+
 
   if (rtmIsMajorTimeStep(PX4Controller_M)) {
     rt_ertODEUpdateContinuousStates(&PX4Controller_M->solverInfo);
